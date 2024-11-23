@@ -1,0 +1,32 @@
+@use '@src/constants/global.scss' as global;
+
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: end;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  align-self:last baseline;
+}
+
+.previos_btn, .next_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 950px) {
+  .pagination {
+    justify-content: center;
+  }
+}
+
+@media(hover:hover) {
+  .previos_btn:hover, .next_btn:hover {
+    transform: scale(1.2);
+  }
+}

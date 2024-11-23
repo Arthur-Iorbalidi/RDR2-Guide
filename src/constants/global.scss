@@ -1,0 +1,50 @@
+//Color
+$primaryColor: #393939;
+$secondaryColor: #d9ef81;
+$secondaryActiveColor: #b5d43c;
+$thirdColor: #F17900;
+$fourthColor: #e0a449;
+$lightColor: #FFF;
+$errorsColor: #ff6363;
+
+//BackgroundColor
+$primaryBackgroundColor: #FAFAFA;
+$secondaryBackgroundColor: #FFF;
+$modalBackgroundColor: #f2f2f2;
+$buttonPrimaryBackgroundColor: #d9ef81;
+$buttonPrimaryNotActiveBackgroundColor: #f0f0f0;
+$buttonPrimaryActiveBackgroundColor: #b5d43c;
+$buttonDangerBackgroundColor: #ff7373;
+$buttonDangerActiveBackgroundColor: #ff3434;
+$formBackgroundColor: #3939390d;
+
+//Box shadow
+$primaryBoxShadow: 0 0 10px #00000033;
+$secondaryBoxShadow: 0 0 5px $buttonPrimaryActiveBackgroundColor;
+
+//Border
+$primaryBorderThin: 1px solid #d1d1d1;
+$primaryBorderMedium: 2px solid #d1d1d1;
+$secondaryBorder: 2px solid $secondaryColor;
+$thirdBorder: 2px solid $primaryBackgroundColor;
+$fourthBorder: 2px solid #aaaaaa;
+$darkBorder: 2px solid $primaryColor;
+
+//BorderRadius
+$extraSmallBorderRadius: 4px;
+$smallBorderRadius: 10px;
+$mediumBorderRadius: 16px;
+$circleBorderRadius: 50%;
+
+//Padding
+$largePadding: 20px;
+$mediumPadding: 16px;
+$smallPadding: 10px;
+$extraSmallPadding: 5px;
+
+//Font-size
+$fontSizeBase: 16px;
+$fontSizeCaptionSmall: 18px;
+$fontSizeCaptionMedium: 20px;
+$fontSizeSubheading: 32px;
+$fontSizeHeading: 64px;

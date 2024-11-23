@@ -1,0 +1,29 @@
+@use '@src/constants/global.scss' as global;
+
+.btn {
+  font-size: global.$fontSizeCaptionSmall;
+  font-weight: 500;
+  padding: global.$extraSmallPadding global.$smallPadding;
+  border-radius: global.$smallBorderRadius;
+  transition: 400ms all;
+}
+
+.normal {
+  background-color: global.$buttonPrimaryBackgroundColor;
+  color: global.$primaryColor;
+}
+
+.danger {
+  background-color: global.$buttonDangerBackgroundColor;
+  color: global.$lightColor;
+}
+
+@media (hover:hover) {
+  .btn:hover {
+    background-color: global.$buttonPrimaryActiveBackgroundColor;
+
+    &.danger {
+      background-color: global.$buttonDangerActiveBackgroundColor;
+    }
+  }
+}

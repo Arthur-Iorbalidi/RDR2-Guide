@@ -1,0 +1,17 @@
+@use '@src/constants/global.scss' as global;
+
+.message {
+  color: global.$errorsColor;
+}
+
+.normal {
+  color: global.$primaryColor;
+}
+
+.succes {
+  color: global.$secondaryActiveColor;
+}
+
+.error {
+  color: global.$errorsColor;
+}

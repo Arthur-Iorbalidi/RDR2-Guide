@@ -1,0 +1,40 @@
+@use '@src/constants/global.scss' as global;
+
+.search_form {
+  margin: 0 auto;
+  margin-top: 72px;
+  max-width: 762px;
+  padding: global.$mediumPadding;
+  border-radius: global.$mediumBorderRadius;
+  background: global.$formBackgroundColor;
+}
+
+.form_field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.query_field {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: global.$fontSizeCaptionMedium;
+  flex: 1;
+}
+
+.submit_btn {
+  display: flex;
+}
+
+.error_message {
+  color: global.$errorsColor;
+  text-align: center;
+}
+
+@media (max-width: 550px) {
+  .search_form {
+    margin-top: 40px;
+  }
+}

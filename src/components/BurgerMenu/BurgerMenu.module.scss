@@ -1,0 +1,44 @@
+@use '@src/constants/global.scss' as global;
+
+.burger_menu {
+  z-index: 2;
+  top: -100%;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  padding: global.$largePadding;
+  background-color: #343333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 500ms all;
+
+  &.opened {
+    top: 0;
+  }
+
+  .burger_menu_list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: global.$fontSizeCaptionMedium;
+  }
+  
+  .link_text {
+    color: global.$lightColor;
+  }
+
+  .line {
+    height: 2px;
+    width: 100%;
+    background-color: global.$primaryBackgroundColor;
+  }
+}

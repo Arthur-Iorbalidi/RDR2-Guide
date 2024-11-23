@@ -1,0 +1,23 @@
+@use '@src/constants/global.scss' as global;
+
+.pagination_item {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: global.$extraSmallBorderRadius;
+}
+
+.active {
+  background: global.$buttonPrimaryActiveBackgroundColor;
+  color: global.$lightColor;
+  cursor: auto;
+}
+
+@media(hover:hover) {
+  .pagination_item:hover {
+    box-shadow: global.$secondaryBoxShadow;
+  }
+  .active:hover {
+    box-shadow: none;
+  }
+}

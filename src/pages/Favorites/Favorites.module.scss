@@ -1,0 +1,17 @@
+@use '@src/constants/global.scss' as global;
+
+.favorites_page {
+  flex-grow: 1;
+}
+
+.wrapper {
+  max-width: 1300px;
+  padding: 60px 20px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-top: 40px;
+  font-size: global.$fontSizeSubheading;
+  text-align: center;
+}

@@ -1,0 +1,7 @@
+@use '@src/constants/global.scss' as global;
+
+main {
+  background-color: global.$primaryBackgroundColor;
+  flex-grow: 1;
+  display: flex;
+}

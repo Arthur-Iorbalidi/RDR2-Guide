@@ -1,0 +1,28 @@
+@use '@src/constants/global.scss' as global;
+
+.burger_menu {
+  z-index: 2;
+  top: 110%;
+  right: 0;
+  position: absolute;
+  padding: global.$largePadding;
+  background-color: #343333;
+  border: global.$fourthBorder;
+  border-radius: global.$mediumBorderRadius;
+
+  .burger_menu_list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .link_text {
+    color: global.$lightColor;
+  }
+}

@@ -1,0 +1,25 @@
+@use '@src/constants/global.scss' as global;
+
+.select_wrapper {
+  display: flex;
+  margin: 0 auto;
+  max-width: 200px;
+  margin-top: 25px;
+}
+
+.select {
+  width: 100%;
+  padding: global.$smallPadding;
+  border: global.$secondaryBorder;
+  border-radius: global.$extraSmallBorderRadius;
+  background-color: white;
+  font-size: global.$fontSizeBase;
+  cursor: pointer;
+  outline: none;
+}
+
+@media(hover:hover) {
+  .select:hover {
+    box-shadow: global.$secondaryBoxShadow;
+  }
+}

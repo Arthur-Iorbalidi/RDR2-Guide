@@ -1,0 +1,58 @@
+@use '@src/constants/global.scss' as global;
+
+.header {
+  position: relative;
+  background: linear-gradient(90deg, #343333 38.05%, #484848 69.22%, #282828 98.98%);
+}
+
+.wrapper {
+  max-width: 1300px;
+  padding: global.$largePadding;
+  margin: 0 auto;
+  min-height: 127px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.appName_wrapper {
+  padding: global.$smallPadding;
+  border: global.$primaryBorderThin;
+  border-radius: global.$smallBorderRadius;
+}
+
+.appName {
+  color: global.$lightColor;
+}
+
+.btns {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.auth {
+  display: flex;
+  gap: 10px;
+  position: relative;
+}
+
+.account_btn {
+  display: flex;
+  transition: 200ms all;
+}
+
+.account_logo {
+  width: 50px;
+}
+
+@media (hover:hover) {
+  .link_text:hover {
+    background-color: #717171;
+  }
+
+  .account_btn:hover {
+    transform: scale(1.1);
+  }
+}

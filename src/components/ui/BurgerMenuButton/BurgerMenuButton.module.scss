@@ -1,0 +1,30 @@
+@use '@src/constants/global.scss' as global;
+
+.burger_btn {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  z-index: 3;
+  transition: 500ms all;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: global.$thirdBorder;
+  border-radius: global.$circleBorderRadius;
+  .burger_line {
+    width: 20px;
+    height: 2px;
+    margin: 3px 0;
+    background-color: global.$primaryBackgroundColor;
+    transition: 500ms all;
+  }
+  &.active {
+    .burger_line:first-child {
+        transform: rotate(-45deg) translate(-3px, 3px);
+    }
+    .burger_line:last-child {
+        transform: rotate(45deg) translate(-3px, -3px);
+    }
+  }
+}

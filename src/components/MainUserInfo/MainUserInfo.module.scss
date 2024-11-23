@@ -1,0 +1,64 @@
+@use '@src/constants/global.scss' as global;
+
+.main_info_form {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 30px;
+  max-width: 400px;
+  background-color: global.$secondaryBackgroundColor;
+  padding: 30px;
+  border-radius: global.$mediumBorderRadius;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.form_header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.form_fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form_field_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form_field {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: global.$smallPadding;
+  border: global.$primaryBorderThin;
+  border-radius: global.$mediumBorderRadius;
+  font-size: global.$fontSizeCaptionMedium;
+}
+
+.form_field_error {
+  color: global.$errorsColor;
+}
+
+.btns_wrapper {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal {
+  margin-top: 20px;
+}
+
+@media (hover:hover) {
+  .link:hover {
+    color: global.$secondaryActiveColor;
+  }
+}
