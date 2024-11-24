@@ -1,61 +1,91 @@
-interface IMovie {
-  id: number;
-  title: string;
-  description?: string;
-  creationDate: string;
-  genre: string;
-  image?: string;
-  budget: number;
-  actors?: IActor[];
-  directors?: IDirector[];
-}
-
-interface IActor {
+interface IWeapon {
   id: number;
   name: string;
-  surname: string;
-  description?: string;
-  height?: string;
-  birthday: string;
-  dateOfDeath?: null;
+  damage: number;
+  range: number;
+  reloadSpeed: number;
+  firingRate: number;
+  accuracy: number;
+  ammo: number;
+  cost: number;
+  isUnique: boolean;
+  locationId?: number;
   image?: string;
-  placeOfBirth: string;
-  movies?: IMovie[];
+  location?: ILocation;
 }
 
-interface IDirector {
+interface ILocation {
   id: number;
   name: string;
-  surname: string;
-  description?: string;
-  birthday: string;
-  dateOfDeath?: null;
+  image: string;
+}
+
+interface IHorse {
+  id: number;
+  name: string;
+  health: number;
+  stamina: number;
+  speed: number;
+  accelerarion: number;
+  handlingId: number;
+  locationId?: number;
   image?: string;
-  placeOfBirth: string;
-  movies?: IMovie[];
+  location?: ILocation;
 }
 
-interface IMoviesResponse {
-  data: IMovie[];
-  pagination: IPagination;
+interface IStoryQuest {
+  id: number;
+  number: number;
+  name: string;
+  reward?: string;
+  locationId?: number;
+  image?: string;
+  location?: ILocation;
 }
 
-interface IActorsResponse {
-  data: IActor[];
-  pagination: IPagination;
+interface ISideQuest {
+  id: number;
+  name: string;
+  reward: string;
+  questGiver: string;
+  isMissable: boolean;
+  missableChapter?: string;
+  locationId?: number;
+  image?: string;
+  location?: ILocation;
 }
 
-interface IDirectorsResponse {
-  data: IDirector[];
-  pagination: IPagination;
+interface IWeaponsResponse {
+  data: IWeapon[];
+  // pagination: IPagination;
 }
 
-interface IPagination {
-  total: number;
-  limit: number;
-  total_pages: number;
-  current_page: number;
+interface IHorsesResponse {
+  data: IHorse[];
+  // pagination: IPagination;
 }
+
+interface IStoryQuestsResponse {
+  data: IStoryQuest[];
+  // pagination: IPagination;
+}
+
+interface ISideQuestsResponse {
+  data: ISideQuest[];
+  // pagination: IPagination;
+}
+
+// interface IMoviesResponse {
+//   data: IMovie[];
+//   pagination: IPagination;
+// }
+
+// interface IPagination {
+//   total: number;
+//   limit: number;
+//   total_pages: number;
+//   current_page: number;
+// }
 
 interface ISearch {
   search?: string;
@@ -70,9 +100,10 @@ interface IUser {
   name: string;
   surname: string;
   email: string;
-  movies: Array<{ id: number }>;
-  actors: Array<{ id: number }>;
-  directors: Array<{ id: number }>;
+  weapons: Array<{ id: number }>;
+  horses: Array<{ id: number }>;
+  storyQuests: Array<{ id: number }>;
+  sideQuests: Array<{ id: number }>;
 }
 
 interface ICreateUserDto {
@@ -112,19 +143,21 @@ interface IErrorResponse {
 }
 
 export type {
-  IActor,
-  IActorsResponse,
   IAuthUserResponse,
   ICheckUserResponse,
   ICreateUserDto,
-  IDirector,
-  IDirectorsResponse,
   IErrorResponse,
+  IHorse,
+  IHorsesResponse,
+  ILocation,
   ILoginUserDto,
-  IMovie,
-  IMoviesResponse,
-  IPagination,
   ISearch,
+  ISideQuest,
+  ISideQuestsResponse,
+  IStoryQuest,
+  IStoryQuestsResponse,
   IUpdateUserDto,
   IUser,
+  IWeapon,
+  IWeaponsResponse,
 };

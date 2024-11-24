@@ -1,107 +1,23 @@
 const sortOptions = {
-  movies: [
+  weapons: [
     {
       title: 'None',
       value: {
         sortBy: '',
         sortOrder: '',
-      },
-    },
-    {
-      title: 'Title ASC',
-      value: {
-        sortBy: 'title',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Title DESC',
-      value: {
-        sortBy: 'title',
-        sortOrder: 'DESC',
-      },
-    },
-    {
-      title: 'Creation date ASC',
-      value: {
-        sortBy: 'creationDate',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Creation date DESC',
-      value: {
-        sortBy: 'creationDate',
-        sortOrder: 'DESC',
-      },
-    },
-    {
-      title: 'Budget ASC',
-      value: {
-        sortBy: 'budget',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Budget DESC',
-      value: {
-        sortBy: 'budget',
-        sortOrder: 'DESC',
       },
     },
   ],
-  actors: [
+  horses: [
     {
       title: 'None',
       value: {
         sortBy: '',
         sortOrder: '',
-      },
-    },
-    {
-      title: 'Name ASC',
-      value: {
-        sortBy: 'name',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Name DESC',
-      value: {
-        sortBy: 'name',
-        sortOrder: 'DESC',
-      },
-    },
-    {
-      title: 'Birthday ASC',
-      value: {
-        sortBy: 'birthday',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Birthday DESC',
-      value: {
-        sortBy: 'birthday',
-        sortOrder: 'DESC',
-      },
-    },
-    {
-      title: 'Height ASC',
-      value: {
-        sortBy: 'height',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Height DESC',
-      value: {
-        sortBy: 'height',
-        sortOrder: 'DESC',
       },
     },
   ],
-  directors: [
+  storyQuests: [
     {
       title: 'None',
       value: {
@@ -109,32 +25,13 @@ const sortOptions = {
         sortOrder: '',
       },
     },
+  ],
+  sideQuests: [
     {
-      title: 'Name ASC',
+      title: 'None',
       value: {
-        sortBy: 'name',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Name DESC',
-      value: {
-        sortBy: 'name',
-        sortOrder: 'DESC',
-      },
-    },
-    {
-      title: 'Birthday ASC',
-      value: {
-        sortBy: 'birthday',
-        sortOrder: 'ASC',
-      },
-    },
-    {
-      title: 'Birthday DESC',
-      value: {
-        sortBy: 'birthday',
-        sortOrder: 'DESC',
+        sortBy: '',
+        sortOrder: '',
       },
     },
   ],

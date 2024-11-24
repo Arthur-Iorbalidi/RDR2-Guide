@@ -13,11 +13,11 @@ import { Link } from 'react-router-dom';
 import styles from './BurgerMenu.module.scss';
 
 interface IProps {
-  toggleBurgerMenu: () => void;
+  closeBurgerMenu: () => void;
   isBurgerMenuOpened: boolean;
 }
 
-const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
+const BurgerMenu = ({ closeBurgerMenu, isBurgerMenuOpened }: IProps) => {
   const dispatch = useAppDispatch();
 
   const isAuth = useAppSelector((state) => state.userReducer.isAuthorized);
@@ -25,13 +25,13 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = useCallback(() => {
-    toggleBurgerMenu();
-  }, [toggleBurgerMenu]);
+    closeBurgerMenu();
+  }, [closeBurgerMenu]);
 
   useClickOutside(menuRef, handleClickOutside);
 
   const logout = () => {
-    toggleBurgerMenu();
+    closeBurgerMenu();
     serverAPI.logout();
     dispatch(changeIsAuthorized(false));
     dispatch(changeUserInfo(undefined));
@@ -47,18 +47,9 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
           <ul className={styles.burger_menu_list}>
             <li>
               <Link
-                to={routes.locations}
-                className={styles.link}
-                onClick={toggleBurgerMenu}
-              >
-                <span className={styles.link_text}>Locations</span>
-              </Link>
-            </li>
-            <li>
-              <Link
                 to={routes.weapons}
                 className={styles.link}
-                onClick={toggleBurgerMenu}
+                onClick={closeBurgerMenu}
               >
                 <span className={styles.link_text}>Weapons</span>
               </Link>
@@ -67,7 +58,7 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
               <Link
                 to={routes.horses}
                 className={styles.link}
-                onClick={toggleBurgerMenu}
+                onClick={closeBurgerMenu}
               >
                 <span className={styles.link_text}>Horses</span>
               </Link>
@@ -76,7 +67,7 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
               <Link
                 to={routes.storyQuests}
                 className={styles.link}
-                onClick={toggleBurgerMenu}
+                onClick={closeBurgerMenu}
               >
                 <span className={styles.link_text}>Story Quests</span>
               </Link>
@@ -85,7 +76,7 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
               <Link
                 to={routes.sideQuests}
                 className={styles.link}
-                onClick={toggleBurgerMenu}
+                onClick={closeBurgerMenu}
               >
                 <span className={styles.link_text}>Side Quests</span>
               </Link>
@@ -97,7 +88,7 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
                   <Link
                     to={routes.account}
                     className={styles.link}
-                    onClick={toggleBurgerMenu}
+                    onClick={closeBurgerMenu}
                   >
                     <span className={styles.link_text}>Account</span>
                   </Link>
@@ -106,7 +97,7 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
                   <Link
                     to={routes.favorites}
                     className={styles.link}
-                    onClick={toggleBurgerMenu}
+                    onClick={closeBurgerMenu}
                   >
                     <span className={styles.link_text}>Favorites</span>
                   </Link>
@@ -123,7 +114,7 @@ const BurgerMenu = ({ toggleBurgerMenu, isBurgerMenuOpened }: IProps) => {
                   <Link
                     to={routes.login}
                     className={styles.link}
-                    onClick={toggleBurgerMenu}
+                    onClick={closeBurgerMenu}
                   >
                     <span className={styles.link_text}>Log In</span>
                   </Link>

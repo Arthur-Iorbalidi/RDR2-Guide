@@ -1,49 +1,64 @@
 import serverAPI from '@src/services/serverAPI';
 
-const toggleFavoriteMovie = (
+const toggleSavedWeapon = (
   id: number,
-  isInFavorites: boolean,
+  isInSaved: boolean,
   succesAdd: (id: number) => void = () => {},
   succesRemove: (id: number) => void = () => {},
   unathorizedCallback: () => void = () => {},
 ) => {
-  if (isInFavorites) {
-    serverAPI.removeMovieFromFavorites(id, succesRemove, unathorizedCallback);
+  if (isInSaved) {
+    serverAPI.removeWeaponFromSaved(id, succesRemove, unathorizedCallback);
   } else {
-    serverAPI.addMovieToFavorites(id, succesAdd, unathorizedCallback);
+    serverAPI.addWeaponToSaved(id, succesAdd, unathorizedCallback);
   }
 };
 
-const toggleFavoriteActor = (
+const toggleSavedHorse = (
   id: number,
-  isInFavorites: boolean,
+  isInSaved: boolean,
   succesAdd: (id: number) => void = () => {},
   succesRemove: (id: number) => void = () => {},
   unathorizedCallback: () => void = () => {},
 ) => {
-  if (isInFavorites) {
-    serverAPI.removeActorFromFavorites(id, succesRemove, unathorizedCallback);
+  if (isInSaved) {
+    serverAPI.removeHorseFromSaved(id, succesRemove, unathorizedCallback);
   } else {
-    serverAPI.addActorToFavorites(id, succesAdd, unathorizedCallback);
+    serverAPI.addHorseToSaved(id, succesAdd, unathorizedCallback);
   }
 };
 
-const toggleFavoriteDirector = (
+const toggleSavedStoryQuest = (
   id: number,
-  isInFavorites: boolean,
+  isInSaved: boolean,
   succesAdd: (id: number) => void = () => {},
   succesRemove: (id: number) => void = () => {},
   unathorizedCallback: () => void = () => {},
 ) => {
-  if (isInFavorites) {
-    serverAPI.removeDirectorFromFavorites(
-      id,
-      succesRemove,
-      unathorizedCallback,
-    );
+  if (isInSaved) {
+    serverAPI.removeStoryQuestFromSaved(id, succesRemove, unathorizedCallback);
   } else {
-    serverAPI.addDirectorToFavorites(id, succesAdd, unathorizedCallback);
+    serverAPI.addStoryQuestToSaved(id, succesAdd, unathorizedCallback);
   }
 };
 
-export { toggleFavoriteActor, toggleFavoriteDirector, toggleFavoriteMovie };
+const toggleSavedSideQuest = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeSideQuestFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addSideQuestToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
+export {
+  toggleSavedHorse,
+  toggleSavedSideQuest,
+  toggleSavedStoryQuest,
+  toggleSavedWeapon,
+};

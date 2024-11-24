@@ -1,17 +1,16 @@
 import {
-  IActor,
-  IActorsResponse,
   IAuthUserResponse,
   ICheckUserResponse,
   ICreateUserDto,
-  IDirector,
-  IDirectorsResponse,
   IErrorResponse,
+  IHorsesResponse,
   ILoginUserDto,
-  IMovie,
-  IMoviesResponse,
   ISearch,
+  ISideQuestsResponse,
+  IStoryQuestsResponse,
   IUpdateUserDto,
+  IWeapon,
+  IWeaponsResponse,
 } from '@src/types/serverAPITypes';
 import axios from 'axios';
 
@@ -124,7 +123,7 @@ class ServerAPI {
     }
   }
 
-  async addMovieToFavorites(
+  async addWeaponToSaved(
     id: number,
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
@@ -133,7 +132,7 @@ class ServerAPI {
       const token = this.getToken();
 
       const response = await this.api.post(
-        `users/favorites/movie/${id}`,
+        `users/saved/weapons/${id}`,
         {},
         {
           headers: {
@@ -154,7 +153,7 @@ class ServerAPI {
     }
   }
 
-  async removeMovieFromFavorites(
+  async removeWeaponFromSaved(
     id: number,
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
@@ -162,7 +161,7 @@ class ServerAPI {
     try {
       const token = this.getToken();
 
-      const response = await this.api.delete(`users/favorites/movie/${id}`, {
+      const response = await this.api.delete(`users/saved/weapons/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -180,7 +179,7 @@ class ServerAPI {
     }
   }
 
-  async addActorToFavorites(
+  async addHorseToSaved(
     id: number,
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
@@ -189,7 +188,7 @@ class ServerAPI {
       const token = this.getToken();
 
       const response = await this.api.post(
-        `users/favorites/actor/${id}`,
+        `users/saved/horses/${id}`,
         {},
         {
           headers: {
@@ -210,7 +209,7 @@ class ServerAPI {
     }
   }
 
-  async removeActorFromFavorites(
+  async removeHorseFromSaved(
     id: number,
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
@@ -218,7 +217,7 @@ class ServerAPI {
     try {
       const token = this.getToken();
 
-      const response = await this.api.delete(`users/favorites/actor/${id}`, {
+      const response = await this.api.delete(`users/saved/horses/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -236,7 +235,7 @@ class ServerAPI {
     }
   }
 
-  async addDirectorToFavorites(
+  async addStoryQuestToSaved(
     id: number,
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
@@ -245,7 +244,7 @@ class ServerAPI {
       const token = this.getToken();
 
       const response = await this.api.post(
-        `users/favorites/director/${id}`,
+        `users/saved/story-quests/${id}`,
         {},
         {
           headers: {
@@ -266,7 +265,7 @@ class ServerAPI {
     }
   }
 
-  async removeDirectorFromFavorites(
+  async removeStoryQuestFromSaved(
     id: number,
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
@@ -274,7 +273,63 @@ class ServerAPI {
     try {
       const token = this.getToken();
 
-      const response = await this.api.delete(`users/favorites/director/${id}`, {
+      const response = await this.api.delete(`users/saved/story-quests/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
+  }
+
+  async addSideQuestToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    try {
+      const token = this.getToken();
+
+      const response = await this.api.post(
+        `users/saved/saved/side-quests/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
+  }
+
+  async removeSideQuestFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    try {
+      const token = this.getToken();
+
+      const response = await this.api.delete(`users/saved/side-quests/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -296,26 +351,26 @@ class ServerAPI {
     storageAPI.remove('token');
   }
 
-  async getMovies(params: ISearch): Promise<IMoviesResponse> {
-    const response = await this.api.get('movies', {
+  async getWeapons(params: ISearch): Promise<IWeaponsResponse> {
+    const response = await this.api.get('weapons', {
       params: {
         ...(params.search !== '' ? { search: params.search } : {}),
         ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
         ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
-        page: params.page,
-        limit: params.limit,
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
       },
     });
 
     return response.data;
   }
 
-  async getMovie(
+  async getWeapon(
     id: number,
     errorCallback: (message: string) => void,
-  ): Promise<IMovie | undefined> {
+  ): Promise<IWeapon | undefined> {
     try {
-      const response = await this.api.get(`movies/${id}`);
+      const response = await this.api.get(`weapons/${id}`);
 
       return response.data;
     } catch {
@@ -323,26 +378,26 @@ class ServerAPI {
     }
   }
 
-  async getActors(params: ISearch): Promise<IActorsResponse> {
-    const response = await this.api.get('actors', {
+  async getHorses(params: ISearch): Promise<IHorsesResponse> {
+    const response = await this.api.get('horses', {
       params: {
         ...(params.search !== '' ? { search: params.search } : {}),
         ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
         ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
-        page: params.page,
-        limit: params.limit,
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
       },
     });
 
     return response.data;
   }
 
-  async getActor(
+  async getHorse(
     id: number,
     errorCallback: (message: string) => void,
-  ): Promise<IActor | undefined> {
+  ): Promise<IWeapon | undefined> {
     try {
-      const response = await this.api.get(`actors/${id}`);
+      const response = await this.api.get(`horses/${id}`);
 
       return response.data;
     } catch {
@@ -350,26 +405,26 @@ class ServerAPI {
     }
   }
 
-  async getDirectors(params: ISearch): Promise<IDirectorsResponse> {
-    const response = await this.api.get('directors', {
+  async getStoryQuests(params: ISearch): Promise<IStoryQuestsResponse> {
+    const response = await this.api.get('story-quests', {
       params: {
         ...(params.search !== '' ? { search: params.search } : {}),
         ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
         ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
-        page: params.page,
-        limit: params.limit,
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
       },
     });
 
     return response.data;
   }
 
-  async getDirector(
+  async getStoryQuest(
     id: number,
     errorCallback: (message: string) => void,
-  ): Promise<IDirector | undefined> {
+  ): Promise<IWeapon | undefined> {
     try {
-      const response = await this.api.get(`directors/${id}`);
+      const response = await this.api.get(`story-quests/${id}`);
 
       return response.data;
     } catch {
@@ -377,13 +432,40 @@ class ServerAPI {
     }
   }
 
-  async getFavoriteMovies(
+  async getSideQuests(params: ISearch): Promise<ISideQuestsResponse> {
+    const response = await this.api.get('side-quests', {
+      params: {
+        ...(params.search !== '' ? { search: params.search } : {}),
+        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
+        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getSideQuest(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IWeapon | undefined> {
+    try {
+      const response = await this.api.get(`side-quests/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getSavedWeapons(
     unathorizedCallback?: () => void,
-  ): Promise<IMovie[] | undefined> {
+  ): Promise<IWeapon[] | undefined> {
     try {
       const token = this.getToken();
 
-      const response = await this.api.get('users/favorites/movies', {
+      const response = await this.api.get('users/saved/weapons', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -397,13 +479,13 @@ class ServerAPI {
     }
   }
 
-  async getFavoriteActors(
+  async getSavedHorses(
     unathorizedCallback?: () => void,
-  ): Promise<IActor[] | undefined> {
+  ): Promise<IWeapon[] | undefined> {
     try {
       const token = this.getToken();
 
-      const response = await this.api.get('users/favorites/actors', {
+      const response = await this.api.get('users/saved/horses', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -417,13 +499,13 @@ class ServerAPI {
     }
   }
 
-  async getFavoriteDirectors(
+  async getSavedStoryQuests(
     unathorizedCallback?: () => void,
-  ): Promise<IDirector[] | undefined> {
+  ): Promise<IWeapon[] | undefined> {
     try {
       const token = this.getToken();
 
-      const response = await this.api.get('users/favorites/directors', {
+      const response = await this.api.get('users/saved/story-quests', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -437,15 +519,16 @@ class ServerAPI {
     }
   }
 
-  async getFavoriteMoviesReportPdf(unathorizedCallback?: () => void) {
+  async getSideStoryQuests(
+    unathorizedCallback?: () => void,
+  ): Promise<IWeapon[] | undefined> {
     try {
       const token = this.getToken();
 
-      const response = await this.api.get('reports/favorites/movies/pdf', {
+      const response = await this.api.get('users/saved/side-quests', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        responseType: 'blob',
       });
 
       return response.data;
@@ -456,100 +539,43 @@ class ServerAPI {
     }
   }
 
-  async getFavoriteMoviesReportDocx(unathorizedCallback?: () => void) {
-    try {
-      const token = this.getToken();
+  // async getFavoriteMoviesReportPdf(unathorizedCallback?: () => void) {
+  //   try {
+  //     const token = this.getToken();
 
-      const response = await this.api.get('reports/favorites/movies/docx', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: 'blob',
-      });
+  //     const response = await this.api.get('reports/favorites/movies/pdf', {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       responseType: 'blob',
+  //     });
 
-      return response.data;
-    } catch (e) {
-      if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
-      }
-    }
-  }
+  //     return response.data;
+  //   } catch (e) {
+  //     if ((e as IErrorResponse).status === 401) {
+  //       unathorizedCallback?.();
+  //     }
+  //   }
+  // }
 
-  async getFavoriteActorsReportPdf(unathorizedCallback?: () => void) {
-    try {
-      const token = this.getToken();
+  // async getFavoriteMoviesReportDocx(unathorizedCallback?: () => void) {
+  //   try {
+  //     const token = this.getToken();
 
-      const response = await this.api.get('reports/favorites/actors/pdf', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: 'blob',
-      });
+  //     const response = await this.api.get('reports/favorites/movies/docx', {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       responseType: 'blob',
+  //     });
 
-      return response.data;
-    } catch (e) {
-      if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
-      }
-    }
-  }
-
-  async getFavoriteActorsReportDocx(unathorizedCallback?: () => void) {
-    try {
-      const token = this.getToken();
-
-      const response = await this.api.get('reports/favorites/actors/docx', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: 'blob',
-      });
-
-      return response.data;
-    } catch (e) {
-      if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
-      }
-    }
-  }
-
-  async getFavoriteDirectorsReportPdf(unathorizedCallback?: () => void) {
-    try {
-      const token = this.getToken();
-
-      const response = await this.api.get('reports/favorites/directors/pdf', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: 'blob',
-      });
-
-      return response.data;
-    } catch (e) {
-      if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
-      }
-    }
-  }
-
-  async getFavoriteDirectorsReportDocx(unathorizedCallback?: () => void) {
-    try {
-      const token = this.getToken();
-
-      const response = await this.api.get('reports/favorites/directors/docx', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: 'blob',
-      });
-
-      return response.data;
-    } catch (e) {
-      if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
-      }
-    }
-  }
+  //     return response.data;
+  //   } catch (e) {
+  //     if ((e as IErrorResponse).status === 401) {
+  //       unathorizedCallback?.();
+  //     }
+  //   }
+  // }
 
   getToken() {
     return storageAPI.get('token');

@@ -11,24 +11,8 @@
   min-height: 127px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 30px;
-}
-
-.info {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.author {
-  font-size: global.$fontSizeCaptionMedium;
-}
-
-.links {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 @media (max-width: 550px) {

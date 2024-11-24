@@ -5,23 +5,92 @@ const searchSlice = createSlice({
   name: 'search',
   initialState: defaultSearchValues,
   reducers: {
-    changeMoviesSearch: (state, action: PayloadAction<string>) => {
-      state.movies.search = action.payload;
+    changeWeaponsSearch: (state, action: PayloadAction<string>) => {
+      state.weapons.search = action.payload;
     },
-    // changeMoviesPage: (state, action: PayloadAction<number>) => {
-    //   state.movies.page = action.payload;
-    // },
-    // changeMoviesSort: (state, action: PayloadAction<string>) => {
-    //   state.movies.sortBy = action.payload;
-    // },
-    // changeMoviesSortOrder: (state, action: PayloadAction<string>) => {
-    //   state.movies.sortOrder = action.payload;
-    // },
-    // resetMoviesPage: (state) => {
-    //   state.movies.page = defaultSearchValues.movies.page;
-    // },
+    changeWeaponsPage: (state, action: PayloadAction<number>) => {
+      state.weapons.page = action.payload;
+    },
+    changeWeaponsSort: (state, action: PayloadAction<string>) => {
+      state.weapons.sortBy = action.payload;
+    },
+    changeWeaponsSortOrder: (state, action: PayloadAction<string>) => {
+      state.weapons.sortOrder = action.payload;
+    },
+    resetWeaponsPage: (state) => {
+      state.weapons.page = defaultSearchValues.weapons.page;
+    },
+
+    changeHorsesSearch: (state, action: PayloadAction<string>) => {
+      state.horses.search = action.payload;
+    },
+    changeHorsesPage: (state, action: PayloadAction<number>) => {
+      state.horses.page = action.payload;
+    },
+    changeHorsesSort: (state, action: PayloadAction<string>) => {
+      state.horses.sortBy = action.payload;
+    },
+    changeHorsesSortOrder: (state, action: PayloadAction<string>) => {
+      state.horses.sortOrder = action.payload;
+    },
+    resetHorsesPage: (state) => {
+      state.horses.page = defaultSearchValues.horses.page;
+    },
+
+    changeStoryQuestsSearch: (state, action: PayloadAction<string>) => {
+      state.storyQuests.search = action.payload;
+    },
+    changeStoryQuestsPage: (state, action: PayloadAction<number>) => {
+      state.storyQuests.page = action.payload;
+    },
+    changeStoryQuestsSort: (state, action: PayloadAction<string>) => {
+      state.storyQuests.sortBy = action.payload;
+    },
+    changeStoryQuestsSortOrder: (state, action: PayloadAction<string>) => {
+      state.storyQuests.sortOrder = action.payload;
+    },
+    resetStoryQuestsPage: (state) => {
+      state.storyQuests.page = defaultSearchValues.storyQuests.page;
+    },
+
+    changeSideQuestsSearch: (state, action: PayloadAction<string>) => {
+      state.sideQuests.search = action.payload;
+    },
+    changeSideQuestsPage: (state, action: PayloadAction<number>) => {
+      state.sideQuests.page = action.payload;
+    },
+    changeSideQuestsSort: (state, action: PayloadAction<string>) => {
+      state.sideQuests.sortBy = action.payload;
+    },
+    changeSideQuestsSortOrder: (state, action: PayloadAction<string>) => {
+      state.sideQuests.sortOrder = action.payload;
+    },
+    resetSideQuestsPage: (state) => {
+      state.sideQuests.page = defaultSearchValues.sideQuests.page;
+    },
   },
 });
 
-export const { changeMoviesSearch } = searchSlice.actions;
+export const {
+  changeWeaponsPage,
+  changeWeaponsSearch,
+  changeWeaponsSort,
+  changeWeaponsSortOrder,
+  changeHorsesPage,
+  changeHorsesSearch,
+  changeHorsesSort,
+  changeHorsesSortOrder,
+  changeSideQuestsPage,
+  changeSideQuestsSearch,
+  changeSideQuestsSort,
+  changeSideQuestsSortOrder,
+  changeStoryQuestsPage,
+  changeStoryQuestsSearch,
+  changeStoryQuestsSort,
+  changeStoryQuestsSortOrder,
+  resetHorsesPage,
+  resetSideQuestsPage,
+  resetStoryQuestsPage,
+  resetWeaponsPage,
+} = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;

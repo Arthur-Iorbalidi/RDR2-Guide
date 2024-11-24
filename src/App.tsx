@@ -34,11 +34,11 @@ function App() {
 
         <Route
           path={routes.login}
-          element={!isAuth ? <Login /> : <Navigate to={routes.movies} />}
+          element={!isAuth ? <Login /> : <Navigate to={routes.home} />}
         />
         <Route
           path={routes.registration}
-          element={!isAuth ? <Registration /> : <Navigate to={routes.movies} />}
+          element={!isAuth ? <Registration /> : <Navigate to={routes.home} />}
         />
       </Routes>
     </BrowserRouter>

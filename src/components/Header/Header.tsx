@@ -41,6 +41,10 @@ const Header = () => {
     setIsBurgerMenuOpened((prev) => !prev);
   }, []);
 
+  const closeBurgerMenu = useCallback(() => {
+    setIsBurgerMenuOpened(false);
+  }, []);
+
   const handleToggleAuthUserMenu = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -92,7 +96,7 @@ const Header = () => {
             handleOpenBurgerMenu={handleToggleBurgerMenu}
           />
           <BurgerMenu
-            toggleBurgerMenu={toggleBurgerMenu}
+            closeBurgerMenu={closeBurgerMenu}
             isBurgerMenuOpened={isBurgerMenuOpened}
           />
         </div>
