@@ -1,6 +1,9 @@
 import routes from '@src/constants/routes';
 import MainLayout from '@src/layouts/MainLayout/MainLayout';
 import Account from '@src/pages/Account/Account';
+import DetailedHorse from '@src/pages/DetailedHorse/DetailedHorse';
+import DetailedSideQuest from '@src/pages/DetailedSideQuest/DetailedSideQuest';
+import DetailedStoryQuest from '@src/pages/DetailedStoryQuest/DetailedStoryQuest';
 import DetailedWeapon from '@src/pages/DetailedWeapon/DetailedWeapon';
 import Favorites from '@src/pages/Favorites/Favorites';
 import Home from '@src/pages/Home/Home';
@@ -22,9 +25,15 @@ const MainRouter = () => {
           <Route path={routes.storyQuests} element={<StoryQuests />} />
           <Route path={routes.sideQuests} element={<SideQuests />} />
           <Route path={routes.detailedWeapon} element={<DetailedWeapon />} />
-          {/* <Route path={routes.detailedHorse} element={<Hourses />} /> */}
-          {/* <Route path={routes.detailedStoryQuest} element={<StoryQuests />} /> */}
-          {/* <Route path={routes.detailedSideQuest} element={<SideQuests />} /> */}
+          <Route path={routes.detailedHorse} element={<DetailedHorse />} />
+          <Route
+            path={routes.detailedStoryQuest}
+            element={<DetailedStoryQuest />}
+          />
+          <Route
+            path={routes.detailedSideQuest}
+            element={<DetailedSideQuest />}
+          />
           <Route path={routes.account} element={<Account />} />
           <Route path={routes.favorites} element={<Favorites />} />
         </Route>

@@ -3,10 +3,13 @@ import {
   ICheckUserResponse,
   ICreateUserDto,
   IErrorResponse,
+  IHorse,
   IHorsesResponse,
   ILoginUserDto,
   ISearch,
+  ISideQuest,
   ISideQuestsResponse,
+  IStoryQuest,
   IStoryQuestsResponse,
   IUpdateUserDto,
   IWeapon,
@@ -300,7 +303,7 @@ class ServerAPI {
       const token = this.getToken();
 
       const response = await this.api.post(
-        `users/saved/saved/side-quests/${id}`,
+        `users/saved/side-quests/${id}`,
         {},
         {
           headers: {
@@ -395,7 +398,7 @@ class ServerAPI {
   async getHorse(
     id: number,
     errorCallback: (message: string) => void,
-  ): Promise<IWeapon | undefined> {
+  ): Promise<IHorse | undefined> {
     try {
       const response = await this.api.get(`horses/${id}`);
 
@@ -422,7 +425,7 @@ class ServerAPI {
   async getStoryQuest(
     id: number,
     errorCallback: (message: string) => void,
-  ): Promise<IWeapon | undefined> {
+  ): Promise<IStoryQuest | undefined> {
     try {
       const response = await this.api.get(`story-quests/${id}`);
 
@@ -449,7 +452,7 @@ class ServerAPI {
   async getSideQuest(
     id: number,
     errorCallback: (message: string) => void,
-  ): Promise<IWeapon | undefined> {
+  ): Promise<ISideQuest | undefined> {
     try {
       const response = await this.api.get(`side-quests/${id}`);
 

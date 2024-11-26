@@ -1,5 +1,6 @@
 import Grid from '@src/components/Grid/Grid';
 import Item from '@src/components/Item/Item';
+import Pagination from '@src/components/Pagination/Pagination';
 import SearchForm from '@src/components/SearchForm/SearchForm';
 import Sorting from '@src/components/Sorting/Sorting';
 import routes from '@src/constants/routes';
@@ -8,6 +9,7 @@ import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
 import {
+  changeWeaponsPage,
   changeWeaponsSearch,
   changeWeaponsSort,
   changeWeaponsSortOrder,
@@ -86,9 +88,9 @@ const Weapons = () => {
     dispatch(resetWeaponsPage());
   };
 
-  // const handleChangePage = (count: number) => {
-  //   dispatch(changeWeaponsPage(params.page! + count));
-  // };
+  const handleChangePage = (count: number) => {
+    dispatch(changeWeaponsPage(params.page! + count));
+  };
 
   const handleChangeSorting = (index: number) => {
     dispatch(changeWeaponsSort(sortOptions.weapons[index].value.sortBy));
@@ -128,12 +130,12 @@ const Weapons = () => {
             ))}
         </Grid>
 
-        {/* {weapons?.pagination && (
+        {weapons?.pagination && (
           <Pagination
             pagination={weapons?.pagination}
             handleChangePage={handleChangePage}
           />
-        )} */}
+        )}
       </div>
     </section>
   );

@@ -31,6 +31,7 @@ interface IHorse {
   locationId?: number;
   image?: string;
   location?: ILocation;
+  handling: IHandling;
 }
 
 interface IStoryQuest {
@@ -55,37 +56,37 @@ interface ISideQuest {
   location?: ILocation;
 }
 
+interface IHandling {
+  id: number;
+  handling: string;
+}
+
 interface IWeaponsResponse {
   data: IWeapon[];
-  // pagination: IPagination;
+  pagination: IPagination;
 }
 
 interface IHorsesResponse {
   data: IHorse[];
-  // pagination: IPagination;
+  pagination: IPagination;
 }
 
 interface IStoryQuestsResponse {
   data: IStoryQuest[];
-  // pagination: IPagination;
+  pagination: IPagination;
 }
 
 interface ISideQuestsResponse {
   data: ISideQuest[];
-  // pagination: IPagination;
+  pagination: IPagination;
 }
 
-// interface IMoviesResponse {
-//   data: IMovie[];
-//   pagination: IPagination;
-// }
-
-// interface IPagination {
-//   total: number;
-//   limit: number;
-//   total_pages: number;
-//   current_page: number;
-// }
+interface IPagination {
+  total: number;
+  limit: number;
+  total_pages: number;
+  current_page: number;
+}
 
 interface ISearch {
   search?: string;
