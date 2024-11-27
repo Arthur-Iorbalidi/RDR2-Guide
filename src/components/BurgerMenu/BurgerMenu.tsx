@@ -95,11 +95,11 @@ const BurgerMenu = ({ closeBurgerMenu, isBurgerMenuOpened }: IProps) => {
                 </li>
                 <li>
                   <Link
-                    to={routes.favorites}
+                    to={routes.saved}
                     className={styles.link}
                     onClick={closeBurgerMenu}
                   >
-                    <span className={styles.link_text}>Favorites</span>
+                    <span className={styles.link_text}>Saved</span>
                   </Link>
                 </li>
                 <li>

@@ -8,7 +8,7 @@ const routes = {
   detailedHorse: '/horses/:id',
   detailedStoryQuest: '/story-quests/:id',
   detailedSideQuest: '/side-quests/:id',
-  favorites: '/favorites',
+  saved: '/saved',
   login: '/login',
   registration: '/registration',
   account: '/account',

@@ -1,3 +1,7 @@
+import SavedHorses from '@src/components/SavedHorses/SavedHorses';
+import SavedSideQuests from '@src/components/SavedSideQuests/SavedSideQuests';
+import SavedStoryQuests from '@src/components/SavedStoryQuests/SavedStoryQuests';
+import SavedWeapons from '@src/components/SavedWeapons/SavedWeapons';
 import Sorting from '@src/components/Sorting/Sorting';
 import Loader from '@src/components/ui/Loader/Loader';
 import routes from '@src/constants/routes';
@@ -5,10 +9,10 @@ import useAppSelector from '@src/hooks/useAppSelector';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import styles from './Favorites.module.scss';
+import styles from './Saved.module.scss';
 
-const Favorites = () => {
-  const options = ['Movies', 'Actors', 'Directors'];
+const Saved = () => {
+  const options = ['Weapons', 'Horses', 'Story Quests', 'Side Quests'];
 
   const [currentOptionIndex, setCurrentOptionIndex] = useState(0);
 
@@ -27,20 +31,21 @@ const Favorites = () => {
   }
 
   return (
-    <section className={styles.favorites_page}>
+    <section className={styles.page}>
       <div className={styles.wrapper}>
-        <h1 className={styles.header}>Favorites</h1>
+        <h1 className={styles.header}>Saved</h1>
         <Sorting
           sortOptions={options}
           currentSortOptionIndex={currentOptionIndex}
           handleChangeSorting={handleChangeSorting}
         />
-        {/* {options[currentOptionIndex] === 'Movies' && <FavoriteMovies />}
-        {options[currentOptionIndex] === 'Actors' && <FavoriteActors />}
-        {options[currentOptionIndex] === 'Directors' && <FavoriteDirectors />} */}
+        {options[currentOptionIndex] === 'Weapons' && <SavedWeapons />}
+        {options[currentOptionIndex] === 'Horses' && <SavedHorses />}
+        {options[currentOptionIndex] === 'Story Quests' && <SavedStoryQuests />}
+        {options[currentOptionIndex] === 'Side Quests' && <SavedSideQuests />}
       </div>
     </section>
   );
 };
 
-export default Favorites;
+export default Saved;

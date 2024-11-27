@@ -484,7 +484,7 @@ class ServerAPI {
 
   async getSavedHorses(
     unathorizedCallback?: () => void,
-  ): Promise<IWeapon[] | undefined> {
+  ): Promise<IHorse[] | undefined> {
     try {
       const token = this.getToken();
 
@@ -504,7 +504,7 @@ class ServerAPI {
 
   async getSavedStoryQuests(
     unathorizedCallback?: () => void,
-  ): Promise<IWeapon[] | undefined> {
+  ): Promise<IStoryQuest[] | undefined> {
     try {
       const token = this.getToken();
 
@@ -522,9 +522,9 @@ class ServerAPI {
     }
   }
 
-  async getSideStoryQuests(
+  async getSavedSideQuests(
     unathorizedCallback?: () => void,
-  ): Promise<IWeapon[] | undefined> {
+  ): Promise<ISideQuest[] | undefined> {
     try {
       const token = this.getToken();
 

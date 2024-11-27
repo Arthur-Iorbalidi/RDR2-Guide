@@ -5,9 +5,9 @@ import DetailedHorse from '@src/pages/DetailedHorse/DetailedHorse';
 import DetailedSideQuest from '@src/pages/DetailedSideQuest/DetailedSideQuest';
 import DetailedStoryQuest from '@src/pages/DetailedStoryQuest/DetailedStoryQuest';
 import DetailedWeapon from '@src/pages/DetailedWeapon/DetailedWeapon';
-import Favorites from '@src/pages/Favorites/Favorites';
 import Home from '@src/pages/Home/Home';
 import Hourses from '@src/pages/Hourses/Hourses';
+import Saved from '@src/pages/Saved/Saved';
 import SideQuests from '@src/pages/SideQuests/SideQuests';
 import StoryQuests from '@src/pages/StoryQuests/StoryQuests';
 import Weapons from '@src/pages/Weapons/Weapons';
@@ -35,7 +35,7 @@ const MainRouter = () => {
             element={<DetailedSideQuest />}
           />
           <Route path={routes.account} element={<Account />} />
-          <Route path={routes.favorites} element={<Favorites />} />
+          <Route path={routes.saved} element={<Saved />} />
         </Route>
       </Routes>
     </>
