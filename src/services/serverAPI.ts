@@ -20,7 +20,7 @@ import axios from 'axios';
 import storageAPI from './storageAPI';
 
 class ServerAPI {
-  private baseUrl = 'http://localhost:5000/api';
+  private baseUrl = 'https://localhost:7157/api';
 
   private api = axios.create({
     baseURL: this.baseUrl,
