@@ -35,6 +35,24 @@ const sortOptions = {
       },
     },
   ],
+  challenges: [
+    {
+      title: 'None',
+      value: {
+        sortBy: '',
+        sortOrder: '',
+      },
+    },
+  ],
+  collectibles: [
+    {
+      title: 'None',
+      value: {
+        sortBy: '',
+        sortOrder: '',
+      },
+    },
+  ],
 };
 
 interface ISortOption {

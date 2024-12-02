@@ -1,12 +1,18 @@
 import routes from '@src/constants/routes';
 import MainLayout from '@src/layouts/MainLayout/MainLayout';
 import Account from '@src/pages/Account/Account';
+import Animals from '@src/pages/Animals/Animals';
+import DetailedAnimal from '@src/pages/DetailedAnimal/DetailedAnimal';
+import DetailedFish from '@src/pages/DetailedFish/DetailedFish';
 import DetailedHorse from '@src/pages/DetailedHorse/DetailedHorse';
+import DetailedPlant from '@src/pages/DetailedPlant/DetailedPlant';
 import DetailedSideQuest from '@src/pages/DetailedSideQuest/DetailedSideQuest';
 import DetailedStoryQuest from '@src/pages/DetailedStoryQuest/DetailedStoryQuest';
 import DetailedWeapon from '@src/pages/DetailedWeapon/DetailedWeapon';
+import Fishes from '@src/pages/Fishes/Fishes';
 import Home from '@src/pages/Home/Home';
 import Hourses from '@src/pages/Hourses/Hourses';
+import Plants from '@src/pages/Plants/Plants';
 import Saved from '@src/pages/Saved/Saved';
 import SideQuests from '@src/pages/SideQuests/SideQuests';
 import StoryQuests from '@src/pages/StoryQuests/StoryQuests';
@@ -24,6 +30,9 @@ const MainRouter = () => {
           <Route path={routes.horses} element={<Hourses />} />
           <Route path={routes.storyQuests} element={<StoryQuests />} />
           <Route path={routes.sideQuests} element={<SideQuests />} />
+          <Route path={routes.animals} element={<Animals />} />
+          <Route path={routes.plants} element={<Plants />} />
+          <Route path={routes.fishes} element={<Fishes />} />
           <Route path={routes.detailedWeapon} element={<DetailedWeapon />} />
           <Route path={routes.detailedHorse} element={<DetailedHorse />} />
           <Route
@@ -34,6 +43,9 @@ const MainRouter = () => {
             path={routes.detailedSideQuest}
             element={<DetailedSideQuest />}
           />
+          <Route path={routes.detailedAnimal} element={<DetailedAnimal />} />
+          <Route path={routes.detailedPlant} element={<DetailedPlant />} />
+          <Route path={routes.detailedFish} element={<DetailedFish />} />
           <Route path={routes.account} element={<Account />} />
           <Route path={routes.saved} element={<Saved />} />
         </Route>

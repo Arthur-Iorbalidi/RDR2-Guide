@@ -12,7 +12,7 @@ import {
 } from '@src/store/slices/userSlice';
 import { IHorse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedHorse } from '@src/utils/toggleFavorites';
+import { toggleSavedHorse } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -106,7 +106,7 @@ const DetailedHorse = () => {
             </div>
             <div className={styles.info}>
               <div className={styles.main_info}>
-                <h2 className={styles.title}>{horse.name}</h2>
+                <h2 className={styles.title}>{horse.breed}</h2>
               </div>
               <div className={styles.overview}>
                 <h2 className={styles.overview_title}>Overview</h2>
@@ -133,13 +133,13 @@ const DetailedHorse = () => {
                     Acceleration:
                   </span>
                   <span className={styles.overview_item_value}>
-                    {horse.accelerarion}
+                    {horse.acceleration}
                   </span>
                 </p>
                 <p className={styles.overview_item}>
                   <span className={styles.overview_item_title}>Handling:</span>
                   <span className={styles.overview_item_value}>
-                    {horse.handling.handling}
+                    {horse.handling}
                   </span>
                 </p>
               </div>
@@ -148,15 +148,18 @@ const DetailedHorse = () => {
           {horse.location && (
             <div className={styles.location_wrapper}>
               <h2 className={styles.location_title}>Location</h2>
-              <div className={styles.img_wrapper}>
-                <img
-                  className={styles.img}
-                  src={imageAPI.getImage(horse.location.image)}
-                  alt="location"
-                  onError={(e) => {
-                    e.currentTarget.src = images.imgPlaceholder;
-                  }}
-                />
+              <div className={styles.location_content}>
+                <h3 className={styles.location_name}>{horse.location.name}</h3>
+                <div className={styles.img_wrapper}>
+                  <img
+                    className={styles.img}
+                    src={imageAPI.getImage(horse.location.image)}
+                    alt="location"
+                    onError={(e) => {
+                      e.currentTarget.src = images.imgPlaceholder;
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}

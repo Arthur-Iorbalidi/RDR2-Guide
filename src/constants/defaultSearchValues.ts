@@ -5,6 +5,9 @@ const defaultSearchValues: {
   horses: ISearch;
   storyQuests: ISearch;
   sideQuests: ISearch;
+  animals: ISearch;
+  plants: ISearch;
+  fishes: ISearch;
 } = {
   weapons: {
     search: '',
@@ -28,6 +31,27 @@ const defaultSearchValues: {
     limit: undefined,
   },
   sideQuests: {
+    search: '',
+    sortBy: '',
+    sortOrder: '',
+    page: undefined,
+    limit: undefined,
+  },
+  animals: {
+    search: '',
+    sortBy: '',
+    sortOrder: '',
+    page: undefined,
+    limit: undefined,
+  },
+  plants: {
+    search: '',
+    sortBy: '',
+    sortOrder: '',
+    page: undefined,
+    limit: undefined,
+  },
+  fishes: {
     search: '',
     sortBy: '',
     sortOrder: '',

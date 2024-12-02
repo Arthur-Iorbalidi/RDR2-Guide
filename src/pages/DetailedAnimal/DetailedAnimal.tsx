@@ -7,28 +7,28 @@ import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
 import {
-  addWeaponToSaved,
-  removeWeaponFromSaved,
+  addAnimalToSaved,
+  removeAnimalFromSaved,
 } from '@src/store/slices/userSlice';
-import { IWeapon } from '@src/types/serverAPITypes';
+import { IAnimal } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedWeapon } from '@src/utils/toggleSaved';
+import { toggleSavedAnimal } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import styles from './DetailedWeapon.module.scss';
+import styles from './DetailedAnimal.module.scss';
 
-const DetailedWeapon = () => {
+const DetailedAnimal = () => {
   const { id } = useParams();
 
   const dispatch = useDispatch();
 
-  const savedWeapons = useAppSelector(
-    (state) => state.userReducer.userInfo?.weapons,
+  const savedAnimals = useAppSelector(
+    (state) => state.userReducer.userInfo?.animals,
   );
 
-  const [weapon, setWeapon] = useState<IWeapon | undefined>(undefined);
+  const [animal, setAnimal] = useState<IAnimal | undefined>(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,18 +39,18 @@ const DetailedWeapon = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const data = await serverAPI.getWeapon(Number(id), errorCallback);
-      setWeapon(data);
+      const data = await serverAPI.getAnimal(Number(id), errorCallback);
+      setAnimal(data);
       setIsLoading(false);
     })();
   }, []);
 
   const succesAdd = (id: number) => {
-    dispatch(addWeaponToSaved(id));
+    dispatch(addAnimalToSaved(id));
   };
 
   const succesRemove = (id: number) => {
-    dispatch(removeWeaponFromSaved(id));
+    dispatch(removeAnimalFromSaved(id));
   };
 
   const unathorizedCallback = () => {
@@ -66,9 +66,9 @@ const DetailedWeapon = () => {
   ) => {
     event.preventDefault();
 
-    toggleSavedWeapon(
-      weapon!.id,
-      isInArray(weapon!.id, savedWeapons),
+    toggleSavedAnimal(
+      animal!.id,
+      isInArray(animal!.id, savedAnimals),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -82,7 +82,7 @@ const DetailedWeapon = () => {
   return (
     <section className={styles.detailed_page}>
       {isLoading && <Loader />}
-      {weapon && (
+      {animal && (
         <div className={styles.wrapper}>
           <button className={styles.back_btn} onClick={goBack}>
             <img src={images.goBackIcon} alt="go back" />
@@ -91,77 +91,51 @@ const DetailedWeapon = () => {
             <div className={styles.img_wrapper}>
               <img
                 className={styles.img}
-                src={imageAPI.getImage(weapon.image!)}
-                alt="weapon"
+                src={imageAPI.getImage(animal.image!)}
+                alt="animal"
                 onError={(e) => {
                   e.currentTarget.src = images.imgPlaceholder;
                 }}
               />
               <div className={styles.favourite_btn_wrapper}>
                 <FavoriteButton
-                  isInFavorites={isInArray(weapon.id, savedWeapons)}
+                  isInFavorites={isInArray(animal.id, savedAnimals)}
                   onClick={handleToggleFavorite}
                 />
               </div>
             </div>
             <div className={styles.info}>
               <div className={styles.main_info}>
-                <h2 className={styles.title}>{weapon.name}</h2>
+                <h2 className={styles.title}>{animal.name}</h2>
               </div>
               <div className={styles.overview}>
                 <h2 className={styles.overview_title}>Overview</h2>
                 <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>Damage:</span>
+                  <span className={styles.overview_item_title}>Hostility:</span>
                   <span className={styles.overview_item_value}>
-                    {weapon.damage}
-                  </span>
-                </p>
-                <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>Range:</span>
-                  <span className={styles.overview_item_value}>
-                    {weapon.range}
+                    {animal.hostility}
                   </span>
                 </p>
                 <p className={styles.overview_item}>
                   <span className={styles.overview_item_title}>
-                    Firing rate:
+                    Is legendary:
                   </span>
                   <span className={styles.overview_item_value}>
-                    {weapon.firingRate}
-                  </span>
-                </p>
-                <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>Accuracy:</span>
-                  <span className={styles.overview_item_value}>
-                    {weapon.accuracy}
-                  </span>
-                </p>
-                {weapon.cost && (
-                  <p className={styles.overview_item}>
-                    <span className={styles.overview_item_title}>Cost:</span>
-                    <span className={styles.overview_item_value}>
-                      {`$${weapon.cost}`}
-                    </span>
-                  </p>
-                )}
-                <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>Is unique:</span>
-                  <span className={styles.overview_item_value}>
-                    {`${weapon.isUnique}`}
+                    {`${animal.isLegendary}`}
                   </span>
                 </p>
               </div>
             </div>
           </div>
-          {weapon.location && (
+          {animal.location && (
             <div className={styles.location_wrapper}>
               <h2 className={styles.location_title}>Location</h2>
               <div className={styles.location_content}>
-                <h3 className={styles.location_name}>{weapon.location.name}</h3>
+                <h3 className={styles.location_name}>{animal.location.name}</h3>
                 <div className={styles.img_wrapper}>
                   <img
                     className={styles.img}
-                    src={imageAPI.getImage(weapon.location.image)}
+                    src={imageAPI.getImage(animal.location.image)}
                     alt="location"
                     onError={(e) => {
                       e.currentTarget.src = images.imgPlaceholder;
@@ -178,4 +152,4 @@ const DetailedWeapon = () => {
   );
 };
 
-export default DetailedWeapon;
+export default DetailedAnimal;

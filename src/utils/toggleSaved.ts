@@ -56,8 +56,53 @@ const toggleSavedSideQuest = (
   }
 };
 
+const toggleSavedAnimal = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeAnimalFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addAnimalToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
+const toggleSavedPlant = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removePlantFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addPlantToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
+const toggleSavedFish = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeFishFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addFishToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
 export {
+  toggleSavedAnimal,
+  toggleSavedFish,
   toggleSavedHorse,
+  toggleSavedPlant,
   toggleSavedSideQuest,
   toggleSavedStoryQuest,
   toggleSavedWeapon,

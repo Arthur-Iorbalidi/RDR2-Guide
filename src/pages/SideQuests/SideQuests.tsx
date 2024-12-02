@@ -21,7 +21,7 @@ import {
 } from '@src/store/slices/userSlice';
 import { ISideQuestsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedSideQuest } from '@src/utils/toggleFavorites';
+import { toggleSavedSideQuest } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

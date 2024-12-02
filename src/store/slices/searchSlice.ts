@@ -68,6 +68,36 @@ const searchSlice = createSlice({
     resetSideQuestsPage: (state) => {
       state.sideQuests.page = defaultSearchValues.sideQuests.page;
     },
+
+    changeAnimalsSearch: (state, action: PayloadAction<string>) => {
+      state.animals.search = action.payload;
+    },
+    changeAnimalsPage: (state, action: PayloadAction<number>) => {
+      state.animals.page = action.payload;
+    },
+    resetAnimalsPage: (state) => {
+      state.animals.page = defaultSearchValues.sideQuests.page;
+    },
+
+    changePlantsSearch: (state, action: PayloadAction<string>) => {
+      state.plants.search = action.payload;
+    },
+    changePlantsPage: (state, action: PayloadAction<number>) => {
+      state.plants.page = action.payload;
+    },
+    resetPlantsPage: (state) => {
+      state.plants.page = defaultSearchValues.sideQuests.page;
+    },
+
+    changeFishesSearch: (state, action: PayloadAction<string>) => {
+      state.fishes.search = action.payload;
+    },
+    changeFishesPage: (state, action: PayloadAction<number>) => {
+      state.fishes.page = action.payload;
+    },
+    resetFishesPage: (state) => {
+      state.fishes.page = defaultSearchValues.sideQuests.page;
+    },
   },
 });
 
@@ -92,5 +122,14 @@ export const {
   resetSideQuestsPage,
   resetStoryQuestsPage,
   resetWeaponsPage,
+  changeAnimalsPage,
+  changeAnimalsSearch,
+  resetAnimalsPage,
+  changePlantsPage,
+  changePlantsSearch,
+  resetPlantsPage,
+  changeFishesPage,
+  changeFishesSearch,
+  resetFishesPage,
 } = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;

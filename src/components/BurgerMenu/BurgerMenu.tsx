@@ -81,6 +81,33 @@ const BurgerMenu = ({ closeBurgerMenu, isBurgerMenuOpened }: IProps) => {
                 <span className={styles.link_text}>Side Quests</span>
               </Link>
             </li>
+            <li>
+              <Link
+                to={routes.animals}
+                className={styles.link}
+                onClick={closeBurgerMenu}
+              >
+                <span className={styles.link_text}>Animals</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={routes.plants}
+                className={styles.link}
+                onClick={closeBurgerMenu}
+              >
+                <span className={styles.link_text}>Plants</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={routes.fishes}
+                className={styles.link}
+                onClick={closeBurgerMenu}
+              >
+                <span className={styles.link_text}>Fishes</span>
+              </Link>
+            </li>
             <div className={styles.line}></div>
             {isAuth ? (
               <>

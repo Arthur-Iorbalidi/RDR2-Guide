@@ -94,6 +94,57 @@ const userSlice = createSlice({
         state.userInfo.sideQuests.push({ id: action.payload });
       }
     },
+
+    removeAnimalFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.animals = state.userInfo.animals.filter(
+          (animal) => animal.id !== action.payload,
+        );
+      }
+    },
+
+    addAnimalToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.animals.some((animal) => animal.id === action.payload)
+      ) {
+        state.userInfo.animals.push({ id: action.payload });
+      }
+    },
+
+    removePlantFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.plants = state.userInfo.plants.filter(
+          (plant) => plant.id !== action.payload,
+        );
+      }
+    },
+
+    addPlantToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.plants.some((plant) => plant.id === action.payload)
+      ) {
+        state.userInfo.plants.push({ id: action.payload });
+      }
+    },
+
+    removeFishFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.plants = state.userInfo.plants.filter(
+          (plant) => plant.id !== action.payload,
+        );
+      }
+    },
+
+    addFishToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.fishes.some((fish) => fish.id === action.payload)
+      ) {
+        state.userInfo.fishes.push({ id: action.payload });
+      }
+    },
   },
 });
 
@@ -108,5 +159,11 @@ export const {
   removeSideQuestFromSaved,
   removeStoryQuestFromSaved,
   removeWeaponFromSaved,
+  removeAnimalFromSaved,
+  addAnimalToSaved,
+  removePlantFromSaved,
+  addPlantToSaved,
+  removeFishFromSaved,
+  addFishToSaved,
 } = userSlice.actions;
 export const userReducer = userSlice.reducer;

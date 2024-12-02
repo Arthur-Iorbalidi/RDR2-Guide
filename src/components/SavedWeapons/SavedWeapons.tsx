@@ -5,7 +5,7 @@ import serverAPI from '@src/services/serverAPI';
 import { removeWeaponFromSaved } from '@src/store/slices/userSlice';
 import { IWeapon } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedWeapon } from '@src/utils/toggleFavorites';
+import { toggleSavedWeapon } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

@@ -21,7 +21,7 @@ import {
 } from '@src/store/slices/userSlice';
 import { IHorsesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedHorse } from '@src/utils/toggleFavorites';
+import { toggleSavedHorse } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -118,7 +118,7 @@ const Horses = () => {
                 key={horse.id}
                 id={horse.id}
                 handleBtnClickCallback={handleToggleSaved}
-                title={horse.name}
+                title={horse.breed}
                 image={imageAPI.getImage(horse.image!)}
                 isActive={isInArray(horse.id, savedHorses)}
                 navigateTo={`${routes.horses}/${horse.id}`}

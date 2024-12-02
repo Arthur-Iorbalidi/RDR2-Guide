@@ -21,7 +21,7 @@ import {
 } from '@src/store/slices/userSlice';
 import { IStoryQuestsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedStoryQuest } from '@src/utils/toggleFavorites';
+import { toggleSavedStoryQuest } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
