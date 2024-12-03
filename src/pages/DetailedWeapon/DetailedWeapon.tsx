@@ -12,7 +12,7 @@ import {
 } from '@src/store/slices/userSlice';
 import { IWeapon } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedWeapon } from '@src/utils/toggleFavorites';
+import { toggleSavedWeapon } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -123,12 +123,6 @@ const DetailedWeapon = () => {
                   </span>
                 </p>
                 <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>Reload:</span>
-                  <span className={styles.overview_item_value}>
-                    {weapon.reloadSpeed}
-                  </span>
-                </p>
-                <p className={styles.overview_item}>
                   <span className={styles.overview_item_title}>
                     Firing rate:
                   </span>
@@ -140,12 +134,6 @@ const DetailedWeapon = () => {
                   <span className={styles.overview_item_title}>Accuracy:</span>
                   <span className={styles.overview_item_value}>
                     {weapon.accuracy}
-                  </span>
-                </p>
-                <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>Ammo:</span>
-                  <span className={styles.overview_item_value}>
-                    {weapon.ammo}
                   </span>
                 </p>
                 {weapon.cost && (
@@ -168,15 +156,18 @@ const DetailedWeapon = () => {
           {weapon.location && (
             <div className={styles.location_wrapper}>
               <h2 className={styles.location_title}>Location</h2>
-              <div className={styles.img_wrapper}>
-                <img
-                  className={styles.img}
-                  src={imageAPI.getImage(weapon.location.image)}
-                  alt="location"
-                  onError={(e) => {
-                    e.currentTarget.src = images.imgPlaceholder;
-                  }}
-                />
+              <div className={styles.location_content}>
+                <h3 className={styles.location_name}>{weapon.location.name}</h3>
+                <div className={styles.img_wrapper}>
+                  <img
+                    className={styles.img}
+                    src={imageAPI.getImage(weapon.location.image)}
+                    alt="location"
+                    onError={(e) => {
+                      e.currentTarget.src = images.imgPlaceholder;
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}

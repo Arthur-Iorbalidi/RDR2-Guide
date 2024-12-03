@@ -14,7 +14,10 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
     "@hookform/resolvers": "^3.9.1",
+    "@mui/material": "^6.1.9",
     "@reduxjs/toolkit": "^2.3.0",
     "axios": "^1.7.7",
     "react": "^18.3.1",

@@ -105,14 +105,23 @@
 
 .location_wrapper {
   margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 
   .location_title {
     text-align: center;
     font-weight: 400;
   }
 
+  .location_content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
   .img_wrapper {
-    margin-top: 20px;
     display: flex;
     justify-content: center;
 

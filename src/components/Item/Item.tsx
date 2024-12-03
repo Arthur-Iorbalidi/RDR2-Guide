@@ -53,16 +53,18 @@ const Item = ({
 
   return (
     <Link to={navigateTo} className={`${styles.item} ${classNameSwitcher()}`}>
-      <div className={styles.img_wrapper}>
-        <img
-          src={image}
-          alt="item"
-          className={styles.item_img}
-          onError={(e) => {
-            e.currentTarget.src = images.imgPlaceholder;
-          }}
-        />
-      </div>
+      {image && (
+        <div className={styles.img_wrapper}>
+          <img
+            src={image}
+            alt="item"
+            className={styles.item_img}
+            onError={(e) => {
+              e.currentTarget.src = images.imgPlaceholder;
+            }}
+          />
+        </div>
+      )}
       <div className={styles.info}>
         <div className={styles.details}>
           <p className={styles.title}>{title}</p>

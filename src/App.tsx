@@ -10,7 +10,7 @@ import MainRouter from './components/MainRouter/MainRouter';
 import useAppDispatch from './hooks/useAppDispatch';
 import useAppSelector from './hooks/useAppSelector';
 import serverAPI from './services/serverAPI';
-import { changeIsAuthorized, changeUserInfo } from './store/slices/userSlice';
+import { changeIsAuthorized } from './store/slices/userSlice';
 import { ICheckUserResponse } from './types/serverAPITypes';
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     function authCheckCallback(response: ICheckUserResponse) {
       dispatch(changeIsAuthorized(response.isAuthorized));
-      dispatch(changeUserInfo(response.user));
+      // dispatch(changeUserInfo(response.user));
     }
 
     serverAPI.checkUser(authCheckCallback);

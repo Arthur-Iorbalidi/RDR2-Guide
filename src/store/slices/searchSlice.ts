@@ -68,6 +68,52 @@ const searchSlice = createSlice({
     resetSideQuestsPage: (state) => {
       state.sideQuests.page = defaultSearchValues.sideQuests.page;
     },
+
+    changeAnimalsSearch: (state, action: PayloadAction<string>) => {
+      state.animals.search = action.payload;
+    },
+    changeAnimalsPage: (state, action: PayloadAction<number>) => {
+      state.animals.page = action.payload;
+    },
+    resetAnimalsPage: (state) => {
+      state.animals.page = defaultSearchValues.sideQuests.page;
+    },
+
+    changePlantsSearch: (state, action: PayloadAction<string>) => {
+      state.plants.search = action.payload;
+    },
+    changePlantsPage: (state, action: PayloadAction<number>) => {
+      state.plants.page = action.payload;
+    },
+    resetPlantsPage: (state) => {
+      state.plants.page = defaultSearchValues.sideQuests.page;
+    },
+
+    changeFishesSearch: (state, action: PayloadAction<string>) => {
+      state.fishes.search = action.payload;
+    },
+    changeFishesPage: (state, action: PayloadAction<number>) => {
+      state.fishes.page = action.payload;
+    },
+    resetFishesPage: (state) => {
+      state.fishes.page = defaultSearchValues.sideQuests.page;
+    },
+
+    changeCollectiblesSearch: (state, action: PayloadAction<string>) => {
+      state.collectibles.search = action.payload;
+    },
+    changeCollectiblesPage: (state, action: PayloadAction<number>) => {
+      state.collectibles.page = action.payload;
+    },
+    changeCollectiblesSort: (state, action: PayloadAction<string>) => {
+      state.collectibles.sortBy = action.payload;
+    },
+    changeCollectiblesOrder: (state, action: PayloadAction<string>) => {
+      state.collectibles.sortOrder = action.payload;
+    },
+    resetCollectiblesPage: (state) => {
+      state.collectibles.page = defaultSearchValues.sideQuests.page;
+    },
   },
 });
 
@@ -92,5 +138,19 @@ export const {
   resetSideQuestsPage,
   resetStoryQuestsPage,
   resetWeaponsPage,
+  changeAnimalsPage,
+  changeAnimalsSearch,
+  resetAnimalsPage,
+  changePlantsPage,
+  changePlantsSearch,
+  resetPlantsPage,
+  changeFishesPage,
+  changeFishesSearch,
+  resetFishesPage,
+  changeCollectiblesOrder,
+  changeCollectiblesPage,
+  changeCollectiblesSearch,
+  changeCollectiblesSort,
+  resetCollectiblesPage,
 } = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;

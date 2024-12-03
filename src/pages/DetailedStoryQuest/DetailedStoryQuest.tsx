@@ -12,7 +12,7 @@ import {
 } from '@src/store/slices/userSlice';
 import { IStoryQuest } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedStoryQuest } from '@src/utils/toggleFavorites';
+import { toggleSavedStoryQuest } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -118,27 +118,34 @@ const DetailedStoryQuest = () => {
                     {storyQuest.number}
                   </span>
                 </p>
-                <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>Rewards:</span>
-                  <span className={styles.overview_item_value}>
-                    {storyQuest.reward}
-                  </span>
-                </p>
+                {storyQuest.reward && (
+                  <p className={styles.overview_item}>
+                    <span className={styles.overview_item_title}>Rewards:</span>
+                    <span className={styles.overview_item_value}>
+                      {storyQuest.reward}
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
           </div>
           {storyQuest.location && (
             <div className={styles.location_wrapper}>
               <h2 className={styles.location_title}>Location</h2>
-              <div className={styles.img_wrapper}>
-                <img
-                  className={styles.img}
-                  src={imageAPI.getImage(storyQuest.location.image)}
-                  alt="location"
-                  onError={(e) => {
-                    e.currentTarget.src = images.imgPlaceholder;
-                  }}
-                />
+              <div className={styles.location_content}>
+                <h3 className={styles.location_name}>
+                  {storyQuest.location.name}
+                </h3>
+                <div className={styles.img_wrapper}>
+                  <img
+                    className={styles.img}
+                    src={imageAPI.getImage(storyQuest.location.image)}
+                    alt="location"
+                    onError={(e) => {
+                      e.currentTarget.src = images.imgPlaceholder;
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}

@@ -1,16 +1,35 @@
+/* eslint-disable */
 import {
+  IAnimal,
+  IAnimalsResponse,
   IAuthUserResponse,
+  IChallenge,
+  IChallengesResponse,
   ICheckUserResponse,
+  ICollectible,
+  ICollectiblesResponse,
   ICreateUserDto,
   IErrorResponse,
+  IFaction,
+  IFactionsResponse,
+  IFish,
+  IFishesResponse,
   IHorse,
   IHorsesResponse,
   ILoginUserDto,
+  IMiscellaneou,
+  IMiscellaneousResponse,
+  IPlant,
+  IPlantsResponse,
+  IRandomEncounter,
+  IRandomEncountersResponse,
   ISearch,
   ISideQuest,
   ISideQuestsResponse,
   IStoryQuest,
   IStoryQuestsResponse,
+  ITableGame,
+  ITableGamesResponse,
   IUpdateUserDto,
   IWeapon,
   IWeaponsResponse,
@@ -20,7 +39,7 @@ import axios from 'axios';
 import storageAPI from './storageAPI';
 
 class ServerAPI {
-  private baseUrl = 'http://localhost:5000/api';
+  private baseUrl = 'https://localhost:7157/api';
 
   private api = axios.create({
     baseURL: this.baseUrl,
@@ -350,6 +369,150 @@ class ServerAPI {
     }
   }
 
+  async addAnimalToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeAnimalFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addPlantToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removePlantFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addFishToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeFishFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addChallengeToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeChallengeFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addCollectibleToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeCollectibleFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addFactionToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeFactionFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addMiscellaneouToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeMiscellaneouFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addRandomEncounterToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeRandomEncounterFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addTableGameToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeTableGameFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
   logout() {
     storageAPI.remove('token');
   }
@@ -409,7 +572,7 @@ class ServerAPI {
   }
 
   async getStoryQuests(params: ISearch): Promise<IStoryQuestsResponse> {
-    const response = await this.api.get('story-quests', {
+    const response = await this.api.get('storyquests', {
       params: {
         ...(params.search !== '' ? { search: params.search } : {}),
         ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
@@ -427,7 +590,7 @@ class ServerAPI {
     errorCallback: (message: string) => void,
   ): Promise<IStoryQuest | undefined> {
     try {
-      const response = await this.api.get(`story-quests/${id}`);
+      const response = await this.api.get(`storyquests/${id}`);
 
       return response.data;
     } catch {
@@ -436,7 +599,7 @@ class ServerAPI {
   }
 
   async getSideQuests(params: ISearch): Promise<ISideQuestsResponse> {
-    const response = await this.api.get('side-quests', {
+    const response = await this.api.get('sidequests', {
       params: {
         ...(params.search !== '' ? { search: params.search } : {}),
         ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
@@ -454,7 +617,252 @@ class ServerAPI {
     errorCallback: (message: string) => void,
   ): Promise<ISideQuest | undefined> {
     try {
-      const response = await this.api.get(`side-quests/${id}`);
+      const response = await this.api.get(`sidequests/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getAnimals(params: ISearch): Promise<IAnimalsResponse> {
+    const response = await this.api.get('animals', {
+      params: {
+        ...(params.search !== '' ? { search: params.search } : {}),
+        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
+        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getAnimal(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IAnimal | undefined> {
+    try {
+      const response = await this.api.get(`animals/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getChallenges(params: ISearch): Promise<IChallengesResponse> {
+    const response = await this.api.get('challenges', {
+      params: {
+        ...(params.search !== '' ? { search: params.search } : {}),
+        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
+        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getChallenge(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IChallenge | undefined> {
+    try {
+      const response = await this.api.get(`challenges/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getCollectibles(params: ISearch): Promise<ICollectiblesResponse> {
+    const response = await this.api.get('collectibles', {
+      params: {
+        ...(params.search !== '' ? { search: params.search } : {}),
+        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
+        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getCollectible(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<ICollectible | undefined> {
+    try {
+      const response = await this.api.get(`collectibles/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getFactions(params?: ISearch): Promise<IFactionsResponse> {
+    const response = await this.api.get('factions', {
+      params: {
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getFaction(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IFaction | undefined> {
+    try {
+      const response = await this.api.get(`factions/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getFishes(params: ISearch): Promise<IFishesResponse> {
+    const response = await this.api.get('fish', {
+      params: {
+        ...(params.search !== '' ? { search: params.search } : {}),
+        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
+        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getFish(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IFish | undefined> {
+    try {
+      const response = await this.api.get(`fish/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getMiscellaneous(params?: ISearch): Promise<IMiscellaneousResponse> {
+    const response = await this.api.get('miscellaneous', {
+      params: {
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getMiscellaneou(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IMiscellaneou | undefined> {
+    try {
+      const response = await this.api.get(`miscellaneous/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getRandomEncounters(
+    params?: ISearch,
+  ): Promise<IRandomEncountersResponse> {
+    const response = await this.api.get('randomencounter', {
+      params: {
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getRandomEncounter(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IRandomEncounter | undefined> {
+    try {
+      const response = await this.api.get(`randomencounter/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getPlants(params: ISearch): Promise<IPlantsResponse> {
+    const response = await this.api.get('plants', {
+      params: {
+        ...(params.search !== '' ? { search: params.search } : {}),
+        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
+        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
+        ...(params.page ? { search: params.page } : {}),
+        ...(params.limit ? { sortBy: params.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getPlant(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<IPlant | undefined> {
+    try {
+      const response = await this.api.get(`plants/${id}`);
+
+      return response.data;
+    } catch {
+      errorCallback?.('Nothing was found');
+    }
+  }
+
+  async getTableGames(params?: ISearch): Promise<ITableGamesResponse> {
+    const response = await this.api.get('tablegames', {
+      params: {
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
+      },
+    });
+
+    return response.data;
+  }
+
+  async getTableGame(
+    id: number,
+    errorCallback: (message: string) => void,
+  ): Promise<ITableGame | undefined> {
+    try {
+      const response = await this.api.get(`tablegames/${id}`);
 
       return response.data;
     } catch {

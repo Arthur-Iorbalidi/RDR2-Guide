@@ -1,5 +1,5 @@
 class ImageAPI {
-  private baseUrl = 'http://localhost:5000';
+  private baseUrl = 'https://localhost:7157/images';
 
   getImage(image: string) {
     return `${this.baseUrl}/${image}`;

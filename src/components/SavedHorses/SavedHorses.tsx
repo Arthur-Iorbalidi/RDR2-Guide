@@ -5,7 +5,7 @@ import serverAPI from '@src/services/serverAPI';
 import { removeHorseFromSaved } from '@src/store/slices/userSlice';
 import { IHorse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedHorse } from '@src/utils/toggleFavorites';
+import { toggleSavedHorse } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';

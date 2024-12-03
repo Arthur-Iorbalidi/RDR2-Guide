@@ -13,6 +13,8 @@
   justify-content: center;
   align-items: center;
   transition: 500ms all;
+  max-height: 100vh;
+  overflow-y: auto;
 
   &.opened {
     top: 0;
@@ -40,5 +42,13 @@
     height: 2px;
     width: 100%;
     background-color: global.$primaryBackgroundColor;
+  }
+}
+
+@media (max-height: 760px) {
+  .burger_menu {
+    .burger_menu_list {
+      gap: 8px;
+    }
   }
 }

@@ -21,7 +21,7 @@ import {
 } from '@src/store/slices/userSlice';
 import { IWeaponsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedWeapon } from '@src/utils/toggleFavorites';
+import { toggleSavedWeapon } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -117,17 +117,19 @@ const Weapons = () => {
 
         <Grid isLoading={isLoading}>
           {weapons &&
-            weapons.data.map((weapon) => (
-              <Item
-                key={weapon.id}
-                id={weapon.id}
-                handleBtnClickCallback={handleToggleSaved}
-                title={weapon.name}
-                image={imageAPI.getImage(weapon.image!)}
-                isActive={isInArray(weapon.id, savedWeapons)}
-                navigateTo={`${routes.weapons}/${weapon.id}`}
-              />
-            ))}
+            weapons.data
+              .slice(1, 4)
+              .map((weapon) => (
+                <Item
+                  key={weapon.id}
+                  id={weapon.id}
+                  handleBtnClickCallback={handleToggleSaved}
+                  title={weapon.name}
+                  image={imageAPI.getImage(weapon.image!)}
+                  isActive={isInArray(weapon.id, savedWeapons)}
+                  navigateTo={`${routes.weapons}/${weapon.id}`}
+                />
+              ))}
         </Grid>
 
         {weapons?.pagination && (
