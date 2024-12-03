@@ -12,13 +12,17 @@ import DetailedPlant from '@src/pages/DetailedPlant/DetailedPlant';
 import DetailedSideQuest from '@src/pages/DetailedSideQuest/DetailedSideQuest';
 import DetailedStoryQuest from '@src/pages/DetailedStoryQuest/DetailedStoryQuest';
 import DetailedWeapon from '@src/pages/DetailedWeapon/DetailedWeapon';
+import Factions from '@src/pages/Factions/Factions';
 import Fishes from '@src/pages/Fishes/Fishes';
 import Home from '@src/pages/Home/Home';
 import Hourses from '@src/pages/Hourses/Hourses';
+import Miscellaneous from '@src/pages/Miscellaneous/Miscellaneous';
 import Plants from '@src/pages/Plants/Plants';
+import RandomEncounters from '@src/pages/RandomEncounters/RandomEncounters';
 import Saved from '@src/pages/Saved/Saved';
 import SideQuests from '@src/pages/SideQuests/SideQuests';
 import StoryQuests from '@src/pages/StoryQuests/StoryQuests';
+import TableGames from '@src/pages/TableGames/TableGames';
 import Weapons from '@src/pages/Weapons/Weapons';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
@@ -38,6 +42,13 @@ const MainRouter = () => {
           <Route path={routes.fishes} element={<Fishes />} />
           <Route path={routes.challenges} element={<Challenges />} />
           <Route path={routes.collectibles} element={<Collectibles />} />
+          <Route path={routes.factions} element={<Factions />} />
+          <Route path={routes.miscellaneous} element={<Miscellaneous />} />
+          <Route
+            path={routes.randomEncounters}
+            element={<RandomEncounters />}
+          />
+          <Route path={routes.tableGames} element={<TableGames />} />
           <Route path={routes.detailedWeapon} element={<DetailedWeapon />} />
           <Route path={routes.detailedHorse} element={<DetailedHorse />} />
           <Route

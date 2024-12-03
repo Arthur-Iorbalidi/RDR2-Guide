@@ -217,6 +217,10 @@ interface IUser {
   fishes: Array<{ id: number }>;
   challenges: Array<{ id: number }>;
   collectibles: Array<{ id: number }>;
+  factions: Array<{ id: number }>;
+  miscellaneous: Array<{ id: number }>;
+  randomEncounters: Array<{ id: number }>;
+  tableGames: Array<{ id: number }>;
 }
 
 interface ICreateUserDto {

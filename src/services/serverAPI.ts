@@ -449,6 +449,70 @@ class ServerAPI {
     successCallback?.(id);
   }
 
+  async addFactionToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeFactionFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addMiscellaneouToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeMiscellaneouFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addRandomEncounterToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeRandomEncounterFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addTableGameToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeTableGameFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
   logout() {
     storageAPI.remove('token');
   }
@@ -642,14 +706,14 @@ class ServerAPI {
     }
   }
 
-  async getFactions(params: ISearch): Promise<IFactionsResponse> {
+  async getFactions(params?: ISearch): Promise<IFactionsResponse> {
     const response = await this.api.get('factions', {
       params: {
-        ...(params.search !== '' ? { search: params.search } : {}),
-        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
-        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
-        ...(params.page ? { search: params.page } : {}),
-        ...(params.limit ? { sortBy: params.limit } : {}),
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
       },
     });
 
@@ -696,14 +760,14 @@ class ServerAPI {
     }
   }
 
-  async getMiscellaneous(params: ISearch): Promise<IMiscellaneousResponse> {
+  async getMiscellaneous(params?: ISearch): Promise<IMiscellaneousResponse> {
     const response = await this.api.get('miscellaneous', {
       params: {
-        ...(params.search !== '' ? { search: params.search } : {}),
-        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
-        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
-        ...(params.page ? { search: params.page } : {}),
-        ...(params.limit ? { sortBy: params.limit } : {}),
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
       },
     });
 
@@ -724,15 +788,15 @@ class ServerAPI {
   }
 
   async getRandomEncounters(
-    params: ISearch,
+    params?: ISearch,
   ): Promise<IRandomEncountersResponse> {
     const response = await this.api.get('randomencounter', {
       params: {
-        ...(params.search !== '' ? { search: params.search } : {}),
-        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
-        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
-        ...(params.page ? { search: params.page } : {}),
-        ...(params.limit ? { sortBy: params.limit } : {}),
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
       },
     });
 
@@ -779,14 +843,14 @@ class ServerAPI {
     }
   }
 
-  async getTableGames(params: ISearch): Promise<ITableGamesResponse> {
+  async getTableGames(params?: ISearch): Promise<ITableGamesResponse> {
     const response = await this.api.get('tablegames', {
       params: {
-        ...(params.search !== '' ? { search: params.search } : {}),
-        ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
-        ...(params.sortOrder !== '' ? { sortOrder: params.sortOrder } : {}),
-        ...(params.page ? { search: params.page } : {}),
-        ...(params.limit ? { sortBy: params.limit } : {}),
+        ...(params?.search !== '' ? { search: params?.search } : {}),
+        ...(params?.sortBy !== '' ? { sortBy: params?.sortBy } : {}),
+        ...(params?.sortOrder !== '' ? { sortOrder: params?.sortOrder } : {}),
+        ...(params?.page ? { search: params?.page } : {}),
+        ...(params?.limit ? { sortBy: params?.limit } : {}),
       },
     });
 

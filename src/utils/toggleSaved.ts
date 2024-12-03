@@ -126,14 +126,82 @@ const toggleSavedCollectible = (
   }
 };
 
+const toggleSavedFaction = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeFactionFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addFactionToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
+const toggleSavedMiscellaneou = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeMiscellaneouFromSaved(
+      id,
+      succesRemove,
+      unathorizedCallback,
+    );
+  } else {
+    serverAPI.addMiscellaneouToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
+const toggleSavedRandomEncounter = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeRandomEncounterFromSaved(
+      id,
+      succesRemove,
+      unathorizedCallback,
+    );
+  } else {
+    serverAPI.addRandomEncounterToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
+const toggleSavedTableGame = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeTableGameFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addTableGameToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
 export {
   toggleSavedAnimal,
   toggleSavedChallenge,
   toggleSavedCollectible,
+  toggleSavedFaction,
   toggleSavedFish,
   toggleSavedHorse,
+  toggleSavedMiscellaneou,
   toggleSavedPlant,
+  toggleSavedRandomEncounter,
   toggleSavedSideQuest,
   toggleSavedStoryQuest,
+  toggleSavedTableGame,
   toggleSavedWeapon,
 };

@@ -20,6 +20,10 @@ const mockUserInfo = {
   fishes: [],
   challenges: [],
   collectibles: [],
+  factions: [],
+  miscellaneous: [],
+  randomEncounters: [],
+  tableGames: [],
 };
 
 const initialState: UserState = {
@@ -200,6 +204,83 @@ const userSlice = createSlice({
         state.userInfo.collectibles.push({ id: action.payload });
       }
     },
+
+    removeFactionFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.factions = state.userInfo.factions.filter(
+          (faction) => faction.id !== action.payload,
+        );
+      }
+    },
+
+    addFactionToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.factions.some(
+          (faction) => faction.id === action.payload,
+        )
+      ) {
+        state.userInfo.factions.push({ id: action.payload });
+      }
+    },
+
+    removeMiscellaneouFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.miscellaneous = state.userInfo.miscellaneous.filter(
+          (miscellaneou) => miscellaneou.id !== action.payload,
+        );
+      }
+    },
+
+    addMiscellaneouToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.miscellaneous.some(
+          (miscellaneou) => miscellaneou.id === action.payload,
+        )
+      ) {
+        state.userInfo.miscellaneous.push({ id: action.payload });
+      }
+    },
+
+    removeRandomEncounterFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.randomEncounters =
+          state.userInfo.randomEncounters.filter(
+            (randomEncounter) => randomEncounter.id !== action.payload,
+          );
+      }
+    },
+
+    addRandomEncounterToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.randomEncounters.some(
+          (randomEncounter) => randomEncounter.id === action.payload,
+        )
+      ) {
+        state.userInfo.randomEncounters.push({ id: action.payload });
+      }
+    },
+
+    removeTableGameFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.tableGames = state.userInfo.tableGames.filter(
+          (tableGame) => tableGame.id !== action.payload,
+        );
+      }
+    },
+
+    addTableGameToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.tableGames.some(
+          (tableGame) => tableGame.id === action.payload,
+        )
+      ) {
+        state.userInfo.tableGames.push({ id: action.payload });
+      }
+    },
   },
 });
 
@@ -224,5 +305,13 @@ export const {
   addChallengeToSaved,
   removeCollectibleFromSaved,
   addCollectibleToSaved,
+  removeFactionFromSaved,
+  addFactionToSaved,
+  removeMiscellaneouFromSaved,
+  addMiscellaneouToSaved,
+  removeRandomEncounterFromSaved,
+  addRandomEncounterToSaved,
+  removeTableGameFromSaved,
+  addTableGameToSaved,
 } = userSlice.actions;
 export const userReducer = userSlice.reducer;
