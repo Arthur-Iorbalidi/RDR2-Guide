@@ -98,8 +98,38 @@ const toggleSavedFish = (
   }
 };
 
+const toggleSavedChallenge = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeChallengeFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addChallengeToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
+const toggleSavedCollectible = (
+  id: number,
+  isInSaved: boolean,
+  succesAdd: (id: number) => void = () => {},
+  succesRemove: (id: number) => void = () => {},
+  unathorizedCallback: () => void = () => {},
+) => {
+  if (isInSaved) {
+    serverAPI.removeCollectibleFromSaved(id, succesRemove, unathorizedCallback);
+  } else {
+    serverAPI.addCollectibleToSaved(id, succesAdd, unathorizedCallback);
+  }
+};
+
 export {
   toggleSavedAnimal,
+  toggleSavedChallenge,
+  toggleSavedCollectible,
   toggleSavedFish,
   toggleSavedHorse,
   toggleSavedPlant,

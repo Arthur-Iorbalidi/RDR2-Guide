@@ -6,9 +6,26 @@ interface UserState {
   userInfo?: IUser;
 }
 
+const mockUserInfo = {
+  id: 1,
+  name: 'A',
+  surname: 'A',
+  email: 'A',
+  weapons: [],
+  horses: [],
+  storyQuests: [],
+  sideQuests: [],
+  animals: [],
+  plants: [],
+  fishes: [],
+  challenges: [],
+  collectibles: [],
+};
+
 const initialState: UserState = {
   isAuthorized: undefined,
-  userInfo: undefined,
+  // userInfo: undefined,
+  userInfo: mockUserInfo,
 };
 
 const userSlice = createSlice({
@@ -145,6 +162,44 @@ const userSlice = createSlice({
         state.userInfo.fishes.push({ id: action.payload });
       }
     },
+
+    removeChallengeFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.challenges = state.userInfo.challenges.filter(
+          (plant) => plant.id !== action.payload,
+        );
+      }
+    },
+
+    addChallengeToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.challenges.some(
+          (challenge) => challenge.id === action.payload,
+        )
+      ) {
+        state.userInfo.challenges.push({ id: action.payload });
+      }
+    },
+
+    removeCollectibleFromSaved: (state, action: PayloadAction<number>) => {
+      if (state.userInfo) {
+        state.userInfo.collectibles = state.userInfo.collectibles.filter(
+          (plant) => plant.id !== action.payload,
+        );
+      }
+    },
+
+    addCollectibleToSaved: (state, action: PayloadAction<number>) => {
+      if (
+        state.userInfo &&
+        !state.userInfo.collectibles.some(
+          (collectible) => collectible.id === action.payload,
+        )
+      ) {
+        state.userInfo.collectibles.push({ id: action.payload });
+      }
+    },
   },
 });
 
@@ -165,5 +220,9 @@ export const {
   addPlantToSaved,
   removeFishFromSaved,
   addFishToSaved,
+  removeChallengeFromSaved,
+  addChallengeToSaved,
+  removeCollectibleFromSaved,
+  addCollectibleToSaved,
 } = userSlice.actions;
 export const userReducer = userSlice.reducer;

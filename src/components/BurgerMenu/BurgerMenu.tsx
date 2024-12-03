@@ -108,6 +108,24 @@ const BurgerMenu = ({ closeBurgerMenu, isBurgerMenuOpened }: IProps) => {
                 <span className={styles.link_text}>Fishes</span>
               </Link>
             </li>
+            <li>
+              <Link
+                to={routes.challenges}
+                className={styles.link}
+                onClick={closeBurgerMenu}
+              >
+                <span className={styles.link_text}>Challenges</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={routes.collectibles}
+                className={styles.link}
+                onClick={closeBurgerMenu}
+              >
+                <span className={styles.link_text}>Collectibles</span>
+              </Link>
+            </li>
             <div className={styles.line}></div>
             {isAuth ? (
               <>

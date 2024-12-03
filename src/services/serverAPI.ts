@@ -417,6 +417,38 @@ class ServerAPI {
     successCallback?.(id);
   }
 
+  async addChallengeToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeChallengeFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async addCollectibleToSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
+  async removeCollectibleFromSaved(
+    id: number,
+    successCallback?: (id: number) => void,
+    unathorizedCallback?: () => void,
+  ) {
+    successCallback?.(id);
+  }
+
   logout() {
     storageAPI.remove('token');
   }

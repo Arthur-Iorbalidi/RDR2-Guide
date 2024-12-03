@@ -8,6 +8,8 @@ const defaultSearchValues: {
   animals: ISearch;
   plants: ISearch;
   fishes: ISearch;
+  challenges: ISearch;
+  collectibles: ISearch;
 } = {
   weapons: {
     search: '',
@@ -52,6 +54,18 @@ const defaultSearchValues: {
     limit: undefined,
   },
   fishes: {
+    search: '',
+    sortBy: '',
+    sortOrder: '',
+    page: undefined,
+    limit: undefined,
+  },
+  challenges: {
+    sortBy: '',
+    sortOrder: '',
+  },
+
+  collectibles: {
     search: '',
     sortBy: '',
     sortOrder: '',

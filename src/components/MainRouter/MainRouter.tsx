@@ -2,7 +2,10 @@ import routes from '@src/constants/routes';
 import MainLayout from '@src/layouts/MainLayout/MainLayout';
 import Account from '@src/pages/Account/Account';
 import Animals from '@src/pages/Animals/Animals';
+import Challenges from '@src/pages/Challenges/Challenges';
+import Collectibles from '@src/pages/Collectibles/Collectibles';
 import DetailedAnimal from '@src/pages/DetailedAnimal/DetailedAnimal';
+import DetailedCollectible from '@src/pages/DetailedCollectible/DetailedCollectible';
 import DetailedFish from '@src/pages/DetailedFish/DetailedFish';
 import DetailedHorse from '@src/pages/DetailedHorse/DetailedHorse';
 import DetailedPlant from '@src/pages/DetailedPlant/DetailedPlant';
@@ -33,6 +36,8 @@ const MainRouter = () => {
           <Route path={routes.animals} element={<Animals />} />
           <Route path={routes.plants} element={<Plants />} />
           <Route path={routes.fishes} element={<Fishes />} />
+          <Route path={routes.challenges} element={<Challenges />} />
+          <Route path={routes.collectibles} element={<Collectibles />} />
           <Route path={routes.detailedWeapon} element={<DetailedWeapon />} />
           <Route path={routes.detailedHorse} element={<DetailedHorse />} />
           <Route
@@ -46,6 +51,10 @@ const MainRouter = () => {
           <Route path={routes.detailedAnimal} element={<DetailedAnimal />} />
           <Route path={routes.detailedPlant} element={<DetailedPlant />} />
           <Route path={routes.detailedFish} element={<DetailedFish />} />
+          <Route
+            path={routes.detailedCollectible}
+            element={<DetailedCollectible />}
+          />
           <Route path={routes.account} element={<Account />} />
           <Route path={routes.saved} element={<Saved />} />
         </Route>

@@ -98,6 +98,22 @@ const searchSlice = createSlice({
     resetFishesPage: (state) => {
       state.fishes.page = defaultSearchValues.sideQuests.page;
     },
+
+    changeCollectiblesSearch: (state, action: PayloadAction<string>) => {
+      state.collectibles.search = action.payload;
+    },
+    changeCollectiblesPage: (state, action: PayloadAction<number>) => {
+      state.collectibles.page = action.payload;
+    },
+    changeCollectiblesSort: (state, action: PayloadAction<string>) => {
+      state.collectibles.sortBy = action.payload;
+    },
+    changeCollectiblesOrder: (state, action: PayloadAction<string>) => {
+      state.collectibles.sortOrder = action.payload;
+    },
+    resetCollectiblesPage: (state) => {
+      state.collectibles.page = defaultSearchValues.sideQuests.page;
+    },
   },
 });
 
@@ -131,5 +147,10 @@ export const {
   changeFishesPage,
   changeFishesSearch,
   resetFishesPage,
+  changeCollectiblesOrder,
+  changeCollectiblesPage,
+  changeCollectiblesSearch,
+  changeCollectiblesSort,
+  resetCollectiblesPage,
 } = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;

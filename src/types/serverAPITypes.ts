@@ -215,6 +215,8 @@ interface IUser {
   animals: Array<{ id: number }>;
   plants: Array<{ id: number }>;
   fishes: Array<{ id: number }>;
+  challenges: Array<{ id: number }>;
+  collectibles: Array<{ id: number }>;
 }
 
 interface ICreateUserDto {
