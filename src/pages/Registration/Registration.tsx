@@ -5,11 +5,7 @@ import getRegistrationValidationSchema from '@src/constants/RegistrationValidati
 import routes from '@src/constants/routes';
 import useAppDispatch from '@src/hooks/useAppDispatch';
 import serverAPI from '@src/services/serverAPI';
-import {
-  changeIsAuthorized,
-  changeUserInfo,
-} from '@src/store/slices/userSlice';
-import { IAuthUserResponse } from '@src/types/serverAPITypes';
+import { changeIsAuthorized } from '@src/store/slices/userSlice';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,9 +13,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Registration.module.scss';
 
 interface IFormFields {
+  nickName: string;
   name: string;
-  surname: string;
-  email: string;
   password: string;
 }
 
@@ -51,11 +46,11 @@ const Registration = () => {
     setIsLoading(true);
   };
 
-  const succesReg = (value: IAuthUserResponse) => {
+  const succesReg = () => {
     setIsLoading(false);
-    serverAPI.setToken(value.token);
+    // serverAPI.setToken(value.token);
     dispatch(changeIsAuthorized(true));
-    dispatch(changeUserInfo(value.user));
+    // dispatch(changeUserInfo(value.user));
     navigate('/');
   };
 
@@ -93,24 +88,13 @@ const Registration = () => {
           </div>
           <div className={styles.form_field_wrapper}>
             <input
-              {...register('surname')}
+              {...register('nickName')}
               className={styles.form_field}
               type="text"
-              placeholder="Surname"
+              placeholder="NickName"
             />
             <div className={styles.form_field_error}>
-              {errors.surname?.message}
-            </div>
-          </div>
-          <div className={styles.form_field_wrapper}>
-            <input
-              {...register('email')}
-              className={styles.form_field}
-              type="text"
-              placeholder="Email"
-            />
-            <div className={styles.form_field_error}>
-              {errors.email?.message}
+              {errors.nickName?.message}
             </div>
           </div>
           <div className={styles.form_field_wrapper}>

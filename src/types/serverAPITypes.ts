@@ -224,9 +224,8 @@ interface IUser {
 }
 
 interface ICreateUserDto {
+  nickName: string;
   name: string;
-  surname: string;
-  email: string;
   password: string;
 }
 
@@ -235,13 +234,22 @@ interface IUpdateUserDto extends Partial<ICreateUserDto> {
 }
 
 interface ILoginUserDto {
-  email: string;
+  name: string;
   password: string;
 }
 
-interface IAuthUserResponse {
-  user: IUser;
-  token: string;
+// interface IAuthUserResponse {
+//   // user: IUser;
+//   accessToken: string;
+//   refreshToken: string;
+// }
+
+interface ILoginUserResponse {
+  // user: IUser;
+  userName: string;
+  nickName: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 interface ICheckUserResponse {
@@ -262,7 +270,6 @@ interface IErrorResponse {
 export type {
   IAnimal,
   IAnimalsResponse,
-  IAuthUserResponse,
   IChallenge,
   IChallengesResponse,
   ICheckUserResponse,
@@ -278,6 +285,7 @@ export type {
   IHorsesResponse,
   ILocation,
   ILoginUserDto,
+  ILoginUserResponse,
   IMiscellaneou,
   IMiscellaneousResponse,
   IPagination,

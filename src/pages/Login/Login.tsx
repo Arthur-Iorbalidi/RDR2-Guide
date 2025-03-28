@@ -5,11 +5,8 @@ import getLoginValidationSchema from '@src/constants/LoginValidationSchema';
 import routes from '@src/constants/routes';
 import useAppDispatch from '@src/hooks/useAppDispatch';
 import serverAPI from '@src/services/serverAPI';
-import {
-  changeIsAuthorized,
-  changeUserInfo,
-} from '@src/store/slices/userSlice';
-import { IAuthUserResponse } from '@src/types/serverAPITypes';
+import { changeIsAuthorized } from '@src/store/slices/userSlice';
+import { ILoginUserResponse } from '@src/types/serverAPITypes';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,7 +14,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Login.module.scss';
 
 interface IFormFields {
-  email: string;
+  name: string;
   password: string;
 }
 
@@ -49,11 +46,12 @@ const Login = () => {
     setIsLoading(true);
   };
 
-  const succesLogin = (value: IAuthUserResponse) => {
+  const succesLogin = (value: ILoginUserResponse) => {
     setIsLoading(false);
-    serverAPI.setToken(value.token);
+    serverAPI.setAccessToken(value.accessToken);
+    serverAPI.setRefreshToken(value.refreshToken);
     dispatch(changeIsAuthorized(true));
-    dispatch(changeUserInfo(value.user));
+    // dispatch(changeUserInfo(value.user));
     navigate('/');
   };
 
@@ -80,13 +78,13 @@ const Login = () => {
         <div className={styles.form_fields}>
           <div className={styles.form_field_wrapper}>
             <input
-              {...register('email')}
+              {...register('name')}
               className={styles.form_field}
               type="text"
-              placeholder="Email"
+              placeholder="Name"
             />
             <div className={styles.form_field_error}>
-              {errors.email?.message}
+              {errors.name?.message}
             </div>
           </div>
           <div className={styles.form_field_wrapper}>
