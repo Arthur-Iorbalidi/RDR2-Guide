@@ -5,8 +5,11 @@ import getLoginValidationSchema from '@src/constants/LoginValidationSchema';
 import routes from '@src/constants/routes';
 import useAppDispatch from '@src/hooks/useAppDispatch';
 import serverAPI from '@src/services/serverAPI';
-import { changeIsAuthorized } from '@src/store/slices/userSlice';
-import { ILoginUserResponse } from '@src/types/serverAPITypes';
+import {
+  changeIsAuthorized,
+  changeUserInfo,
+} from '@src/store/slices/userSlice';
+import { IErrorResponse, ILoginUserResponse } from '@src/types/serverAPITypes';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -14,7 +17,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Login.module.scss';
 
 interface IFormFields {
-  name: string;
+  username: string;
   password: string;
 }
 
@@ -46,19 +49,22 @@ const Login = () => {
     setIsLoading(true);
   };
 
-  const succesLogin = (value: ILoginUserResponse) => {
+  const succesLogin = (response: ILoginUserResponse) => {
     setIsLoading(false);
-    serverAPI.setAccessToken(value.accessToken);
-    serverAPI.setRefreshToken(value.refreshToken);
     dispatch(changeIsAuthorized(true));
-    // dispatch(changeUserInfo(value.user));
+    dispatch(
+      changeUserInfo({
+        username: response.username,
+        nickname: response.nickname,
+      }),
+    );
     navigate('/');
   };
 
-  const errorLogin = (message?: string) => {
+  const errorLogin = (error?: IErrorResponse) => {
     setIsLoading(false);
-    if (message) {
-      setModal({ isShowed: true, text: message });
+    if (error) {
+      setModal({ isShowed: true, text: JSON.stringify(error.response.data) });
     } else {
       setModal({ isShowed: true, text: 'Error' });
     }
@@ -78,13 +84,13 @@ const Login = () => {
         <div className={styles.form_fields}>
           <div className={styles.form_field_wrapper}>
             <input
-              {...register('name')}
+              {...register('username')}
               className={styles.form_field}
               type="text"
               placeholder="Name"
             />
             <div className={styles.form_field_error}>
-              {errors.name?.message}
+              {errors.username?.message}
             </div>
           </div>
           <div className={styles.form_field_wrapper}>

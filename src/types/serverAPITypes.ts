@@ -204,28 +204,28 @@ interface ISearch {
 }
 
 interface IUser {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
-  weapons: Array<{ id: number }>;
-  horses: Array<{ id: number }>;
-  storyQuests: Array<{ id: number }>;
-  sideQuests: Array<{ id: number }>;
-  animals: Array<{ id: number }>;
-  plants: Array<{ id: number }>;
-  fishes: Array<{ id: number }>;
-  challenges: Array<{ id: number }>;
-  collectibles: Array<{ id: number }>;
-  factions: Array<{ id: number }>;
-  miscellaneous: Array<{ id: number }>;
-  randomEncounters: Array<{ id: number }>;
-  tableGames: Array<{ id: number }>;
+  // id: number;
+  username: string;
+  nickname: string;
+  // email: string;
+  weapons?: Array<{ id: number }>;
+  horses?: Array<{ id: number }>;
+  storyQuests?: Array<{ id: number }>;
+  sideQuests?: Array<{ id: number }>;
+  animals?: Array<{ id: number }>;
+  plants?: Array<{ id: number }>;
+  fishes?: Array<{ id: number }>;
+  challenges?: Array<{ id: number }>;
+  collectibles?: Array<{ id: number }>;
+  factions?: Array<{ id: number }>;
+  miscellaneous?: Array<{ id: number }>;
+  randomEncounters?: Array<{ id: number }>;
+  tableGames?: Array<{ id: number }>;
 }
 
 interface ICreateUserDto {
-  nickName: string;
-  name: string;
+  nickname: string;
+  username: string;
   password: string;
 }
 
@@ -234,7 +234,7 @@ interface IUpdateUserDto extends Partial<ICreateUserDto> {
 }
 
 interface ILoginUserDto {
-  name: string;
+  username: string;
   password: string;
 }
 
@@ -246,10 +246,12 @@ interface ILoginUserDto {
 
 interface ILoginUserResponse {
   // user: IUser;
-  userName: string;
-  nickName: string;
-  accessToken: string;
-  refreshToken: string;
+  username: string;
+  nickname: string;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 interface ICheckUserResponse {
@@ -260,10 +262,7 @@ interface ICheckUserResponse {
 interface IErrorResponse {
   status: number;
   response: {
-    data: {
-      statusCode: number;
-      message: string;
-    };
+    data: any;
   };
 }
 

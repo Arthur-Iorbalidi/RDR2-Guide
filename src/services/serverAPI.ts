@@ -50,36 +50,33 @@ class ServerAPI {
 
   async register(
     userDto: ICreateUserDto,
-    successCallback?: () => void,
-    errorCallback?: (message?: string) => void,
+    successCallback?: (response: ILoginUserResponse) => void,
+    errorCallback?: (error?: IErrorResponse) => void,
   ) {
     try {
-      await this.api.post('auth', userDto);
+      await this.api.post('auth', {...userDto, roles: ["User"]});
 
-      successCallback?.();
+      await this.login(userDto, successCallback, errorCallback);
     } catch (error) {
-      if ((error as IErrorResponse).response) {
-        errorCallback?.((error as IErrorResponse).response.data.message);
-      } else {
-        errorCallback?.('Error');
-      }
+      errorCallback?.(error as IErrorResponse);
     }
   }
 
   async login(
     userDto: ILoginUserDto,
     successCallback?: (value: ILoginUserResponse) => void,
-    errorCallback?: (message?: string) => void,
+    errorCallback?: (error?: IErrorResponse) => void,
   ) {
     try {
       const response = await this.api.post('auth/login', userDto);
+
+      this.setAccessToken(response.data.tokens.accessToken);
+      this.setRefreshToken(response.data.tokens.refreshToken);
 
       successCallback?.(response.data);
     } catch (error) {
       if ((error as IErrorResponse).response) {
         errorCallback?.((error as IErrorResponse).response.data.message);
-      } else {
-        errorCallback?.('Error');
       }
     }
   }
@@ -122,15 +119,18 @@ class ServerAPI {
 
   async updateRefreshToken(callback?: (response: any) => void) {
     try {
-      const token = this.getAccessToken();
+      const accessToken = this.getAccessToken();
+      const refreshToken = this.getRefreshToken();
 
-      const response: ILoginUserResponse = await this.api.get('token/refresh', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await this.api.post('token/refresh', {
+        accessToken,
+        refreshToken
       });
 
-      callback?.({ isAuthorized: true, user: response.data });
+      this.setAccessToken(response.data.tokens.accessToken);
+      this.setRefreshToken(response.data.tokens.refreshToken);
+
+      callback?.({ isAuthorized: true, user: {nickname: response.data.nickname, username: response.data.username} });
     } catch {
       callback?.({ isAuthorized: false, user: undefined });
     }
@@ -505,7 +505,8 @@ class ServerAPI {
   }
 
   logout() {
-    storageAPI.remove('token');
+    storageAPI.remove('accessToken');
+    storageAPI.remove('refreshToken');
   }
 
   async getWeapons(params: ISearch): Promise<IWeaponsResponse> {

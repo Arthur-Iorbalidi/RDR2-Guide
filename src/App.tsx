@@ -24,7 +24,7 @@ function App() {
       // dispatch(changeUserInfo(response.user));
     }
 
-    serverAPI.checkUser(authCheckCallback);
+    serverAPI.updateRefreshToken(authCheckCallback);
   }, []);
 
   return (

@@ -2,12 +2,12 @@ import * as yup from 'yup';
 
 const getRegistrationValidationSchema = () =>
   yup.object().shape({
-    nickName: yup
+    nickname: yup
       .string()
       .required('NickName is required')
       .min(2, 'NickName must be at least 2 characters')
       .max(50, 'NickName must be at most 50 characters'),
-    name: yup
+    username: yup
       .string()
       .required('Name is required')
       .min(2, 'Name must be at least 2 characters')
