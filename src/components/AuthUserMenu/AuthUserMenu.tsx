@@ -50,11 +50,11 @@ const AuthUserMenu = ({ toggleAuthUserMenu, isAuthUserMenuOpened }: IProps) => {
             </li>
             <li>
               <Link
-                to={routes.favorites}
+                to={routes.saved}
                 className={styles.link}
                 onClick={toggleAuthUserMenu}
               >
-                <span className={styles.link_text}>Favorites</span>
+                <span className={styles.link_text}>Saved</span>
               </Link>
             </li>
             <li>

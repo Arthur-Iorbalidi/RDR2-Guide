@@ -9,6 +9,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addStoryQuestToSaved,
   removeStoryQuestFromSaved,
+  setSavedStoryQuests,
 } from '@src/store/slices/userSlice';
 import { IStoryQuest } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -24,6 +25,10 @@ const DetailedStoryQuest = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedStoryQuests = useAppSelector(
     (state) => state.userReducer.userInfo?.storyQuests,
   );
@@ -37,6 +42,15 @@ const DetailedStoryQuest = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedStoryQuests) {
+        const savedStoryQuests = await serverAPI.getSavedStoryQuests();
+        dispatch(setSavedStoryQuests(savedStoryQuests));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -70,7 +84,7 @@ const DetailedStoryQuest = () => {
 
     toggleSavedStoryQuest(
       storyQuest!.id,
-      isInArray(storyQuest!.id, savedStoryQuests),
+      isInArray(storyQuest!.id, savedStoryQuests, 'storyquestId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -101,7 +115,11 @@ const DetailedStoryQuest = () => {
               />
               <div className={styles.favourite_btn_wrapper}>
                 <FavoriteButton
-                  isInFavorites={isInArray(storyQuest.id, savedStoryQuests)}
+                  isInFavorites={isInArray(
+                    storyQuest.id,
+                    savedStoryQuests,
+                    'storyquestId',
+                  )}
                   onClick={handleToggleFavorite}
                 />
               </div>

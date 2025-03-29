@@ -18,6 +18,7 @@ import {
 import {
   addStoryQuestToSaved,
   removeStoryQuestFromSaved,
+  setSavedStoryQuests,
 } from '@src/store/slices/userSlice';
 import { IStoryQuestsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -33,6 +34,10 @@ const StoryQuests = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedStoryQuests = useAppSelector(
     (state) => state.userReducer.userInfo?.storyQuests,
   );
@@ -44,6 +49,15 @@ const StoryQuests = () => {
   const params = useAppSelector((state) => state.searchReducer.storyQuests);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedStoryQuests) {
+        const savedStoryQuests = await serverAPI.getSavedStoryQuests();
+        dispatch(setSavedStoryQuests(savedStoryQuests));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -64,7 +78,7 @@ const StoryQuests = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedStoryQuest(
       id,
-      isInArray(id, savedStoryQuests),
+      isInArray(id, savedStoryQuests, 'storyquestId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -128,7 +142,11 @@ const StoryQuests = () => {
                 handleBtnClickCallback={handleToggleSaved}
                 title={storyQuest.name}
                 image={imageAPI.getImage(storyQuest.image!)}
-                isActive={isInArray(storyQuest.id, savedStoryQuests)}
+                isActive={isInArray(
+                  storyQuest.id,
+                  savedStoryQuests,
+                  'storyquestId',
+                )}
                 navigateTo={`${routes.storyQuests}/${storyQuest.id}`}
               />
             ))}

@@ -2,8 +2,11 @@ import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import { removeStoryQuestFromSaved } from '@src/store/slices/userSlice';
-import { IStoryQuest } from '@src/types/serverAPITypes';
+import {
+  removeStoryQuestFromSaved,
+  setSavedStoryQuests,
+} from '@src/store/slices/userSlice';
+import { ISavedStoryQuestsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
 import { toggleSavedStoryQuest } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
@@ -18,15 +21,28 @@ const SavedStoryQuests = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedStoryQuests = useAppSelector(
     (state) => state.userReducer.userInfo?.storyQuests,
   );
 
-  const [storyQuests, setStoryQuests] = useState<IStoryQuest[] | undefined>(
-    undefined,
-  );
+  const [storyQuests, setStoryQuests] = useState<
+    ISavedStoryQuestsResponse['data'] | undefined
+  >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedStoryQuests) {
+        const savedStoryQuests = await serverAPI.getSavedStoryQuests();
+        dispatch(setSavedStoryQuests(savedStoryQuests));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -40,7 +56,7 @@ const SavedStoryQuests = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedStoryQuest(
       id,
-      isInArray(id, savedStoryQuests),
+      isInArray(id, savedStoryQuests, 'storyquestId'),
       undefined,
       succesRemove,
       unathorizedCallback,
@@ -50,7 +66,7 @@ const SavedStoryQuests = () => {
   const succesRemove = (id: number) => {
     dispatch(removeStoryQuestFromSaved(id));
     setStoryQuests((prevStoryQuests) =>
-      prevStoryQuests?.filter((storyQuest) => storyQuest.id !== id),
+      prevStoryQuests?.filter((storyQuest) => storyQuest.storyquest.id !== id),
     );
   };
 
@@ -70,13 +86,17 @@ const SavedStoryQuests = () => {
         {storyQuests &&
           storyQuests.map((storyQuest) => (
             <Item
-              key={storyQuest.id}
-              id={storyQuest.id}
+              key={storyQuest.storyquest.id}
+              id={storyQuest.storyquest.id}
               handleBtnClickCallback={handleToggleSaved}
-              title={storyQuest.name}
-              image={imageAPI.getImage(storyQuest.image!)}
-              isActive={isInArray(storyQuest.id, savedStoryQuests)}
-              navigateTo={`${routes.storyQuests}/${storyQuest.id}`}
+              title={storyQuest.storyquest.name}
+              image={imageAPI.getImage(storyQuest.storyquest.image!)}
+              isActive={isInArray(
+                storyQuest.storyquest.id,
+                savedStoryQuests,
+                'storyquestId',
+              )}
+              navigateTo={`${routes.storyQuests}/${storyQuest.storyquest.id}`}
               appearance={Appearance.horizontal}
             />
           ))}
