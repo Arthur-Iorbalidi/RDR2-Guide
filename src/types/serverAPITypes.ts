@@ -12,7 +12,7 @@ interface IWeapon {
   location?: ILocation;
 }
 
-interface ISavedWeaponResponse {
+interface ISavedWeaponsResponse {
   data: {
     userId: string;
     weaponId: number;
@@ -39,6 +39,14 @@ interface IHorse {
   location?: ILocation;
 }
 
+interface ISavedHorsesResponse {
+  data: {
+    userId: string;
+    horseId: number;
+    horse: IHorse;
+  }[];
+}
+
 interface IStoryQuest {
   id: number;
   number: number;
@@ -47,6 +55,14 @@ interface IStoryQuest {
   locationId?: number;
   image?: string;
   location?: ILocation;
+}
+
+interface ISavedStoryQuestsResponse {
+  data: {
+    userId: string;
+    storyquestId: number;
+    storyquest: IStoryQuest;
+  }[];
 }
 
 interface ISideQuest {
@@ -61,6 +77,14 @@ interface ISideQuest {
   location?: ILocation;
 }
 
+interface ISavedSideQuestsResponse {
+  data: {
+    userId: string;
+    sidequestId: number;
+    sidequest: ISideQuest;
+  }[];
+}
+
 interface IAnimal {
   id: number;
   name: string;
@@ -71,12 +95,28 @@ interface IAnimal {
   location?: ILocation;
 }
 
+interface ISavedAnimalsResponse {
+  data: {
+    userId: string;
+    animalId: number;
+    animal: IHorse;
+  }[];
+}
+
 interface IChallenge {
   id: number;
   name: string;
   description: string;
   rank: boolean;
   reward: string;
+}
+
+interface ISavedChallengesResponse {
+  data: {
+    userId: string;
+    challengeId: number;
+    challenge: IHorse;
+  }[];
 }
 
 interface ICollectible {
@@ -88,11 +128,27 @@ interface ICollectible {
   sidequest: ISideQuest;
 }
 
+interface ISavedCollectibleResponse {
+  data: {
+    userId: string;
+    collectibleId: number;
+    collectible: IHorse;
+  }[];
+}
+
 interface IFaction {
   id: number;
   name: string;
   leader: string;
   status: string;
+}
+
+interface ISavedFactionsResponse {
+  data: {
+    userId: string;
+    factionId: number;
+    faction: IHorse;
+  }[];
 }
 
 interface IFish {
@@ -104,9 +160,25 @@ interface IFish {
   location?: ILocation;
 }
 
+interface ISavedFishesResponse {
+  data: {
+    userId: string;
+    fishId: number;
+    fish: IHorse;
+  }[];
+}
+
 interface IMiscellaneou {
   id: number;
   name: string;
+}
+
+interface ISavedMiscellaneousResponse {
+  data: {
+    userId: string;
+    miscellaneouId: number;
+    miscellaneou: IHorse;
+  }[];
 }
 
 interface IPlant {
@@ -118,6 +190,14 @@ interface IPlant {
   location?: ILocation;
 }
 
+interface ISavedPlantsResponse {
+  data: {
+    userId: string;
+    plantId: number;
+    plant: IHorse;
+  }[];
+}
+
 interface IRandomEncounter {
   id: number;
   name: string;
@@ -125,10 +205,26 @@ interface IRandomEncounter {
   faction?: IFaction;
 }
 
+interface ISavedRandomEncountersResponse {
+  data: {
+    userId: string;
+    randomencounterId: number;
+    randomencounter: IHorse;
+  }[];
+}
+
 interface ITableGame {
   id: number;
   name: string;
   description: string;
+}
+
+interface ISavedTableGamesResponse {
+  data: {
+    userId: string;
+    tablegameId: number;
+    tablegame: IHorse;
+  }[];
 }
 
 interface IWeaponsResponse {
@@ -212,23 +308,21 @@ interface ISearch {
 }
 
 interface IUser {
-  // id: number;
   username: string;
   nickname: string;
-  // email: string;
   weapons?: Array<{ weaponId: number }>;
-  horses?: Array<{ id: number }>;
-  storyQuests?: Array<{ id: number }>;
-  sideQuests?: Array<{ id: number }>;
-  animals?: Array<{ id: number }>;
-  plants?: Array<{ id: number }>;
-  fishes?: Array<{ id: number }>;
-  challenges?: Array<{ id: number }>;
-  collectibles?: Array<{ id: number }>;
-  factions?: Array<{ id: number }>;
-  miscellaneous?: Array<{ id: number }>;
-  randomEncounters?: Array<{ id: number }>;
-  tableGames?: Array<{ id: number }>;
+  horses?: Array<{ horseId: number }>;
+  storyQuests?: Array<{ storyquestId: number }>;
+  sideQuests?: Array<{ sidequestId: number }>;
+  animals?: Array<{ animalId: number }>;
+  plants?: Array<{ plantId: number }>;
+  fishes?: Array<{ fishId: number }>;
+  challenges?: Array<{ challengeId: number }>;
+  collectibles?: Array<{ collectibleId: number }>;
+  factions?: Array<{ factionId: number }>;
+  miscellaneous?: Array<{ miscellaneouId: number }>;
+  randomEncounters?: Array<{ randomencounterId: number }>;
+  tableGames?: Array<{ tablegameId: number }>;
 }
 
 interface ICreateUserDto {
@@ -300,7 +394,19 @@ export type {
   IPlantsResponse,
   IRandomEncounter,
   IRandomEncountersResponse,
-  ISavedWeaponResponse,
+  ISavedAnimalsResponse,
+  ISavedChallengesResponse,
+  ISavedCollectibleResponse,
+  ISavedFactionsResponse,
+  ISavedFishesResponse,
+  ISavedHorsesResponse,
+  ISavedMiscellaneousResponse,
+  ISavedPlantsResponse,
+  ISavedRandomEncountersResponse,
+  ISavedSideQuestsResponse,
+  ISavedStoryQuestsResponse,
+  ISavedTableGamesResponse,
+  ISavedWeaponsResponse,
   ISearch,
   ISideQuest,
   ISideQuestsResponse,

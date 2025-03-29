@@ -2,8 +2,11 @@ import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import { removeHorseFromSaved } from '@src/store/slices/userSlice';
-import { IHorse } from '@src/types/serverAPITypes';
+import {
+  removeHorseFromSaved,
+  setSavedHorses,
+} from '@src/store/slices/userSlice';
+import { ISavedHorsesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
 import { toggleSavedHorse } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
@@ -18,13 +21,28 @@ const SavedHorses = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedHorses = useAppSelector(
     (state) => state.userReducer.userInfo?.horses,
   );
 
-  const [horses, setHorses] = useState<IHorse[] | undefined>(undefined);
+  const [horses, setHorses] = useState<
+    ISavedHorsesResponse['data'] | undefined
+  >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedHorses) {
+        const savedHorses = await serverAPI.getSavedHorses();
+        dispatch(setSavedHorses(savedHorses));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -38,7 +56,7 @@ const SavedHorses = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedHorse(
       id,
-      isInArray(id, savedHorses),
+      isInArray(id, savedHorses, 'horseId'),
       undefined,
       succesRemove,
       unathorizedCallback,
@@ -47,7 +65,9 @@ const SavedHorses = () => {
 
   const succesRemove = (id: number) => {
     dispatch(removeHorseFromSaved(id));
-    setHorses((prevHorses) => prevHorses?.filter((horse) => horse.id !== id));
+    setHorses((prevHorses) =>
+      prevHorses?.filter((horse) => horse.horseId !== id),
+    );
   };
 
   const unathorizedCallback = () => {
@@ -64,13 +84,13 @@ const SavedHorses = () => {
         {horses &&
           horses.map((horse) => (
             <Item
-              key={horse.id}
-              id={horse.id}
+              key={horse.horse.id}
+              id={horse.horse.id}
               handleBtnClickCallback={handleToggleSaved}
-              title={horse.name}
-              image={imageAPI.getImage(horse.image!)}
-              isActive={isInArray(horse.id, savedHorses)}
-              navigateTo={`${routes.horses}/${horse.id}`}
+              title={horse.horse.breed}
+              image={imageAPI.getImage(horse.horse.image!)}
+              isActive={isInArray(horse.horse.id, savedHorses, 'horseId')}
+              navigateTo={`${routes.horses}/${horse.horse.id}`}
               appearance={Appearance.horizontal}
             />
           ))}

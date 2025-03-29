@@ -9,6 +9,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addWeaponToSaved,
   removeWeaponFromSaved,
+  setSavedWeapons,
 } from '@src/store/slices/userSlice';
 import { IWeapon } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -24,6 +25,10 @@ const DetailedWeapon = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedWeapons = useAppSelector(
     (state) => state.userReducer.userInfo?.weapons,
   );
@@ -35,6 +40,15 @@ const DetailedWeapon = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedWeapons) {
+        const savedWeapons = await serverAPI.getSavedWeapons();
+        dispatch(setSavedWeapons(savedWeapons));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {

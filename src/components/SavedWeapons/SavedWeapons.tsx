@@ -2,8 +2,11 @@ import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import { removeWeaponFromSaved } from '@src/store/slices/userSlice';
-import { ISavedWeaponResponse } from '@src/types/serverAPITypes';
+import {
+  removeWeaponFromSaved,
+  setSavedWeapons,
+} from '@src/store/slices/userSlice';
+import { ISavedWeaponsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
 import { toggleSavedWeapon } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
@@ -18,15 +21,28 @@ const SavedWeapons = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedWeapons = useAppSelector(
     (state) => state.userReducer.userInfo?.weapons,
   );
 
   const [weapons, setWeapons] = useState<
-    ISavedWeaponResponse['data'] | undefined
+    ISavedWeaponsResponse['data'] | undefined
   >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedWeapons) {
+        const savedWeapons = await serverAPI.getSavedWeapons();
+        dispatch(setSavedWeapons(savedWeapons));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {

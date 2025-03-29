@@ -18,6 +18,7 @@ import {
 import {
   addHorseToSaved,
   removeHorseFromSaved,
+  setSavedHorses,
 } from '@src/store/slices/userSlice';
 import { IHorsesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -33,6 +34,10 @@ const Horses = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedHorses = useAppSelector(
     (state) => state.userReducer.userInfo?.horses,
   );
@@ -42,6 +47,15 @@ const Horses = () => {
   const params = useAppSelector((state) => state.searchReducer.horses);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedHorses) {
+        const savedHorses = await serverAPI.getSavedHorses();
+        dispatch(setSavedHorses(savedHorses));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -62,7 +76,7 @@ const Horses = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedHorse(
       id,
-      isInArray(id, savedHorses),
+      isInArray(id, savedHorses, 'horseId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -120,7 +134,7 @@ const Horses = () => {
                 handleBtnClickCallback={handleToggleSaved}
                 title={horse.breed}
                 image={imageAPI.getImage(horse.image!)}
-                isActive={isInArray(horse.id, savedHorses)}
+                isActive={isInArray(horse.id, savedHorses, 'horseId')}
                 navigateTo={`${routes.horses}/${horse.id}`}
               />
             ))}

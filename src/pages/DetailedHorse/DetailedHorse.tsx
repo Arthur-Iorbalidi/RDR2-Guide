@@ -9,6 +9,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addHorseToSaved,
   removeHorseFromSaved,
+  setSavedHorses,
 } from '@src/store/slices/userSlice';
 import { IHorse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -24,6 +25,10 @@ const DetailedHorse = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedHorses = useAppSelector(
     (state) => state.userReducer.userInfo?.horses,
   );
@@ -35,6 +40,15 @@ const DetailedHorse = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedHorses) {
+        const savedHorses = await serverAPI.getSavedHorses();
+        dispatch(setSavedHorses(savedHorses));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -68,7 +82,7 @@ const DetailedHorse = () => {
 
     toggleSavedHorse(
       horse!.id,
-      isInArray(horse!.id, savedHorses),
+      isInArray(horse!.id, savedHorses, 'horseId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -99,7 +113,7 @@ const DetailedHorse = () => {
               />
               <div className={styles.favourite_btn_wrapper}>
                 <FavoriteButton
-                  isInFavorites={isInArray(horse.id, savedHorses)}
+                  isInFavorites={isInArray(horse.id, savedHorses, 'horseId')}
                   onClick={handleToggleFavorite}
                 />
               </div>
