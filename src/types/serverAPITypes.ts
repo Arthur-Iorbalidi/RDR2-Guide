@@ -12,6 +12,14 @@ interface IWeapon {
   location?: ILocation;
 }
 
+interface ISavedWeaponResponse {
+  data: {
+    userId: string;
+    weaponId: number;
+    weapon: IWeapon;
+  }[];
+}
+
 interface ILocation {
   id: number;
   name: string;
@@ -208,7 +216,7 @@ interface IUser {
   username: string;
   nickname: string;
   // email: string;
-  weapons?: Array<{ id: number }>;
+  weapons?: Array<{ weaponId: number }>;
   horses?: Array<{ id: number }>;
   storyQuests?: Array<{ id: number }>;
   sideQuests?: Array<{ id: number }>;
@@ -292,6 +300,7 @@ export type {
   IPlantsResponse,
   IRandomEncounter,
   IRandomEncountersResponse,
+  ISavedWeaponResponse,
   ISearch,
   ISideQuest,
   ISideQuestsResponse,

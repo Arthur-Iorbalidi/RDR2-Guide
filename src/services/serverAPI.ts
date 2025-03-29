@@ -23,6 +23,7 @@ import {
   IPlantsResponse,
   IRandomEncounter,
   IRandomEncountersResponse,
+  ISavedWeaponResponse,
   ISearch,
   ISideQuest,
   ISideQuestsResponse,
@@ -145,7 +146,7 @@ class ServerAPI {
       const token = this.getAccessToken();
 
       const response = await this.api.post(
-        `users/saved/weapons/${id}`,
+        `users/weapons/${id}`,
         {},
         {
           headers: {
@@ -174,7 +175,7 @@ class ServerAPI {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.delete(`users/saved/weapons/${id}`, {
+      const response = await this.api.delete(`users/weapons/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -864,17 +865,17 @@ class ServerAPI {
 
   async getSavedWeapons(
     unathorizedCallback?: () => void,
-  ): Promise<IWeapon[] | undefined> {
+  ): Promise<ISavedWeaponResponse["data"] | undefined> {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.get('users/saved/weapons', {
+      const response = await this.api.get('users/weapons', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      return response.data;
+      return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
         unathorizedCallback?.();

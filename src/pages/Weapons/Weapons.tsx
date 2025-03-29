@@ -18,6 +18,7 @@ import {
 import {
   addWeaponToSaved,
   removeWeaponFromSaved,
+  setSavedWeapons,
 } from '@src/store/slices/userSlice';
 import { IWeaponsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -33,6 +34,10 @@ const Weapons = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedWeapons = useAppSelector(
     (state) => state.userReducer.userInfo?.weapons,
   );
@@ -44,6 +49,15 @@ const Weapons = () => {
   const params = useAppSelector((state) => state.searchReducer.weapons);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedWeapons) {
+        const savedWeapons = await serverAPI.getSavedWeapons();
+        dispatch(setSavedWeapons(savedWeapons));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -64,7 +78,7 @@ const Weapons = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedWeapon(
       id,
-      isInArray(id, savedWeapons),
+      isInArray(id, savedWeapons, 'weaponId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -126,7 +140,7 @@ const Weapons = () => {
                   handleBtnClickCallback={handleToggleSaved}
                   title={weapon.name}
                   image={imageAPI.getImage(weapon.image!)}
-                  isActive={isInArray(weapon.id, savedWeapons)}
+                  isActive={isInArray(weapon.id, savedWeapons, 'weaponId')}
                   navigateTo={`${routes.weapons}/${weapon.id}`}
                 />
               ))}

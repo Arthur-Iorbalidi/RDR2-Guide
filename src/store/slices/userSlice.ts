@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUser } from '@src/types/serverAPITypes';
+import { ISavedWeaponResponse, IUser } from '@src/types/serverAPITypes';
 
 interface UserState {
   isAuthorized: boolean | undefined;
@@ -44,10 +44,19 @@ const userSlice = createSlice({
       state.userInfo = action.payload;
     },
 
+    setSavedWeapons: (
+      state,
+      action: PayloadAction<ISavedWeaponResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.weapons = action.payload;
+      }
+    },
+
     removeWeaponFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.weapons = state.userInfo.weapons?.filter(
-          (weapon) => weapon.id !== action.payload,
+          (weapon) => weapon.weaponId !== action.payload,
         );
       }
     },
@@ -55,9 +64,11 @@ const userSlice = createSlice({
     addWeaponToSaved: (state, action: PayloadAction<number>) => {
       if (
         state.userInfo &&
-        !state.userInfo.weapons?.some((weapon) => weapon.id === action.payload)
+        !state.userInfo.weapons?.some(
+          (weapon) => weapon.weaponId === action.payload,
+        )
       ) {
-        state.userInfo.weapons?.push({ id: action.payload });
+        state.userInfo.weapons?.push({ weaponId: action.payload });
       }
     },
 
@@ -287,6 +298,7 @@ const userSlice = createSlice({
 export const {
   changeIsAuthorized,
   changeUserInfo,
+  setSavedWeapons,
   addHorseToSaved,
   addSideQuestToSaved,
   addStoryQuestToSaved,
