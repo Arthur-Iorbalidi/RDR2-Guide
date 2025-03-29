@@ -9,7 +9,7 @@ import {
   changeIsAuthorized,
   changeUserInfo,
 } from '@src/store/slices/userSlice';
-import { IAuthUserResponse } from '@src/types/serverAPITypes';
+import { IErrorResponse, ILoginUserResponse } from '@src/types/serverAPITypes';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,9 +17,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Registration.module.scss';
 
 interface IFormFields {
-  name: string;
-  surname: string;
-  email: string;
+  nickname: string;
+  username: string;
   password: string;
 }
 
@@ -51,18 +50,22 @@ const Registration = () => {
     setIsLoading(true);
   };
 
-  const succesReg = (value: IAuthUserResponse) => {
+  const succesReg = (response: ILoginUserResponse) => {
     setIsLoading(false);
-    serverAPI.setToken(value.token);
     dispatch(changeIsAuthorized(true));
-    dispatch(changeUserInfo(value.user));
+    dispatch(
+      changeUserInfo({
+        username: response.username,
+        nickname: response.nickname,
+      }),
+    );
     navigate('/');
   };
 
-  const errorReg = (message?: string) => {
+  const errorReg = (error?: IErrorResponse) => {
     setIsLoading(false);
-    if (message) {
-      setModal({ isShowed: true, text: message });
+    if (error) {
+      setModal({ isShowed: true, text: JSON.stringify(error.response.data) });
     } else {
       setModal({ isShowed: true, text: 'Error' });
     }
@@ -82,35 +85,24 @@ const Registration = () => {
         <div className={styles.form_fields}>
           <div className={styles.form_field_wrapper}>
             <input
-              {...register('name')}
+              {...register('username')}
               className={styles.form_field}
               type="text"
               placeholder="Name"
             />
             <div className={styles.form_field_error}>
-              {errors.name?.message}
+              {errors.username?.message}
             </div>
           </div>
           <div className={styles.form_field_wrapper}>
             <input
-              {...register('surname')}
+              {...register('nickname')}
               className={styles.form_field}
               type="text"
-              placeholder="Surname"
+              placeholder="NickName"
             />
             <div className={styles.form_field_error}>
-              {errors.surname?.message}
-            </div>
-          </div>
-          <div className={styles.form_field_wrapper}>
-            <input
-              {...register('email')}
-              className={styles.form_field}
-              type="text"
-              placeholder="Email"
-            />
-            <div className={styles.form_field_error}>
-              {errors.email?.message}
+              {errors.nickname?.message}
             </div>
           </div>
           <div className={styles.form_field_wrapper}>

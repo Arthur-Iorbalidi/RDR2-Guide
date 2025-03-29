@@ -12,6 +12,14 @@ interface IWeapon {
   location?: ILocation;
 }
 
+interface ISavedWeaponResponse {
+  data: {
+    userId: string;
+    weaponId: number;
+    weapon: IWeapon;
+  }[];
+}
+
 interface ILocation {
   id: number;
   name: string;
@@ -204,29 +212,28 @@ interface ISearch {
 }
 
 interface IUser {
-  id: number;
-  name: string;
-  surname: string;
-  email: string;
-  weapons: Array<{ id: number }>;
-  horses: Array<{ id: number }>;
-  storyQuests: Array<{ id: number }>;
-  sideQuests: Array<{ id: number }>;
-  animals: Array<{ id: number }>;
-  plants: Array<{ id: number }>;
-  fishes: Array<{ id: number }>;
-  challenges: Array<{ id: number }>;
-  collectibles: Array<{ id: number }>;
-  factions: Array<{ id: number }>;
-  miscellaneous: Array<{ id: number }>;
-  randomEncounters: Array<{ id: number }>;
-  tableGames: Array<{ id: number }>;
+  // id: number;
+  username: string;
+  nickname: string;
+  // email: string;
+  weapons?: Array<{ weaponId: number }>;
+  horses?: Array<{ id: number }>;
+  storyQuests?: Array<{ id: number }>;
+  sideQuests?: Array<{ id: number }>;
+  animals?: Array<{ id: number }>;
+  plants?: Array<{ id: number }>;
+  fishes?: Array<{ id: number }>;
+  challenges?: Array<{ id: number }>;
+  collectibles?: Array<{ id: number }>;
+  factions?: Array<{ id: number }>;
+  miscellaneous?: Array<{ id: number }>;
+  randomEncounters?: Array<{ id: number }>;
+  tableGames?: Array<{ id: number }>;
 }
 
 interface ICreateUserDto {
-  name: string;
-  surname: string;
-  email: string;
+  nickname: string;
+  username: string;
   password: string;
 }
 
@@ -235,13 +242,24 @@ interface IUpdateUserDto extends Partial<ICreateUserDto> {
 }
 
 interface ILoginUserDto {
-  email: string;
+  username: string;
   password: string;
 }
 
-interface IAuthUserResponse {
-  user: IUser;
-  token: string;
+// interface IAuthUserResponse {
+//   // user: IUser;
+//   accessToken: string;
+//   refreshToken: string;
+// }
+
+interface ILoginUserResponse {
+  // user: IUser;
+  username: string;
+  nickname: string;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
 }
 
 interface ICheckUserResponse {
@@ -252,17 +270,13 @@ interface ICheckUserResponse {
 interface IErrorResponse {
   status: number;
   response: {
-    data: {
-      statusCode: number;
-      message: string;
-    };
+    data: any;
   };
 }
 
 export type {
   IAnimal,
   IAnimalsResponse,
-  IAuthUserResponse,
   IChallenge,
   IChallengesResponse,
   ICheckUserResponse,
@@ -278,6 +292,7 @@ export type {
   IHorsesResponse,
   ILocation,
   ILoginUserDto,
+  ILoginUserResponse,
   IMiscellaneou,
   IMiscellaneousResponse,
   IPagination,
@@ -285,6 +300,7 @@ export type {
   IPlantsResponse,
   IRandomEncounter,
   IRandomEncountersResponse,
+  ISavedWeaponResponse,
   ISearch,
   ISideQuest,
   ISideQuestsResponse,

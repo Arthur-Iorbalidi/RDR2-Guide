@@ -1,6 +1,10 @@
-const isInArray = (id: number, array: { id: number }[] | undefined) => {
+const isInArray = <T extends { [key: string]: number }>(
+  id: number,
+  array: T[] | undefined,
+  idKey: keyof T,
+) => {
   if (array) {
-    return array.some((elem) => elem.id === id);
+    return array.some((elem) => elem[idKey] === id);
   }
   return false;
 };

@@ -68,7 +68,7 @@ const DetailedWeapon = () => {
 
     toggleSavedWeapon(
       weapon!.id,
-      isInArray(weapon!.id, savedWeapons),
+      isInArray(weapon!.id, savedWeapons, 'weaponId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -99,7 +99,7 @@ const DetailedWeapon = () => {
               />
               <div className={styles.favourite_btn_wrapper}>
                 <FavoriteButton
-                  isInFavorites={isInArray(weapon.id, savedWeapons)}
+                  isInFavorites={isInArray(weapon.id, savedWeapons, 'weaponId')}
                   onClick={handleToggleFavorite}
                 />
               </div>

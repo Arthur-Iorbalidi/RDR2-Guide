@@ -3,7 +3,7 @@ import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
 import { removeWeaponFromSaved } from '@src/store/slices/userSlice';
-import { IWeapon } from '@src/types/serverAPITypes';
+import { ISavedWeaponResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
 import { toggleSavedWeapon } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
@@ -22,7 +22,9 @@ const SavedWeapons = () => {
     (state) => state.userReducer.userInfo?.weapons,
   );
 
-  const [weapons, setWeapons] = useState<IWeapon[] | undefined>(undefined);
+  const [weapons, setWeapons] = useState<
+    ISavedWeaponResponse['data'] | undefined
+  >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -38,7 +40,7 @@ const SavedWeapons = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedWeapon(
       id,
-      isInArray(id, savedWeapons),
+      isInArray(id, savedWeapons, 'weaponId'),
       undefined,
       succesRemove,
       unathorizedCallback,
@@ -48,7 +50,7 @@ const SavedWeapons = () => {
   const succesRemove = (id: number) => {
     dispatch(removeWeaponFromSaved(id));
     setWeapons((prevWeapons) =>
-      prevWeapons?.filter((weapon) => weapon.id !== id),
+      prevWeapons!.filter((weapon) => weapon.weapon.id !== id),
     );
   };
 
@@ -66,13 +68,13 @@ const SavedWeapons = () => {
         {weapons &&
           weapons.map((weapon) => (
             <Item
-              key={weapon.id}
-              id={weapon.id}
+              key={weapon.weapon.id}
+              id={weapon.weapon.id}
               handleBtnClickCallback={handleToggleSaved}
-              title={weapon.name}
-              image={imageAPI.getImage(weapon.image!)}
-              isActive={isInArray(weapon.id, savedWeapons)}
-              navigateTo={`${routes.weapons}/${weapon.id}`}
+              title={weapon.weapon.name}
+              image={imageAPI.getImage(weapon.weapon.image!)}
+              isActive={isInArray(weapon.weapon.id, savedWeapons, 'weaponId')}
+              navigateTo={`${routes.weapons}/${weapon.weapon.id}`}
               appearance={Appearance.horizontal}
             />
           ))}

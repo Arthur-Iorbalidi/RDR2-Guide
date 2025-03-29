@@ -9,7 +9,7 @@ import {
   changeIsAuthorized,
   changeUserInfo,
 } from '@src/store/slices/userSlice';
-import { IAuthUserResponse } from '@src/types/serverAPITypes';
+import { IErrorResponse, ILoginUserResponse } from '@src/types/serverAPITypes';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,7 +17,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Login.module.scss';
 
 interface IFormFields {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -49,18 +49,22 @@ const Login = () => {
     setIsLoading(true);
   };
 
-  const succesLogin = (value: IAuthUserResponse) => {
+  const succesLogin = (response: ILoginUserResponse) => {
     setIsLoading(false);
-    serverAPI.setToken(value.token);
     dispatch(changeIsAuthorized(true));
-    dispatch(changeUserInfo(value.user));
+    dispatch(
+      changeUserInfo({
+        username: response.username,
+        nickname: response.nickname,
+      }),
+    );
     navigate('/');
   };
 
-  const errorLogin = (message?: string) => {
+  const errorLogin = (error?: IErrorResponse) => {
     setIsLoading(false);
-    if (message) {
-      setModal({ isShowed: true, text: message });
+    if (error) {
+      setModal({ isShowed: true, text: JSON.stringify(error.response.data) });
     } else {
       setModal({ isShowed: true, text: 'Error' });
     }
@@ -80,13 +84,13 @@ const Login = () => {
         <div className={styles.form_fields}>
           <div className={styles.form_field_wrapper}>
             <input
-              {...register('email')}
+              {...register('username')}
               className={styles.form_field}
               type="text"
-              placeholder="Email"
+              placeholder="Name"
             />
             <div className={styles.form_field_error}>
-              {errors.email?.message}
+              {errors.username?.message}
             </div>
           </div>
           <div className={styles.form_field_wrapper}>

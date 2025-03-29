@@ -2,7 +2,6 @@
 import {
   IAnimal,
   IAnimalsResponse,
-  IAuthUserResponse,
   IChallenge,
   IChallengesResponse,
   ICheckUserResponse,
@@ -17,12 +16,14 @@ import {
   IHorse,
   IHorsesResponse,
   ILoginUserDto,
+  ILoginUserResponse,
   IMiscellaneou,
   IMiscellaneousResponse,
   IPlant,
   IPlantsResponse,
   IRandomEncounter,
   IRandomEncountersResponse,
+  ISavedWeaponResponse,
   ISearch,
   ISideQuest,
   ISideQuestsResponse,
@@ -50,96 +51,87 @@ class ServerAPI {
 
   async register(
     userDto: ICreateUserDto,
-    successCallback?: (value: IAuthUserResponse) => void,
-    errorCallback?: (message?: string) => void,
+    successCallback?: (response: ILoginUserResponse) => void,
+    errorCallback?: (error?: IErrorResponse) => void,
   ) {
     try {
-      const response = await this.api.post('auth/registration', {
-        name: userDto.name,
-        surname: userDto.surname,
-        email: userDto.email,
-        password: userDto.password,
-      });
+      await this.api.post('auth', {...userDto, roles: ["User"]});
 
-      successCallback?.(response.data);
+      await this.login(userDto, successCallback, errorCallback);
     } catch (error) {
-      if ((error as IErrorResponse).response) {
-        errorCallback?.((error as IErrorResponse).response.data.message);
-      } else {
-        errorCallback?.('Error');
-      }
+      errorCallback?.(error as IErrorResponse);
     }
   }
 
   async login(
     userDto: ILoginUserDto,
-    successCallback?: (value: IAuthUserResponse) => void,
-    errorCallback?: (message?: string) => void,
+    successCallback?: (value: ILoginUserResponse) => void,
+    errorCallback?: (error?: IErrorResponse) => void,
   ) {
     try {
-      const response = await this.api.post('auth/login', {
-        email: userDto.email,
-        password: userDto.password,
-      });
+      const response = await this.api.post('auth/login', userDto);
+
+      this.setAccessToken(response.data.tokens.accessToken);
+      this.setRefreshToken(response.data.tokens.refreshToken);
 
       successCallback?.(response.data);
     } catch (error) {
       if ((error as IErrorResponse).response) {
         errorCallback?.((error as IErrorResponse).response.data.message);
-      } else {
-        errorCallback?.('Error');
       }
     }
   }
 
-  async updateUserInfo(
-    id: number,
-    userDto: IUpdateUserDto,
-    successCallback?: (value: IAuthUserResponse) => void,
-    errorCallback?: (message?: string) => void,
-  ) {
+  // async updateUserInfo(
+  //   id: number,
+  //   userDto: IUpdateUserDto,
+  //   successCallback?: (value: IAuthUserResponse) => void,
+  //   errorCallback?: (message?: string) => void,
+  // ) {
+  //   try {
+  //     const token = this.getToken();
+
+  //     const response = await this.api.patch(
+  //       `users/${id}`,
+  //       {
+  //         ...(userDto.name !== '' ? { name: userDto.name } : {}),
+  //         ...(userDto.nickName !== '' ? { surname: userDto.nickName } : {}),
+  //         ...(userDto.password !== '' ? { password: userDto.password } : {}),
+  //         ...(userDto.oldPassword !== ''
+  //           ? { oldPassword: userDto.oldPassword }
+  //           : {}),
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+
+  //     successCallback?.(response.data);
+  //   } catch (error) {
+  //     if ((error as IErrorResponse).response) {
+  //       errorCallback?.((error as IErrorResponse).response.data.message);
+  //     } else {
+  //       errorCallback?.('Error');
+  //     }
+  //   }
+  // }
+
+  async updateRefreshToken(callback?: (response: any) => void) {
     try {
-      const token = this.getToken();
+      const accessToken = this.getAccessToken();
+      const refreshToken = this.getRefreshToken();
 
-      const response = await this.api.patch(
-        `users/${id}`,
-        {
-          ...(userDto.name !== '' ? { name: userDto.name } : {}),
-          ...(userDto.surname !== '' ? { surname: userDto.surname } : {}),
-          ...(userDto.email !== '' ? { email: userDto.email } : {}),
-          ...(userDto.password !== '' ? { password: userDto.password } : {}),
-          ...(userDto.oldPassword !== ''
-            ? { oldPassword: userDto.oldPassword }
-            : {}),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      successCallback?.(response.data);
-    } catch (error) {
-      if ((error as IErrorResponse).response) {
-        errorCallback?.((error as IErrorResponse).response.data.message);
-      } else {
-        errorCallback?.('Error');
-      }
-    }
-  }
-
-  async checkUser(callback?: (response: ICheckUserResponse) => void) {
-    try {
-      const token = this.getToken();
-
-      const response = await this.api.get('auth/check', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await this.api.post('token/refresh', {
+        accessToken,
+        refreshToken
       });
 
-      callback?.({ isAuthorized: true, user: response.data });
+      this.setAccessToken(response.data.tokens.accessToken);
+      this.setRefreshToken(response.data.tokens.refreshToken);
+
+      callback?.({ isAuthorized: true, user: {nickname: response.data.nickname, username: response.data.username} });
     } catch {
       callback?.({ isAuthorized: false, user: undefined });
     }
@@ -151,10 +143,10 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.post(
-        `users/saved/weapons/${id}`,
+        `users/weapons/${id}`,
         {},
         {
           headers: {
@@ -181,9 +173,9 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
-      const response = await this.api.delete(`users/saved/weapons/${id}`, {
+      const response = await this.api.delete(`users/weapons/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -207,7 +199,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.post(
         `users/saved/horses/${id}`,
@@ -237,7 +229,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.delete(`users/saved/horses/${id}`, {
         headers: {
@@ -263,7 +255,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.post(
         `users/saved/story-quests/${id}`,
@@ -293,7 +285,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.delete(`users/saved/story-quests/${id}`, {
         headers: {
@@ -319,7 +311,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.post(
         `users/saved/side-quests/${id}`,
@@ -349,7 +341,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ) {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.delete(`users/saved/side-quests/${id}`, {
         headers: {
@@ -514,7 +506,8 @@ class ServerAPI {
   }
 
   logout() {
-    storageAPI.remove('token');
+    storageAPI.remove('accessToken');
+    storageAPI.remove('refreshToken');
   }
 
   async getWeapons(params: ISearch): Promise<IWeaponsResponse> {
@@ -872,17 +865,17 @@ class ServerAPI {
 
   async getSavedWeapons(
     unathorizedCallback?: () => void,
-  ): Promise<IWeapon[] | undefined> {
+  ): Promise<ISavedWeaponResponse["data"] | undefined> {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
-      const response = await this.api.get('users/saved/weapons', {
+      const response = await this.api.get('users/weapons', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      return response.data;
+      return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
         unathorizedCallback?.();
@@ -894,7 +887,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ): Promise<IHorse[] | undefined> {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.get('users/saved/horses', {
         headers: {
@@ -914,7 +907,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ): Promise<IStoryQuest[] | undefined> {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.get('users/saved/story-quests', {
         headers: {
@@ -934,7 +927,7 @@ class ServerAPI {
     unathorizedCallback?: () => void,
   ): Promise<ISideQuest[] | undefined> {
     try {
-      const token = this.getToken();
+      const token = this.getAccessToken();
 
       const response = await this.api.get('users/saved/side-quests', {
         headers: {
@@ -988,12 +981,20 @@ class ServerAPI {
   //   }
   // }
 
-  getToken() {
-    return storageAPI.get('token');
+  getAccessToken() {
+    return storageAPI.get('accessToken');
   }
 
-  setToken(token: string) {
-    storageAPI.set('token', token);
+  getRefreshToken() {
+    return storageAPI.get('refreshToken');
+  }
+
+  setAccessToken(token: string) {
+    storageAPI.set('accessToken', token);
+  }
+
+  setRefreshToken(token: string) {
+    storageAPI.set('refreshToken', token);
   }
 }
 
