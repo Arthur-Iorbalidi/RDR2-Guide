@@ -15,6 +15,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addChallengeToSaved,
   removeChallengeFromSaved,
+  setSavedChallenges,
 } from '@src/store/slices/userSlice';
 import { IChallengesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -30,6 +31,10 @@ const Challenges = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedChallenges = useAppSelector(
     (state) => state.userReducer.userInfo?.challenges,
   );
@@ -44,6 +49,15 @@ const Challenges = () => {
 
   useEffect(() => {
     (async () => {
+      if (isAuthorized && !savedChallenges) {
+        const savedChallenges = await serverAPI.getSavedChallenges();
+        dispatch(setSavedChallenges(savedChallenges));
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       setIsLoading(true);
       const data = await serverAPI.getChallenges(params);
       setChallenges(data);
@@ -54,7 +68,7 @@ const Challenges = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedChallenge(
       id,
-      isInArray(id, savedChallenges),
+      isInArray(id, savedChallenges, 'challengeId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -110,6 +124,7 @@ const Challenges = () => {
                           isInFavorites={isInArray(
                             challenge.id,
                             savedChallenges,
+                            'challengeId',
                           )}
                           onClick={() => handleToggleSaved(challenge.id)}
                         />
