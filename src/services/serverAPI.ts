@@ -25,6 +25,7 @@ import {
   ISavedAnimalsResponse,
   ISavedChallengesResponse,
   ISavedCollectiblesResponse,
+  ISavedFactionsResponse,
   ISavedFishesResponse,
   ISavedHorsesResponse,
   ISavedMiscellaneousResponse,
@@ -1372,7 +1373,7 @@ class ServerAPI {
 
   async getSavedFactions(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedSideQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedFactionsResponse["data"] | undefined> {
     try {
       const token = this.getAccessToken();
 
