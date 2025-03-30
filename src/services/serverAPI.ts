@@ -30,6 +30,7 @@ import {
   ISavedHorsesResponse,
   ISavedMiscellaneousResponse,
   ISavedPlantsResponse,
+  ISavedRandomEncountersResponse,
   ISavedSideQuestsResponse,
   ISavedStoryQuestsResponse,
   ISavedWeaponsResponse,
@@ -1453,7 +1454,7 @@ class ServerAPI {
 
   async getSavedRandomEncounters(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedSideQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedRandomEncountersResponse["data"] | undefined> {
     try {
       const token = this.getAccessToken();
 

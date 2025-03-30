@@ -15,6 +15,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addRandomEncounterToSaved,
   removeRandomEncounterFromSaved,
+  setSavedRandomEncounter,
 } from '@src/store/slices/userSlice';
 import { IRandomEncountersResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -30,6 +31,10 @@ const RandomEncounters = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedRandomEncounters = useAppSelector(
     (state) => state.userReducer.userInfo?.randomEncounters,
   );
@@ -39,6 +44,16 @@ const RandomEncounters = () => {
   >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedRandomEncounters) {
+        const savedRandomEncounters =
+          await serverAPI.getSavedRandomEncounters();
+        dispatch(setSavedRandomEncounter(savedRandomEncounters));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -52,7 +67,7 @@ const RandomEncounters = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedRandomEncounter(
       id,
-      isInArray(id, savedRandomEncounters),
+      isInArray(id, savedRandomEncounters, 'randomencounterId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -108,6 +123,7 @@ const RandomEncounters = () => {
                           isInFavorites={isInArray(
                             randomEncounter.id,
                             savedRandomEncounters,
+                            'randomencounterId',
                           )}
                           onClick={() => handleToggleSaved(randomEncounter.id)}
                         />
