@@ -1,6 +1,5 @@
 import MainUserInfo from '@src/components/MainUserInfo/MainUserInfo';
 import Loader from '@src/components/ui/Loader/Loader';
-import UserPassword from '@src/components/UserPassword/UserPassword';
 import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import { Navigate } from 'react-router-dom';
@@ -23,7 +22,7 @@ const Account = () => {
       <div className={styles.wrapper}>
         <h1 className={styles.header}>Account</h1>
         <MainUserInfo />
-        <UserPassword />
+        {/* <UserPassword /> */}
       </div>
     </section>
   );
