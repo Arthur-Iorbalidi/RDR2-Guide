@@ -14,6 +14,7 @@ import {
 import {
   addCollectibleToSaved,
   removeCollectibleFromSaved,
+  setSavedCollectibles,
 } from '@src/store/slices/userSlice';
 import { ICollectiblesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -29,6 +30,10 @@ const Collectibles = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedCollectibles = useAppSelector(
     (state) => state.userReducer.userInfo?.collectibles,
   );
@@ -43,6 +48,15 @@ const Collectibles = () => {
 
   useEffect(() => {
     (async () => {
+      if (isAuthorized && !savedCollectibles) {
+        const savedCollectibles = await serverAPI.getSavedCollectibles();
+        dispatch(setSavedCollectibles(savedCollectibles));
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       setIsLoading(true);
       const data = await serverAPI.getCollectibles(params);
       setCollectibles(data);
@@ -53,7 +67,7 @@ const Collectibles = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedCollectible(
       id,
-      isInArray(id, savedCollectibles),
+      isInArray(id, savedCollectibles, 'collectibleId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -100,7 +114,11 @@ const Collectibles = () => {
                 handleBtnClickCallback={handleToggleSaved}
                 title={collectible.name}
                 image={imageAPI.getImage(collectible.image!)}
-                isActive={isInArray(collectible.id, savedCollectibles)}
+                isActive={isInArray(
+                  collectible.id,
+                  savedCollectibles,
+                  'collectibleId',
+                )}
                 navigateTo={`${routes.collectibles}/${collectible.id}`}
               />
             ))}

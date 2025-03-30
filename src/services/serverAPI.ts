@@ -24,6 +24,7 @@ import {
   IRandomEncountersResponse,
   ISavedAnimalsResponse,
   ISavedChallengesResponse,
+  ISavedCollectiblesResponse,
   ISavedFishesResponse,
   ISavedHorsesResponse,
   ISavedMiscellaneousResponse,
@@ -1351,7 +1352,7 @@ class ServerAPI {
 
   async getSavedCollectibles(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedSideQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedCollectiblesResponse["data"] | undefined> {
     try {
       const token = this.getAccessToken();
 

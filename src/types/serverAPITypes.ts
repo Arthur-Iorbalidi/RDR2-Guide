@@ -128,7 +128,7 @@ interface ICollectible {
   sidequest: ISideQuest;
 }
 
-interface ISavedCollectibleResponse {
+interface ISavedCollectiblesResponse {
   data: {
     userId: string;
     collectibleId: number;
@@ -396,7 +396,7 @@ export type {
   IRandomEncountersResponse,
   ISavedAnimalsResponse,
   ISavedChallengesResponse,
-  ISavedCollectibleResponse,
+  ISavedCollectiblesResponse,
   ISavedFactionsResponse,
   ISavedFishesResponse,
   ISavedHorsesResponse,
