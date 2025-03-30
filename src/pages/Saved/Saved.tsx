@@ -1,4 +1,8 @@
+import SavedAnimals from '@src/components/SavedAnimals/SavedAnimals';
+import SavedCollectibles from '@src/components/SavedCollectibles/SavedCollectibles';
+import SavedFishes from '@src/components/SavedFishes/SavedFishes';
 import SavedHorses from '@src/components/SavedHorses/SavedHorses';
+import SavedPlants from '@src/components/SavedPlants/SavedPlants';
 import SavedSideQuests from '@src/components/SavedSideQuests/SavedSideQuests';
 import SavedStoryQuests from '@src/components/SavedStoryQuests/SavedStoryQuests';
 import SavedWeapons from '@src/components/SavedWeapons/SavedWeapons';
@@ -12,7 +16,21 @@ import { Navigate } from 'react-router-dom';
 import styles from './Saved.module.scss';
 
 const Saved = () => {
-  const options = ['Weapons', 'Horses', 'Story Quests', 'Side Quests'];
+  const options = [
+    'Weapons',
+    'Horses',
+    'Story Quests',
+    'Side Quests',
+    'Animals',
+    'Plants',
+    'Fishes',
+    'Challenges',
+    'Collectibles',
+    'Factions',
+    'Miscellaneous',
+    'Random encounters',
+    'Table games',
+  ];
 
   const [currentOptionIndex, setCurrentOptionIndex] = useState(0);
 
@@ -43,6 +61,21 @@ const Saved = () => {
         {options[currentOptionIndex] === 'Horses' && <SavedHorses />}
         {options[currentOptionIndex] === 'Story Quests' && <SavedStoryQuests />}
         {options[currentOptionIndex] === 'Side Quests' && <SavedSideQuests />}
+        {options[currentOptionIndex] === 'Animals' && <SavedAnimals />}
+        {options[currentOptionIndex] === 'Plants' && <SavedPlants />}
+        {options[currentOptionIndex] === 'Fishes' && <SavedFishes />}
+        {options[currentOptionIndex] === 'Challenges' && <SavedSideQuests />}
+        {options[currentOptionIndex] === 'Collectibles' && (
+          <SavedCollectibles />
+        )}
+        {options[currentOptionIndex] === 'Factions' && <SavedHorses />}
+        {options[currentOptionIndex] === 'Miscellaneous' && (
+          <SavedStoryQuests />
+        )}
+        {options[currentOptionIndex] === 'Random encounters' && (
+          <SavedSideQuests />
+        )}
+        {options[currentOptionIndex] === 'Table games' && <SavedSideQuests />}
       </div>
     </section>
   );

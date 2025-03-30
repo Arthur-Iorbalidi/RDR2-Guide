@@ -124,8 +124,8 @@ interface ICollectible {
   name: string;
   amount: number;
   image?: string;
-  sidequestId: number;
-  sidequest: ISideQuest;
+  sidequestId?: number;
+  sidequest?: ISideQuest;
 }
 
 interface ISavedCollectiblesResponse {

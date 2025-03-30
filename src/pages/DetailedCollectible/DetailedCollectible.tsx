@@ -136,17 +136,19 @@ const DetailedCollectible = () => {
                     {collectible.amount}
                   </span>
                 </p>
-                <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>
-                    Side Quest:
-                  </span>
-                  <Link
-                    className={styles.overview_item_value_link}
-                    to={`${routes.sideQuests}/${collectible.sidequest.id}`}
-                  >
-                    {collectible.sidequest.name}
-                  </Link>
-                </p>
+                {collectible?.sidequest && (
+                  <p className={styles.overview_item}>
+                    <span className={styles.overview_item_title}>
+                      Side Quest:
+                    </span>
+                    <Link
+                      className={styles.overview_item_value_link}
+                      to={`${routes.sideQuests}/${collectible.sidequest.id}`}
+                    >
+                      {collectible.sidequest.name}
+                    </Link>
+                  </p>
+                )}
               </div>
             </div>
           </div>

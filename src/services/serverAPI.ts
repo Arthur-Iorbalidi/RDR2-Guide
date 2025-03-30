@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {
   IAnimal,
   IAnimalsResponse,
@@ -65,7 +64,7 @@ class ServerAPI {
     errorCallback?: (error?: IErrorResponse) => void,
   ) {
     try {
-      await this.api.post('auth', {...userDto, roles: ["User"]});
+      await this.api.post('auth', { ...userDto, roles: ['User'] });
 
       await this.login(userDto, successCallback, errorCallback);
     } catch (error) {
@@ -135,14 +134,21 @@ class ServerAPI {
 
       const response = await this.api.post('token/refresh', {
         accessToken,
-        refreshToken
+        refreshToken,
       });
 
       this.setAccessToken(response.data.tokens.accessToken);
       this.setRefreshToken(response.data.tokens.refreshToken);
 
-      callback?.({ isAuthorized: true, user: {nickname: response.data.nickname, username: response.data.username} });
+      callback?.({
+        isAuthorized: true,
+        user: {
+          nickname: response.data.nickname,
+          username: response.data.username,
+        },
+      });
     } catch {
+      this.removeTokens();
       callback?.({ isAuthorized: false, user: undefined });
     }
   }
@@ -876,8 +882,7 @@ class ServerAPI {
   }
 
   logout() {
-    storageAPI.remove('accessToken');
-    storageAPI.remove('refreshToken');
+    this.removeTokens();
   }
 
   async getWeapons(params: ISearch): Promise<IWeaponsResponse> {
@@ -1235,7 +1240,7 @@ class ServerAPI {
 
   async getSavedWeapons(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedWeaponsResponse["data"] | undefined> {
+  ): Promise<ISavedWeaponsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1255,7 +1260,7 @@ class ServerAPI {
 
   async getSavedHorses(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedHorsesResponse["data"] | undefined> {
+  ): Promise<ISavedHorsesResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1275,7 +1280,7 @@ class ServerAPI {
 
   async getSavedStoryQuests(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedStoryQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedStoryQuestsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1295,7 +1300,7 @@ class ServerAPI {
 
   async getSavedSideQuests(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedSideQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedSideQuestsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1315,7 +1320,7 @@ class ServerAPI {
 
   async getSavedAnimals(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedAnimalsResponse["data"] | undefined> {
+  ): Promise<ISavedAnimalsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1335,7 +1340,7 @@ class ServerAPI {
 
   async getSavedChallenges(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedChallengesResponse["data"] | undefined> {
+  ): Promise<ISavedChallengesResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1355,7 +1360,7 @@ class ServerAPI {
 
   async getSavedCollectibles(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedCollectiblesResponse["data"] | undefined> {
+  ): Promise<ISavedCollectiblesResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1375,7 +1380,7 @@ class ServerAPI {
 
   async getSavedFactions(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedFactionsResponse["data"] | undefined> {
+  ): Promise<ISavedFactionsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1395,7 +1400,7 @@ class ServerAPI {
 
   async getSavedFishes(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedFishesResponse["data"] | undefined> {
+  ): Promise<ISavedFishesResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1415,7 +1420,7 @@ class ServerAPI {
 
   async getSavedMiscellaneous(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedMiscellaneousResponse["data"] | undefined> {
+  ): Promise<ISavedMiscellaneousResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1435,7 +1440,7 @@ class ServerAPI {
 
   async getSavedPlants(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedPlantsResponse["data"] | undefined> {
+  ): Promise<ISavedPlantsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1455,7 +1460,7 @@ class ServerAPI {
 
   async getSavedRandomEncounters(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedRandomEncountersResponse["data"] | undefined> {
+  ): Promise<ISavedRandomEncountersResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1475,7 +1480,7 @@ class ServerAPI {
 
   async getSavedTableGames(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedTableGamesResponse["data"] | undefined> {
+  ): Promise<ISavedTableGamesResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1545,6 +1550,11 @@ class ServerAPI {
 
   setRefreshToken(token: string) {
     storageAPI.set('refreshToken', token);
+  }
+
+  removeTokens() {
+    storageAPI.remove('accessToken');
+    storageAPI.remove('refreshToken');
   }
 }
 
