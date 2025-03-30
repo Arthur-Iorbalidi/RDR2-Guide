@@ -7,26 +7,26 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import FavoriteButton from '@src/components/ui/FavoriteButton/FavoriteButton';
-import Loader from '@src/components/ui/Loader/Loader';
 import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import serverAPI from '@src/services/serverAPI';
 import {
-  addRandomEncounterToSaved,
   removeRandomEncounterFromSaved,
   setSavedRandomEncounters,
 } from '@src/store/slices/userSlice';
-import { IRandomEncountersResponse } from '@src/types/serverAPITypes';
+import { ISavedRandomEncountersResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
 import { toggleSavedRandomEncounter } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
-import styles from './RandomEncounters.module.scss';
+import FavoriteButton from '../ui/FavoriteButton/FavoriteButton';
+import Loader from '../ui/Loader/Loader';
+import Message from '../ui/Message/Message';
+import styles from './SavedRandomEncounters.module.scss';
 
-const RandomEncounters = () => {
+const SavedRandomEncounters = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const RandomEncounters = () => {
   );
 
   const [randomEncounters, setRandomEncounters] = useState<
-    IRandomEncountersResponse | undefined
+    ISavedRandomEncountersResponse['data'] | undefined
   >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +58,7 @@ const RandomEncounters = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const data = await serverAPI.getRandomEncounters();
+      const data = await serverAPI.getSavedRandomEncounters();
       setRandomEncounters(data);
       setIsLoading(false);
     })();
@@ -68,18 +68,19 @@ const RandomEncounters = () => {
     toggleSavedRandomEncounter(
       id,
       isInArray(id, savedRandomEncounters, 'randomencounterId'),
-      succesAdd,
+      undefined,
       succesRemove,
       unathorizedCallback,
     );
   };
 
-  const succesAdd = (id: number) => {
-    dispatch(addRandomEncounterToSaved(id));
-  };
-
   const succesRemove = (id: number) => {
     dispatch(removeRandomEncounterFromSaved(id));
+    setRandomEncounters((prevRandomEncounters) =>
+      prevRandomEncounters!.filter(
+        (randomEncounter) => randomEncounter.randomencounter.id !== id,
+      ),
+    );
   };
 
   const unathorizedCallback = () => {
@@ -87,12 +88,9 @@ const RandomEncounters = () => {
   };
 
   return (
-    <section className={styles.page}>
-      <div className={styles.wrapper}>
-        <h2 className={styles.header}>Random encounters</h2>
-
-        {isLoading && <Loader />}
-
+    <>
+      {isLoading && <Loader />}
+      {randomEncounters && randomEncounters.length > 0 ? (
         <TableContainer component={Paper} className={styles.table_wrapper}>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
@@ -103,17 +101,17 @@ const RandomEncounters = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {randomEncounters?.data.map((randomEncounter) => (
+              {randomEncounters?.map((randomEncounter) => (
                 <TableRow
-                  key={randomEncounter.id}
+                  key={randomEncounter.randomencounter.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {randomEncounter.name}
+                    {randomEncounter.randomencounter.name}
                   </TableCell>
                   <TableCell align="right">
                     <Link to={routes.factions}>
-                      {randomEncounter.faction?.name}
+                      {randomEncounter.randomencounter.faction?.name}
                     </Link>
                   </TableCell>
                   <TableCell align="right">
@@ -121,11 +119,15 @@ const RandomEncounters = () => {
                       <div className={styles.btn_wrapper}>
                         <FavoriteButton
                           isInFavorites={isInArray(
-                            randomEncounter.id,
+                            randomEncounter.randomencounter.id,
                             savedRandomEncounters,
                             'randomencounterId',
                           )}
-                          onClick={() => handleToggleSaved(randomEncounter.id)}
+                          onClick={() =>
+                            handleToggleSaved(
+                              randomEncounter.randomencounter.id,
+                            )
+                          }
                         />
                       </div>
                     }
@@ -135,9 +137,11 @@ const RandomEncounters = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-    </section>
+      ) : (
+        <Message message="There is nothing here" />
+      )}
+    </>
   );
 };
 
-export default RandomEncounters;
+export default SavedRandomEncounters;

@@ -6,8 +6,10 @@ import SavedFishes from '@src/components/SavedFishes/SavedFishes';
 import SavedHorses from '@src/components/SavedHorses/SavedHorses';
 import SavedMiscellaneous from '@src/components/SavedMiscellaneous/SavedMiscellaneous';
 import SavedPlants from '@src/components/SavedPlants/SavedPlants';
+import SavedRandomEncounters from '@src/components/SavedRandomEncounters/SavedRandomEncounters';
 import SavedSideQuests from '@src/components/SavedSideQuests/SavedSideQuests';
 import SavedStoryQuests from '@src/components/SavedStoryQuests/SavedStoryQuests';
+import SavedTableGames from '@src/components/SavedTableGames/SavedTableGames';
 import SavedWeapons from '@src/components/SavedWeapons/SavedWeapons';
 import Sorting from '@src/components/Sorting/Sorting';
 import Loader from '@src/components/ui/Loader/Loader';
@@ -76,9 +78,9 @@ const Saved = () => {
           <SavedMiscellaneous />
         )}
         {options[currentOptionIndex] === 'Random encounters' && (
-          <SavedSideQuests />
+          <SavedRandomEncounters />
         )}
-        {options[currentOptionIndex] === 'Table games' && <SavedSideQuests />}
+        {options[currentOptionIndex] === 'Table games' && <SavedTableGames />}
       </div>
     </section>
   );

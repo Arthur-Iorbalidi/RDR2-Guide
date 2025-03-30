@@ -158,7 +158,7 @@ const userSlice = createSlice({
       }
     },
 
-    setSavedRandomEncounter: (
+    setSavedRandomEncounters: (
       state,
       action: PayloadAction<ISavedRandomEncountersResponse['data'] | undefined>,
     ) => {
@@ -440,7 +440,7 @@ export const {
   setSavedHorses,
   setSavedMiscellaneous,
   setSavedPlants,
-  setSavedRandomEncounter,
+  setSavedRandomEncounters,
   setSavedSideQuests,
   setSavedStoryQuests,
   setSavedTableGames,
