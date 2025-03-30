@@ -1,7 +1,10 @@
 import SavedAnimals from '@src/components/SavedAnimals/SavedAnimals';
+import SavedChallenges from '@src/components/SavedChallenges/SavedChallenges';
 import SavedCollectibles from '@src/components/SavedCollectibles/SavedCollectibles';
+import SavedFactions from '@src/components/SavedFactions/SavedFactions';
 import SavedFishes from '@src/components/SavedFishes/SavedFishes';
 import SavedHorses from '@src/components/SavedHorses/SavedHorses';
+import SavedMiscellaneous from '@src/components/SavedMiscellaneous/SavedMiscellaneous';
 import SavedPlants from '@src/components/SavedPlants/SavedPlants';
 import SavedSideQuests from '@src/components/SavedSideQuests/SavedSideQuests';
 import SavedStoryQuests from '@src/components/SavedStoryQuests/SavedStoryQuests';
@@ -64,13 +67,13 @@ const Saved = () => {
         {options[currentOptionIndex] === 'Animals' && <SavedAnimals />}
         {options[currentOptionIndex] === 'Plants' && <SavedPlants />}
         {options[currentOptionIndex] === 'Fishes' && <SavedFishes />}
-        {options[currentOptionIndex] === 'Challenges' && <SavedSideQuests />}
+        {options[currentOptionIndex] === 'Challenges' && <SavedChallenges />}
         {options[currentOptionIndex] === 'Collectibles' && (
           <SavedCollectibles />
         )}
-        {options[currentOptionIndex] === 'Factions' && <SavedHorses />}
+        {options[currentOptionIndex] === 'Factions' && <SavedFactions />}
         {options[currentOptionIndex] === 'Miscellaneous' && (
-          <SavedStoryQuests />
+          <SavedMiscellaneous />
         )}
         {options[currentOptionIndex] === 'Random encounters' && (
           <SavedSideQuests />
