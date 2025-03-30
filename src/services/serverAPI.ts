@@ -1,4 +1,9 @@
 import {
+  changeIsAuthorized,
+  changeUserInfo,
+} from '@src/store/slices/userSlice';
+import { store } from '@src/store/store';
+import {
   IAnimal,
   IAnimalsResponse,
   IChallenge,
@@ -127,7 +132,7 @@ class ServerAPI {
   //   }
   // }
 
-  async updateRefreshToken(callback?: (response: any) => void) {
+  async checkUser(callback?: (response: any) => void) {
     try {
       const accessToken = this.getAccessToken();
       const refreshToken = this.getRefreshToken();
@@ -150,6 +155,31 @@ class ServerAPI {
     } catch {
       this.removeTokens();
       callback?.({ isAuthorized: false, user: undefined });
+    }
+  }
+
+  async refreshToken(
+    succesCallback?: () => void,
+    unathorizedCallback?: () => void,
+  ) {
+    try {
+      const accessToken = this.getAccessToken();
+      const refreshToken = this.getRefreshToken();
+
+      const response = await this.api.post('token/refresh', {
+        accessToken,
+        refreshToken,
+      });
+
+      this.setAccessToken(response.data.tokens.accessToken);
+      this.setRefreshToken(response.data.tokens.refreshToken);
+
+      succesCallback?.();
+    } catch {
+      this.removeTokens();
+      store.dispatch(changeIsAuthorized(false));
+      store.dispatch(changeUserInfo(undefined));
+      unathorizedCallback?.();
     }
   }
 
@@ -176,7 +206,10 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.addWeaponToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -202,7 +235,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeWeaponFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -232,7 +273,10 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.addHorseToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -258,7 +302,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeHorseFromSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -288,7 +336,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addStoryQuestToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -314,7 +366,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeStoryQuestFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -344,7 +404,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addSideQuestToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -370,7 +434,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeSideQuestFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -400,7 +472,10 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.addAnimalToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -426,7 +501,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeAnimalFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -456,7 +539,10 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.addPlantToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -482,7 +568,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removePlantFromSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -512,7 +602,10 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.addFishToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -538,7 +631,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeFishFromSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -568,7 +665,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addChallengeToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -594,7 +695,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeChallengeFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -624,7 +733,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addCollectibleToSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -650,7 +767,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeCollectibleFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -680,7 +805,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addFactionToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -706,7 +835,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeFactionFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -736,7 +873,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addMiscellaneouToSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -762,7 +907,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeMiscellaneouFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -792,7 +945,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addRandomEncounterToSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -818,7 +979,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeRandomEncounterFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -848,7 +1017,11 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.addTableGameToSaved(id, successCallback, unathorizedCallback),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -874,7 +1047,15 @@ class ServerAPI {
       return response;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () =>
+            this.removeTableGameFromSaved(
+              id,
+              successCallback,
+              unathorizedCallback,
+            ),
+          unathorizedCallback,
+        );
       }
 
       return e;
@@ -1253,7 +1434,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedWeapons(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1273,7 +1457,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedHorses(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1293,7 +1480,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedStoryQuests(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1313,7 +1503,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedSideQuests(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1333,7 +1526,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedAnimals(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1353,7 +1549,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedChallenges(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1373,7 +1572,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedCollectibles(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1393,7 +1595,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedFactions(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1413,7 +1618,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedFishes(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1433,7 +1641,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedMiscellaneous(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1453,7 +1664,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedPlants(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1473,7 +1687,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedRandomEncounters(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }
@@ -1493,7 +1710,10 @@ class ServerAPI {
       return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
-        unathorizedCallback?.();
+        this.refreshToken(
+          () => this.getSavedTableGames(unathorizedCallback),
+          unathorizedCallback,
+        );
       }
     }
   }

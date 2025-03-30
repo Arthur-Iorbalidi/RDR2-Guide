@@ -28,7 +28,7 @@ function App() {
       setLoading(false);
     }
 
-    serverAPI.updateRefreshToken(authCheckCallback);
+    serverAPI.checkUser(authCheckCallback);
   }, []);
 
   if (loading) {
