@@ -22,10 +22,12 @@ import {
   IPlantsResponse,
   IRandomEncounter,
   IRandomEncountersResponse,
+  ISavedAnimalsResponse,
   ISavedChallengesResponse,
   ISavedFishesResponse,
   ISavedHorsesResponse,
   ISavedMiscellaneousResponse,
+  ISavedPlantsResponse,
   ISavedSideQuestsResponse,
   ISavedStoryQuestsResponse,
   ISavedWeaponsResponse,
@@ -1309,7 +1311,7 @@ class ServerAPI {
 
   async getSavedAnimals(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedSideQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedAnimalsResponse["data"] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1429,7 +1431,7 @@ class ServerAPI {
 
   async getSavedPlants(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedSideQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedPlantsResponse["data"] | undefined> {
     try {
       const token = this.getAccessToken();
 

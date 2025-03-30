@@ -9,6 +9,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addPlantToSaved,
   removePlantFromSaved,
+  setSavedPlants,
 } from '@src/store/slices/userSlice';
 import { IPlant } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -24,6 +25,10 @@ const DetailedPlant = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedPlants = useAppSelector(
     (state) => state.userReducer.userInfo?.plants,
   );
@@ -35,6 +40,15 @@ const DetailedPlant = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedPlants) {
+        const savedPlants = await serverAPI.getSavedPlants();
+        dispatch(setSavedPlants(savedPlants));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -68,7 +82,7 @@ const DetailedPlant = () => {
 
     toggleSavedPlant(
       plant!.id,
-      isInArray(plant!.id, savedPlants),
+      isInArray(plant!.id, savedPlants, 'plantId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -99,7 +113,7 @@ const DetailedPlant = () => {
               />
               <div className={styles.favourite_btn_wrapper}>
                 <FavoriteButton
-                  isInFavorites={isInArray(plant.id, savedPlants)}
+                  isInFavorites={isInArray(plant.id, savedPlants, 'plantId')}
                   onClick={handleToggleFavorite}
                 />
               </div>
