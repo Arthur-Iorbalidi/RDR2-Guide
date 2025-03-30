@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ISavedAnimalsResponse,
   ISavedChallengesResponse,
-  ISavedCollectibleResponse,
+  ISavedCollectiblesResponse,
   ISavedFactionsResponse,
   ISavedFishesResponse,
   ISavedHorsesResponse,
@@ -115,7 +115,7 @@ const userSlice = createSlice({
 
     setSavedCollectibles: (
       state,
-      action: PayloadAction<ISavedCollectibleResponse['data'] | undefined>,
+      action: PayloadAction<ISavedCollectiblesResponse['data'] | undefined>,
     ) => {
       if (state.userInfo) {
         state.userInfo.collectibles = action.payload;
@@ -367,7 +367,7 @@ const userSlice = createSlice({
     removeMiscellaneouFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.miscellaneous = state.userInfo.miscellaneous?.filter(
-          (miscellaneou) => miscellaneou.miscellaneouId !== action.payload,
+          (miscellaneou) => miscellaneou.miscellaneousId !== action.payload,
         );
       }
     },
@@ -376,10 +376,10 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.miscellaneous?.some(
-          (miscellaneou) => miscellaneou.miscellaneouId === action.payload,
+          (miscellaneou) => miscellaneou.miscellaneousId === action.payload,
         )
       ) {
-        state.userInfo.miscellaneous?.push({ miscellaneouId: action.payload });
+        state.userInfo.miscellaneous?.push({ miscellaneousId: action.payload });
       }
     },
 

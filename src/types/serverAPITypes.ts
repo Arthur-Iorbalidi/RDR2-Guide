@@ -99,7 +99,7 @@ interface ISavedAnimalsResponse {
   data: {
     userId: string;
     animalId: number;
-    animal: IHorse;
+    animal: IAnimal;
   }[];
 }
 
@@ -115,7 +115,7 @@ interface ISavedChallengesResponse {
   data: {
     userId: string;
     challengeId: number;
-    challenge: IHorse;
+    challenge: IChallenge;
   }[];
 }
 
@@ -132,7 +132,7 @@ interface ISavedCollectiblesResponse {
   data: {
     userId: string;
     collectibleId: number;
-    collectible: IHorse;
+    collectible: ICollectible;
   }[];
 }
 
@@ -147,7 +147,7 @@ interface ISavedFactionsResponse {
   data: {
     userId: string;
     factionId: number;
-    faction: IHorse;
+    faction: IFaction;
   }[];
 }
 
@@ -164,7 +164,7 @@ interface ISavedFishesResponse {
   data: {
     userId: string;
     fishId: number;
-    fish: IHorse;
+    fish: IFish;
   }[];
 }
 
@@ -176,8 +176,8 @@ interface IMiscellaneou {
 interface ISavedMiscellaneousResponse {
   data: {
     userId: string;
-    miscellaneouId: number;
-    miscellaneou: IHorse;
+    miscellaneousId: number;
+    miscellaneous: IMiscellaneou;
   }[];
 }
 
@@ -194,7 +194,7 @@ interface ISavedPlantsResponse {
   data: {
     userId: string;
     plantId: number;
-    plant: IHorse;
+    plant: IPlant;
   }[];
 }
 
@@ -209,7 +209,7 @@ interface ISavedRandomEncountersResponse {
   data: {
     userId: string;
     randomencounterId: number;
-    randomencounter: IHorse;
+    randomencounter: IRandomEncounter;
   }[];
 }
 
@@ -223,7 +223,7 @@ interface ISavedTableGamesResponse {
   data: {
     userId: string;
     tablegameId: number;
-    tablegame: IHorse;
+    tablegame: ITableGame;
   }[];
 }
 
@@ -320,7 +320,7 @@ interface IUser {
   challenges?: Array<{ challengeId: number }>;
   collectibles?: Array<{ collectibleId: number }>;
   factions?: Array<{ factionId: number }>;
-  miscellaneous?: Array<{ miscellaneouId: number }>;
+  miscellaneous?: Array<{ miscellaneousId: number }>;
   randomEncounters?: Array<{ randomencounterId: number }>;
   tableGames?: Array<{ tablegameId: number }>;
 }

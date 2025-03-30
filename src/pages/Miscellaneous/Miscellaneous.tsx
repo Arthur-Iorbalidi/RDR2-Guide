@@ -14,6 +14,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addMiscellaneouToSaved,
   removeMiscellaneouFromSaved,
+  setSavedMiscellaneous,
 } from '@src/store/slices/userSlice';
 import { IMiscellaneousResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -29,6 +30,10 @@ const Miscellaneous = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedMiscellaneous = useAppSelector(
     (state) => state.userReducer.userInfo?.miscellaneous,
   );
@@ -38,6 +43,15 @@ const Miscellaneous = () => {
   >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedMiscellaneous) {
+        const savedMiscellaneous = await serverAPI.getSavedMiscellaneous();
+        dispatch(setSavedMiscellaneous(savedMiscellaneous));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -51,7 +65,7 @@ const Miscellaneous = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedMiscellaneou(
       id,
-      isInArray(id, savedMiscellaneous),
+      isInArray(id, savedMiscellaneous, 'miscellaneousId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -95,6 +109,7 @@ const Miscellaneous = () => {
                           isInFavorites={isInArray(
                             miscellaneou.id,
                             savedMiscellaneous,
+                            'miscellaneousId',
                           )}
                           onClick={() => handleToggleSaved(miscellaneou.id)}
                         />
