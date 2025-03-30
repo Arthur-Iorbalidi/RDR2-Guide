@@ -33,6 +33,7 @@ import {
   ISavedRandomEncountersResponse,
   ISavedSideQuestsResponse,
   ISavedStoryQuestsResponse,
+  ISavedTableGamesResponse,
   ISavedWeaponsResponse,
   ISearch,
   ISideQuest,
@@ -1474,7 +1475,7 @@ class ServerAPI {
 
   async getSavedTableGames(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedSideQuestsResponse["data"] | undefined> {
+  ): Promise<ISavedTableGamesResponse["data"] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -1484,7 +1485,7 @@ class ServerAPI {
         },
       });
 
-      return response.data;
+      return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
         unathorizedCallback?.();

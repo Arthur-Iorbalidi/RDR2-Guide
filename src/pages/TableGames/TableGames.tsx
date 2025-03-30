@@ -15,6 +15,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addTableGameToSaved,
   removeTableGameFromSaved,
+  setSavedTableGames,
 } from '@src/store/slices/userSlice';
 import { ITableGamesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -30,6 +31,10 @@ const TableGames = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedTableGames = useAppSelector(
     (state) => state.userReducer.userInfo?.tableGames,
   );
@@ -39,6 +44,15 @@ const TableGames = () => {
   );
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedTableGames) {
+        const savedTableGames = await serverAPI.getSavedTableGames();
+        dispatch(setSavedTableGames(savedTableGames));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -52,7 +66,7 @@ const TableGames = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedTableGame(
       id,
-      isInArray(id, savedTableGames),
+      isInArray(id, savedTableGames, 'tablegameId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -104,6 +118,7 @@ const TableGames = () => {
                           isInFavorites={isInArray(
                             tableGame.id,
                             savedTableGames,
+                            'tablegameId',
                           )}
                           onClick={() => handleToggleSaved(tableGame.id)}
                         />
