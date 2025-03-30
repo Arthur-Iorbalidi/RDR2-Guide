@@ -3,12 +3,12 @@ import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
 import {
-  removeSideQuestFromSaved,
-  setSavedSideQuests,
+  removeAnimalFromSaved,
+  setSavedAnimals,
 } from '@src/store/slices/userSlice';
-import { ISavedSideQuestsResponse } from '@src/types/serverAPITypes';
+import { ISavedAnimalsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedSideQuest } from '@src/utils/toggleSaved';
+import { toggleSavedAnimal } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import Grid, { LayoutType } from '../Grid/Grid';
 import Item, { Appearance } from '../Item/Item';
 
-const SavedSideQuests = () => {
+const SavedAnimals = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -25,21 +25,21 @@ const SavedSideQuests = () => {
     (state) => state.userReducer.isAuthorized,
   );
 
-  const savedSideQuests = useAppSelector(
-    (state) => state.userReducer.userInfo?.sideQuests,
+  const savedAnimals = useAppSelector(
+    (state) => state.userReducer.userInfo?.animals,
   );
 
-  const [sideQuests, setSideQuests] = useState<
-    ISavedSideQuestsResponse['data'] | undefined
+  const [animals, setAnimals] = useState<
+    ISavedAnimalsResponse['data'] | undefined
   >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
-      if (isAuthorized && !savedSideQuests) {
-        const savedSideQuests = await serverAPI.getSavedSideQuests();
-        dispatch(setSavedSideQuests(savedSideQuests));
+      if (isAuthorized && !savedAnimals) {
+        const savedAnimals = await serverAPI.getSavedAnimals();
+        dispatch(setSavedAnimals(savedAnimals));
       }
     })();
   }, []);
@@ -47,16 +47,16 @@ const SavedSideQuests = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const data = await serverAPI.getSavedSideQuests();
-      setSideQuests(data);
+      const data = await serverAPI.getSavedAnimals();
+      setAnimals(data);
       setIsLoading(false);
     })();
   }, []);
 
   const handleToggleSaved = (id: number) => {
-    toggleSavedSideQuest(
+    toggleSavedAnimal(
       id,
-      isInArray(id, savedSideQuests, 'sidequestId'),
+      isInArray(id, savedAnimals, 'animalId'),
       undefined,
       succesRemove,
       unathorizedCallback,
@@ -64,9 +64,9 @@ const SavedSideQuests = () => {
   };
 
   const succesRemove = (id: number) => {
-    dispatch(removeSideQuestFromSaved(id));
-    setSideQuests((prevSideQuests) =>
-      prevSideQuests?.filter((sideQuest) => sideQuest.sidequest.id !== id),
+    dispatch(removeAnimalFromSaved(id));
+    setAnimals((prevAnimals) =>
+      prevAnimals!.filter((animal) => animal.animal.id !== id),
     );
   };
 
@@ -78,23 +78,19 @@ const SavedSideQuests = () => {
     <>
       <Grid
         isLoading={isLoading}
-        message={sideQuests?.length === 0 ? 'There is nothing here' : undefined}
+        message={animals?.length === 0 ? 'There is nothing here' : undefined}
         layoutType={LayoutType.twoColumns}
       >
-        {sideQuests &&
-          sideQuests.map((sideQuest) => (
+        {animals &&
+          animals.map((animal) => (
             <Item
-              key={sideQuest.sidequest.id}
-              id={sideQuest.sidequest.id}
+              key={animal.animal.id}
+              id={animal.animal.id}
               handleBtnClickCallback={handleToggleSaved}
-              title={sideQuest.sidequest.name}
-              image={imageAPI.getImage(sideQuest.sidequest.image!)}
-              isActive={isInArray(
-                sideQuest.sidequest.id,
-                savedSideQuests,
-                'sidequestId',
-              )}
-              navigateTo={`${routes.sideQuests}/${sideQuest.sidequest.id}`}
+              title={animal.animal.name}
+              image={imageAPI.getImage(animal.animal.image!)}
+              isActive={isInArray(animal.animal.id, savedAnimals, 'animalId')}
+              navigateTo={`${routes.animals}/${animal.animal.id}`}
               appearance={Appearance.horizontal}
             />
           ))}
@@ -103,4 +99,4 @@ const SavedSideQuests = () => {
   );
 };
 
-export default SavedSideQuests;
+export default SavedAnimals;

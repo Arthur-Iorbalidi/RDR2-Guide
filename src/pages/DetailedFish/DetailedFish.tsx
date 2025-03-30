@@ -9,6 +9,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addFishToSaved,
   removeFishFromSaved,
+  setSavedFishes,
 } from '@src/store/slices/userSlice';
 import { IFish } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -24,6 +25,10 @@ const DetailedFish = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedFishes = useAppSelector(
     (state) => state.userReducer.userInfo?.fishes,
   );
@@ -35,6 +40,15 @@ const DetailedFish = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedFishes) {
+        const savedFishes = await serverAPI.getSavedFishes();
+        dispatch(setSavedFishes(savedFishes));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -68,7 +82,7 @@ const DetailedFish = () => {
 
     toggleSavedFish(
       fish!.id,
-      isInArray(fish!.id, savedFishes),
+      isInArray(fish!.id, savedFishes, 'fishId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -93,7 +107,7 @@ const DetailedFish = () => {
             </div>
             <div className={styles.favourite_btn_wrapper}>
               <FavoriteButton
-                isInFavorites={isInArray(fish.id, savedFishes)}
+                isInFavorites={isInArray(fish.id, savedFishes, 'fishId')}
                 onClick={handleToggleFavorite}
               />
             </div>

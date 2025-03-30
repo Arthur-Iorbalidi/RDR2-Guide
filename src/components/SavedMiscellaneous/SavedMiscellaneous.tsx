@@ -4,29 +4,28 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
 } from '@mui/material';
-import FavoriteButton from '@src/components/ui/FavoriteButton/FavoriteButton';
-import Loader from '@src/components/ui/Loader/Loader';
 import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import serverAPI from '@src/services/serverAPI';
 import {
-  addTableGameToSaved,
-  removeTableGameFromSaved,
-  setSavedTableGames,
+  removeMiscellaneouFromSaved,
+  setSavedMiscellaneous,
 } from '@src/store/slices/userSlice';
-import { ITableGamesResponse } from '@src/types/serverAPITypes';
+import { ISavedMiscellaneousResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedTableGame } from '@src/utils/toggleSaved';
+import { toggleSavedMiscellaneou } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import styles from './TableGames.module.scss';
+import FavoriteButton from '../ui/FavoriteButton/FavoriteButton';
+import Loader from '../ui/Loader/Loader';
+import Message from '../ui/Message/Message';
+import styles from './SavedMiscellaneous.module.scss';
 
-const TableGames = () => {
+const SavedMiscellaneous = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -35,21 +34,21 @@ const TableGames = () => {
     (state) => state.userReducer.isAuthorized,
   );
 
-  const savedTableGames = useAppSelector(
-    (state) => state.userReducer.userInfo?.tableGames,
+  const savedMiscellaneous = useAppSelector(
+    (state) => state.userReducer.userInfo?.miscellaneous,
   );
 
-  const [tableGames, setTableGames] = useState<ITableGamesResponse | undefined>(
-    undefined,
-  );
+  const [miscellaneous, setMiscellaneous] = useState<
+    ISavedMiscellaneousResponse['data'] | undefined
+  >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
-      if (isAuthorized && !savedTableGames) {
-        const savedTableGames = await serverAPI.getSavedTableGames();
-        dispatch(setSavedTableGames(savedTableGames));
+      if (isAuthorized && !savedMiscellaneous) {
+        const savedMiscellaneous = await serverAPI.getSavedMiscellaneous();
+        dispatch(setSavedMiscellaneous(savedMiscellaneous));
       }
     })();
   }, []);
@@ -57,28 +56,29 @@ const TableGames = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const data = await serverAPI.getTableGames();
-      setTableGames(data);
+      const data = await serverAPI.getSavedMiscellaneous();
+      setMiscellaneous(data);
       setIsLoading(false);
     })();
   }, []);
 
   const handleToggleSaved = (id: number) => {
-    toggleSavedTableGame(
+    toggleSavedMiscellaneou(
       id,
-      isInArray(id, savedTableGames, 'tablegameId'),
-      succesAdd,
+      isInArray(id, savedMiscellaneous, 'miscellaneousId'),
+      undefined,
       succesRemove,
       unathorizedCallback,
     );
   };
 
-  const succesAdd = (id: number) => {
-    dispatch(addTableGameToSaved(id));
-  };
-
   const succesRemove = (id: number) => {
-    dispatch(removeTableGameFromSaved(id));
+    dispatch(removeMiscellaneouFromSaved(id));
+    setMiscellaneous((prevMiscellaneous) =>
+      prevMiscellaneous!.filter(
+        (miscellaneou) => miscellaneou.miscellaneous.id !== id,
+      ),
+    );
   };
 
   const unathorizedCallback = () => {
@@ -86,41 +86,32 @@ const TableGames = () => {
   };
 
   return (
-    <section className={styles.page}>
-      <div className={styles.wrapper}>
-        <h2 className={styles.header}>Table games</h2>
-
-        {isLoading && <Loader />}
-
+    <>
+      {isLoading && <Loader />}
+      {miscellaneous && miscellaneous.length > 0 ? (
         <TableContainer component={Paper} className={styles.table_wrapper}>
           <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="left">Description</TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
             <TableBody>
-              {tableGames?.data.map((tableGame) => (
+              {miscellaneous?.map((miscellaneou) => (
                 <TableRow
-                  key={tableGame.id}
+                  key={miscellaneou.miscellaneous.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {tableGame.name}
+                    {miscellaneou.miscellaneous.name}
                   </TableCell>
-                  <TableCell align="left">{tableGame.description}</TableCell>
                   <TableCell align="right">
                     {
                       <div className={styles.btn_wrapper}>
                         <FavoriteButton
                           isInFavorites={isInArray(
-                            tableGame.id,
-                            savedTableGames,
-                            'tablegameId',
+                            miscellaneou.miscellaneous.id,
+                            savedMiscellaneous,
+                            'miscellaneousId',
                           )}
-                          onClick={() => handleToggleSaved(tableGame.id)}
+                          onClick={() =>
+                            handleToggleSaved(miscellaneou.miscellaneous.id)
+                          }
                         />
                       </div>
                     }
@@ -130,9 +121,11 @@ const TableGames = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-    </section>
+      ) : (
+        <Message message="There is nothing here" />
+      )}
+    </>
   );
 };
 
-export default TableGames;
+export default SavedMiscellaneous;

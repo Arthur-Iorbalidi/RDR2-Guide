@@ -7,26 +7,26 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import FavoriteButton from '@src/components/ui/FavoriteButton/FavoriteButton';
-import Loader from '@src/components/ui/Loader/Loader';
 import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import serverAPI from '@src/services/serverAPI';
 import {
-  addChallengeToSaved,
   removeChallengeFromSaved,
   setSavedChallenges,
 } from '@src/store/slices/userSlice';
-import { IChallengesResponse } from '@src/types/serverAPITypes';
+import { ISavedChallengesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
 import { toggleSavedChallenge } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import styles from './Challenges.module.scss';
+import FavoriteButton from '../ui/FavoriteButton/FavoriteButton';
+import Loader from '../ui/Loader/Loader';
+import Message from '../ui/Message/Message';
+import styles from './SavedChallenges.module.scss';
 
-const Challenges = () => {
+const SavedChallenges = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -39,11 +39,9 @@ const Challenges = () => {
     (state) => state.userReducer.userInfo?.challenges,
   );
 
-  const [challenges, setChallenges] = useState<IChallengesResponse | undefined>(
-    undefined,
-  );
-
-  const params = useAppSelector((state) => state.searchReducer.fishes);
+  const [challenges, setChallenges] = useState<
+    ISavedChallengesResponse['data'] | undefined
+  >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,28 +57,27 @@ const Challenges = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const data = await serverAPI.getChallenges(params);
+      const data = await serverAPI.getSavedChallenges();
       setChallenges(data);
       setIsLoading(false);
     })();
-  }, [params]);
+  }, []);
 
   const handleToggleSaved = (id: number) => {
     toggleSavedChallenge(
       id,
       isInArray(id, savedChallenges, 'challengeId'),
-      succesAdd,
+      undefined,
       succesRemove,
       unathorizedCallback,
     );
   };
 
-  const succesAdd = (id: number) => {
-    dispatch(addChallengeToSaved(id));
-  };
-
   const succesRemove = (id: number) => {
     dispatch(removeChallengeFromSaved(id));
+    setChallenges((prevChallenges) =>
+      prevChallenges!.filter((challenge) => challenge.challenge.id !== id),
+    );
   };
 
   const unathorizedCallback = () => {
@@ -88,12 +85,9 @@ const Challenges = () => {
   };
 
   return (
-    <section className={styles.page}>
-      <div className={styles.wrapper}>
-        <h2 className={styles.header}>Challenges</h2>
-
-        {isLoading && <Loader />}
-
+    <>
+      {isLoading && <Loader />}
+      {challenges && challenges.length > 0 ? (
         <TableContainer component={Paper} className={styles.table_wrapper}>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
@@ -106,27 +100,35 @@ const Challenges = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {challenges?.data.map((challenge) => (
+              {challenges?.map((challenge) => (
                 <TableRow
-                  key={challenge.id}
+                  key={challenge.challenge.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {challenge.name}
+                    {challenge.challenge.name}
                   </TableCell>
-                  <TableCell align="right">{challenge.rank}</TableCell>
-                  <TableCell align="right">{challenge.reward}</TableCell>
-                  <TableCell align="right">{challenge.description}</TableCell>
+                  <TableCell align="right">
+                    {challenge.challenge.rank}
+                  </TableCell>
+                  <TableCell align="right">
+                    {challenge.challenge.reward}
+                  </TableCell>
+                  <TableCell align="right">
+                    {challenge.challenge.description}
+                  </TableCell>
                   <TableCell align="right">
                     {
                       <div className={styles.btn_wrapper}>
                         <FavoriteButton
                           isInFavorites={isInArray(
-                            challenge.id,
+                            challenge.challenge.id,
                             savedChallenges,
                             'challengeId',
                           )}
-                          onClick={() => handleToggleSaved(challenge.id)}
+                          onClick={() =>
+                            handleToggleSaved(challenge.challenge.id)
+                          }
                         />
                       </div>
                     }
@@ -136,9 +138,11 @@ const Challenges = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-    </section>
+      ) : (
+        <Message message="There is nothing here" />
+      )}
+    </>
   );
 };
 
-export default Challenges;
+export default SavedChallenges;

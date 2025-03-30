@@ -14,6 +14,7 @@ import {
 import {
   addAnimalToSaved,
   removeAnimalFromSaved,
+  setSavedAnimals,
 } from '@src/store/slices/userSlice';
 import { IAnimalsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -29,6 +30,10 @@ const Animals = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedAnimals = useAppSelector(
     (state) => state.userReducer.userInfo?.animals,
   );
@@ -43,6 +48,15 @@ const Animals = () => {
 
   useEffect(() => {
     (async () => {
+      if (isAuthorized && !savedAnimals) {
+        const savedAnimals = await serverAPI.getSavedAnimals();
+        dispatch(setSavedAnimals(savedAnimals));
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       setIsLoading(true);
       const data = await serverAPI.getAnimals(params);
       setAnimals(data);
@@ -53,7 +67,7 @@ const Animals = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedAnimal(
       id,
-      isInArray(id, savedAnimals),
+      isInArray(id, savedAnimals, 'animalId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -100,7 +114,7 @@ const Animals = () => {
                 handleBtnClickCallback={handleToggleSaved}
                 title={animal.name}
                 image={imageAPI.getImage(animal.image!)}
-                isActive={isInArray(animal.id, savedAnimals)}
+                isActive={isInArray(animal.id, savedAnimals, 'animalId')}
                 navigateTo={`${routes.animals}/${animal.id}`}
               />
             ))}

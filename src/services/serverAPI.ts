@@ -1,10 +1,8 @@
-/* eslint-disable */
 import {
   IAnimal,
   IAnimalsResponse,
   IChallenge,
   IChallengesResponse,
-  ICheckUserResponse,
   ICollectible,
   ICollectiblesResponse,
   ICreateUserDto,
@@ -23,7 +21,19 @@ import {
   IPlantsResponse,
   IRandomEncounter,
   IRandomEncountersResponse,
-  ISavedWeaponResponse,
+  ISavedAnimalsResponse,
+  ISavedChallengesResponse,
+  ISavedCollectiblesResponse,
+  ISavedFactionsResponse,
+  ISavedFishesResponse,
+  ISavedHorsesResponse,
+  ISavedMiscellaneousResponse,
+  ISavedPlantsResponse,
+  ISavedRandomEncountersResponse,
+  ISavedSideQuestsResponse,
+  ISavedStoryQuestsResponse,
+  ISavedTableGamesResponse,
+  ISavedWeaponsResponse,
   ISearch,
   ISideQuest,
   ISideQuestsResponse,
@@ -31,7 +41,6 @@ import {
   IStoryQuestsResponse,
   ITableGame,
   ITableGamesResponse,
-  IUpdateUserDto,
   IWeapon,
   IWeaponsResponse,
 } from '@src/types/serverAPITypes';
@@ -55,7 +64,7 @@ class ServerAPI {
     errorCallback?: (error?: IErrorResponse) => void,
   ) {
     try {
-      await this.api.post('auth', {...userDto, roles: ["User"]});
+      await this.api.post('auth', { ...userDto, roles: ['User'] });
 
       await this.login(userDto, successCallback, errorCallback);
     } catch (error) {
@@ -125,14 +134,21 @@ class ServerAPI {
 
       const response = await this.api.post('token/refresh', {
         accessToken,
-        refreshToken
+        refreshToken,
       });
 
       this.setAccessToken(response.data.tokens.accessToken);
       this.setRefreshToken(response.data.tokens.refreshToken);
 
-      callback?.({ isAuthorized: true, user: {nickname: response.data.nickname, username: response.data.username} });
+      callback?.({
+        isAuthorized: true,
+        user: {
+          nickname: response.data.nickname,
+          username: response.data.username,
+        },
+      });
     } catch {
+      this.removeTokens();
       callback?.({ isAuthorized: false, user: undefined });
     }
   }
@@ -202,7 +218,7 @@ class ServerAPI {
       const token = this.getAccessToken();
 
       const response = await this.api.post(
-        `users/saved/horses/${id}`,
+        `users/horses/${id}`,
         {},
         {
           headers: {
@@ -231,7 +247,7 @@ class ServerAPI {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.delete(`users/saved/horses/${id}`, {
+      const response = await this.api.delete(`users/horses/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -258,7 +274,7 @@ class ServerAPI {
       const token = this.getAccessToken();
 
       const response = await this.api.post(
-        `users/saved/story-quests/${id}`,
+        `users/storyquests/${id}`,
         {},
         {
           headers: {
@@ -287,7 +303,7 @@ class ServerAPI {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.delete(`users/saved/story-quests/${id}`, {
+      const response = await this.api.delete(`users/storyquests/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -314,7 +330,7 @@ class ServerAPI {
       const token = this.getAccessToken();
 
       const response = await this.api.post(
-        `users/saved/side-quests/${id}`,
+        `users/sidequests/${id}`,
         {},
         {
           headers: {
@@ -343,7 +359,7 @@ class ServerAPI {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.delete(`users/saved/side-quests/${id}`, {
+      const response = await this.api.delete(`users/sidequests/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -366,7 +382,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/animals/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeAnimalFromSaved(
@@ -374,7 +412,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/animals/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addPlantToSaved(
@@ -382,7 +438,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/plants/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removePlantFromSaved(
@@ -390,7 +468,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/plants/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addFishToSaved(
@@ -398,7 +494,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/fish/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeFishFromSaved(
@@ -406,7 +524,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/fish/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addChallengeToSaved(
@@ -414,7 +550,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/challenges/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeChallengeFromSaved(
@@ -422,7 +580,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/challenges/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addCollectibleToSaved(
@@ -430,7 +606,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/collectibles/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeCollectibleFromSaved(
@@ -438,7 +636,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/collectibles/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addFactionToSaved(
@@ -446,7 +662,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/factions/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeFactionFromSaved(
@@ -454,7 +692,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/factions/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addMiscellaneouToSaved(
@@ -462,7 +718,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/miscellaneous/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeMiscellaneouFromSaved(
@@ -470,7 +748,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/miscellaneous/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addRandomEncounterToSaved(
@@ -478,7 +774,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/randomencounters/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeRandomEncounterFromSaved(
@@ -486,7 +804,25 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/randomencounters/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async addTableGameToSaved(
@@ -494,7 +830,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.post(
+        `users/tablegames/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   async removeTableGameFromSaved(
@@ -502,12 +860,29 @@ class ServerAPI {
     successCallback?: (id: number) => void,
     unathorizedCallback?: () => void,
   ) {
-    successCallback?.(id);
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.delete(`users/tablegames/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      successCallback?.(id);
+
+      return response;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+
+      return e;
+    }
   }
 
   logout() {
-    storageAPI.remove('accessToken');
-    storageAPI.remove('refreshToken');
+    this.removeTokens();
   }
 
   async getWeapons(params: ISearch): Promise<IWeaponsResponse> {
@@ -538,7 +913,7 @@ class ServerAPI {
   }
 
   async getHorses(params: ISearch): Promise<IHorsesResponse> {
-    const response = await this.api.get('horses', {
+    const response = await this.api.get('horse', {
       params: {
         ...(params.search !== '' ? { search: params.search } : {}),
         ...(params.sortBy !== '' ? { sortBy: params.sortBy } : {}),
@@ -556,7 +931,7 @@ class ServerAPI {
     errorCallback: (message: string) => void,
   ): Promise<IHorse | undefined> {
     try {
-      const response = await this.api.get(`horses/${id}`);
+      const response = await this.api.get(`horse/${id}`);
 
       return response.data;
     } catch {
@@ -865,7 +1240,7 @@ class ServerAPI {
 
   async getSavedWeapons(
     unathorizedCallback?: () => void,
-  ): Promise<ISavedWeaponResponse["data"] | undefined> {
+  ): Promise<ISavedWeaponsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
@@ -885,17 +1260,17 @@ class ServerAPI {
 
   async getSavedHorses(
     unathorizedCallback?: () => void,
-  ): Promise<IHorse[] | undefined> {
+  ): Promise<ISavedHorsesResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.get('users/saved/horses', {
+      const response = await this.api.get('users/horses', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      return response.data;
+      return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
         unathorizedCallback?.();
@@ -905,17 +1280,17 @@ class ServerAPI {
 
   async getSavedStoryQuests(
     unathorizedCallback?: () => void,
-  ): Promise<IStoryQuest[] | undefined> {
+  ): Promise<ISavedStoryQuestsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.get('users/saved/story-quests', {
+      const response = await this.api.get('users/storyquests', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      return response.data;
+      return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
         unathorizedCallback?.();
@@ -925,17 +1300,197 @@ class ServerAPI {
 
   async getSavedSideQuests(
     unathorizedCallback?: () => void,
-  ): Promise<ISideQuest[] | undefined> {
+  ): Promise<ISavedSideQuestsResponse['data'] | undefined> {
     try {
       const token = this.getAccessToken();
 
-      const response = await this.api.get('users/saved/side-quests', {
+      const response = await this.api.get('users/sidequests', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      return response.data;
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedAnimals(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedAnimalsResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/animals', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedChallenges(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedChallengesResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/challenges', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedCollectibles(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedCollectiblesResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/collectibles', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedFactions(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedFactionsResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/factions', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedFishes(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedFishesResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/fish', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedMiscellaneous(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedMiscellaneousResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/miscellaneous', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedPlants(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedPlantsResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/plants', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedRandomEncounters(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedRandomEncountersResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/randomencounters', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
+    } catch (e) {
+      if ((e as IErrorResponse).status === 401) {
+        unathorizedCallback?.();
+      }
+    }
+  }
+
+  async getSavedTableGames(
+    unathorizedCallback?: () => void,
+  ): Promise<ISavedTableGamesResponse['data'] | undefined> {
+    try {
+      const token = this.getAccessToken();
+
+      const response = await this.api.get('users/tablegames', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data.data;
     } catch (e) {
       if ((e as IErrorResponse).status === 401) {
         unathorizedCallback?.();
@@ -995,6 +1550,11 @@ class ServerAPI {
 
   setRefreshToken(token: string) {
     storageAPI.set('refreshToken', token);
+  }
+
+  removeTokens() {
+    storageAPI.remove('accessToken');
+    storageAPI.remove('refreshToken');
   }
 }
 

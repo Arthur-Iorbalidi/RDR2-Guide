@@ -14,6 +14,7 @@ import {
 import {
   addPlantToSaved,
   removePlantFromSaved,
+  setSavedPlants,
 } from '@src/store/slices/userSlice';
 import { IPlantsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -29,6 +30,10 @@ const Plants = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedPlants = useAppSelector(
     (state) => state.userReducer.userInfo?.plants,
   );
@@ -38,6 +43,15 @@ const Plants = () => {
   const params = useAppSelector((state) => state.searchReducer.plants);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedPlants) {
+        const savedPlants = await serverAPI.getSavedPlants();
+        dispatch(setSavedPlants(savedPlants));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -51,7 +65,7 @@ const Plants = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedPlant(
       id,
-      isInArray(id, savedPlants),
+      isInArray(id, savedPlants, 'plantId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -98,7 +112,7 @@ const Plants = () => {
                 handleBtnClickCallback={handleToggleSaved}
                 title={plant.name}
                 image={imageAPI.getImage(plant.image!)}
-                isActive={isInArray(plant.id, savedPlants)}
+                isActive={isInArray(plant.id, savedPlants, 'plantId')}
                 navigateTo={`${routes.plants}/${plant.id}`}
               />
             ))}

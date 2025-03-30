@@ -7,26 +7,26 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import FavoriteButton from '@src/components/ui/FavoriteButton/FavoriteButton';
-import Loader from '@src/components/ui/Loader/Loader';
 import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import serverAPI from '@src/services/serverAPI';
 import {
-  addChallengeToSaved,
-  removeChallengeFromSaved,
-  setSavedChallenges,
+  removeFactionFromSaved,
+  setSavedFactions,
 } from '@src/store/slices/userSlice';
-import { IChallengesResponse } from '@src/types/serverAPITypes';
+import { ISavedFactionsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
-import { toggleSavedChallenge } from '@src/utils/toggleSaved';
+import { toggleSavedFaction } from '@src/utils/toggleSaved';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import styles from './Challenges.module.scss';
+import FavoriteButton from '../ui/FavoriteButton/FavoriteButton';
+import Loader from '../ui/Loader/Loader';
+import Message from '../ui/Message/Message';
+import styles from './SavedFactions.module.scss';
 
-const Challenges = () => {
+const SavedFactions = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -35,23 +35,21 @@ const Challenges = () => {
     (state) => state.userReducer.isAuthorized,
   );
 
-  const savedChallenges = useAppSelector(
-    (state) => state.userReducer.userInfo?.challenges,
+  const savedFactions = useAppSelector(
+    (state) => state.userReducer.userInfo?.factions,
   );
 
-  const [challenges, setChallenges] = useState<IChallengesResponse | undefined>(
-    undefined,
-  );
-
-  const params = useAppSelector((state) => state.searchReducer.fishes);
+  const [factions, setFactions] = useState<
+    ISavedFactionsResponse['data'] | undefined
+  >(undefined);
 
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
-      if (isAuthorized && !savedChallenges) {
-        const savedChallenges = await serverAPI.getSavedChallenges();
-        dispatch(setSavedChallenges(savedChallenges));
+      if (isAuthorized && !savedFactions) {
+        const savedFactions = await serverAPI.getSavedFactions();
+        dispatch(setSavedFactions(savedFactions));
       }
     })();
   }, []);
@@ -59,28 +57,27 @@ const Challenges = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const data = await serverAPI.getChallenges(params);
-      setChallenges(data);
+      const data = await serverAPI.getSavedFactions();
+      setFactions(data);
       setIsLoading(false);
     })();
-  }, [params]);
+  }, []);
 
   const handleToggleSaved = (id: number) => {
-    toggleSavedChallenge(
+    toggleSavedFaction(
       id,
-      isInArray(id, savedChallenges, 'challengeId'),
-      succesAdd,
+      isInArray(id, savedFactions, 'factionId'),
+      undefined,
       succesRemove,
       unathorizedCallback,
     );
   };
 
-  const succesAdd = (id: number) => {
-    dispatch(addChallengeToSaved(id));
-  };
-
   const succesRemove = (id: number) => {
-    dispatch(removeChallengeFromSaved(id));
+    dispatch(removeFactionFromSaved(id));
+    setFactions((prevFactions) =>
+      prevFactions!.filter((faction) => faction.faction.id !== id),
+    );
   };
 
   const unathorizedCallback = () => {
@@ -88,45 +85,40 @@ const Challenges = () => {
   };
 
   return (
-    <section className={styles.page}>
-      <div className={styles.wrapper}>
-        <h2 className={styles.header}>Challenges</h2>
-
-        {isLoading && <Loader />}
-
+    <>
+      {isLoading && <Loader />}
+      {factions && factions.length > 0 ? (
         <TableContainer component={Paper} className={styles.table_wrapper}>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell align="right">Rank</TableCell>
-                <TableCell align="right">Reward</TableCell>
+                <TableCell align="right">Leader</TableCell>
                 <TableCell align="right">Description</TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {challenges?.data.map((challenge) => (
+              {factions?.map((faction) => (
                 <TableRow
-                  key={challenge.id}
+                  key={faction.faction.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {challenge.name}
+                    {faction.faction.name}
                   </TableCell>
-                  <TableCell align="right">{challenge.rank}</TableCell>
-                  <TableCell align="right">{challenge.reward}</TableCell>
-                  <TableCell align="right">{challenge.description}</TableCell>
+                  <TableCell align="right">{faction.faction.leader}</TableCell>
+                  <TableCell align="right">{faction.faction.status}</TableCell>
                   <TableCell align="right">
                     {
                       <div className={styles.btn_wrapper}>
                         <FavoriteButton
                           isInFavorites={isInArray(
-                            challenge.id,
-                            savedChallenges,
-                            'challengeId',
+                            faction.faction.id,
+                            savedFactions,
+                            'factionId',
                           )}
-                          onClick={() => handleToggleSaved(challenge.id)}
+                          onClick={() => handleToggleSaved(faction.faction.id)}
                         />
                       </div>
                     }
@@ -136,9 +128,11 @@ const Challenges = () => {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-    </section>
+      ) : (
+        <Message message="There is nothing here" />
+      )}
+    </>
   );
 };
 
-export default Challenges;
+export default SavedFactions;

@@ -1,5 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ISavedWeaponResponse, IUser } from '@src/types/serverAPITypes';
+import {
+  ISavedAnimalsResponse,
+  ISavedChallengesResponse,
+  ISavedCollectiblesResponse,
+  ISavedFactionsResponse,
+  ISavedFishesResponse,
+  ISavedHorsesResponse,
+  ISavedMiscellaneousResponse,
+  ISavedPlantsResponse,
+  ISavedRandomEncountersResponse,
+  ISavedSideQuestsResponse,
+  ISavedStoryQuestsResponse,
+  ISavedTableGamesResponse,
+  ISavedWeaponsResponse,
+  IUser,
+} from '@src/types/serverAPITypes';
 
 interface UserState {
   isAuthorized: boolean | undefined;
@@ -46,10 +61,118 @@ const userSlice = createSlice({
 
     setSavedWeapons: (
       state,
-      action: PayloadAction<ISavedWeaponResponse['data'] | undefined>,
+      action: PayloadAction<ISavedWeaponsResponse['data'] | undefined>,
     ) => {
       if (state.userInfo) {
         state.userInfo.weapons = action.payload;
+      }
+    },
+
+    setSavedHorses: (
+      state,
+      action: PayloadAction<ISavedHorsesResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.horses = action.payload;
+      }
+    },
+
+    setSavedStoryQuests: (
+      state,
+      action: PayloadAction<ISavedStoryQuestsResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.storyQuests = action.payload;
+      }
+    },
+
+    setSavedSideQuests: (
+      state,
+      action: PayloadAction<ISavedSideQuestsResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.sideQuests = action.payload;
+      }
+    },
+
+    setSavedAnimals: (
+      state,
+      action: PayloadAction<ISavedAnimalsResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.animals = action.payload;
+      }
+    },
+
+    setSavedChallenges: (
+      state,
+      action: PayloadAction<ISavedChallengesResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.challenges = action.payload;
+      }
+    },
+
+    setSavedCollectibles: (
+      state,
+      action: PayloadAction<ISavedCollectiblesResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.collectibles = action.payload;
+      }
+    },
+
+    setSavedFactions: (
+      state,
+      action: PayloadAction<ISavedFactionsResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.factions = action.payload;
+      }
+    },
+
+    setSavedFishes: (
+      state,
+      action: PayloadAction<ISavedFishesResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.fishes = action.payload;
+      }
+    },
+
+    setSavedMiscellaneous: (
+      state,
+      action: PayloadAction<ISavedMiscellaneousResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.miscellaneous = action.payload;
+      }
+    },
+
+    setSavedPlants: (
+      state,
+      action: PayloadAction<ISavedPlantsResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.plants = action.payload;
+      }
+    },
+
+    setSavedRandomEncounters: (
+      state,
+      action: PayloadAction<ISavedRandomEncountersResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.randomEncounters = action.payload;
+      }
+    },
+
+    setSavedTableGames: (
+      state,
+      action: PayloadAction<ISavedTableGamesResponse['data'] | undefined>,
+    ) => {
+      if (state.userInfo) {
+        state.userInfo.tableGames = action.payload;
       }
     },
 
@@ -75,7 +198,7 @@ const userSlice = createSlice({
     removeHorseFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.horses = state.userInfo.horses?.filter(
-          (horse) => horse.id !== action.payload,
+          (horse) => horse.horseId !== action.payload,
         );
       }
     },
@@ -83,16 +206,18 @@ const userSlice = createSlice({
     addHorseToSaved: (state, action: PayloadAction<number>) => {
       if (
         state.userInfo &&
-        !state.userInfo.horses?.some((horse) => horse.id === action.payload)
+        !state.userInfo.horses?.some(
+          (horse) => horse.horseId === action.payload,
+        )
       ) {
-        state.userInfo.horses?.push({ id: action.payload });
+        state.userInfo.horses?.push({ horseId: action.payload });
       }
     },
 
     removeStoryQuestFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.storyQuests = state.userInfo.storyQuests?.filter(
-          (storyQuest) => storyQuest.id !== action.payload,
+          (storyQuest) => storyQuest.storyquestId !== action.payload,
         );
       }
     },
@@ -101,17 +226,17 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.storyQuests?.some(
-          (StoryQuest) => StoryQuest.id === action.payload,
+          (StoryQuest) => StoryQuest.storyquestId === action.payload,
         )
       ) {
-        state.userInfo.storyQuests?.push({ id: action.payload });
+        state.userInfo.storyQuests?.push({ storyquestId: action.payload });
       }
     },
 
     removeSideQuestFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.sideQuests = state.userInfo.sideQuests?.filter(
-          (sideQuest) => sideQuest.id !== action.payload,
+          (sideQuest) => sideQuest.sidequestId !== action.payload,
         );
       }
     },
@@ -120,17 +245,17 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.sideQuests?.some(
-          (sideQuest) => sideQuest.id === action.payload,
+          (sideQuest) => sideQuest.sidequestId === action.payload,
         )
       ) {
-        state.userInfo.sideQuests?.push({ id: action.payload });
+        state.userInfo.sideQuests?.push({ sidequestId: action.payload });
       }
     },
 
     removeAnimalFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.animals = state.userInfo.animals?.filter(
-          (animal) => animal.id !== action.payload,
+          (animal) => animal.animalId !== action.payload,
         );
       }
     },
@@ -138,16 +263,18 @@ const userSlice = createSlice({
     addAnimalToSaved: (state, action: PayloadAction<number>) => {
       if (
         state.userInfo &&
-        !state.userInfo.animals?.some((animal) => animal.id === action.payload)
+        !state.userInfo.animals?.some(
+          (animal) => animal.animalId === action.payload,
+        )
       ) {
-        state.userInfo.animals?.push({ id: action.payload });
+        state.userInfo.animals?.push({ animalId: action.payload });
       }
     },
 
     removePlantFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.plants = state.userInfo.plants?.filter(
-          (plant) => plant.id !== action.payload,
+          (plant) => plant.plantId !== action.payload,
         );
       }
     },
@@ -155,16 +282,18 @@ const userSlice = createSlice({
     addPlantToSaved: (state, action: PayloadAction<number>) => {
       if (
         state.userInfo &&
-        !state.userInfo.plants?.some((plant) => plant.id === action.payload)
+        !state.userInfo.plants?.some(
+          (plant) => plant.plantId === action.payload,
+        )
       ) {
-        state.userInfo.plants?.push({ id: action.payload });
+        state.userInfo.plants?.push({ plantId: action.payload });
       }
     },
 
     removeFishFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
-        state.userInfo.plants = state.userInfo.plants?.filter(
-          (plant) => plant.id !== action.payload,
+        state.userInfo.fishes = state.userInfo.fishes?.filter(
+          (fish) => fish.fishId !== action.payload,
         );
       }
     },
@@ -172,16 +301,16 @@ const userSlice = createSlice({
     addFishToSaved: (state, action: PayloadAction<number>) => {
       if (
         state.userInfo &&
-        !state.userInfo.fishes?.some((fish) => fish.id === action.payload)
+        !state.userInfo.fishes?.some((fish) => fish.fishId === action.payload)
       ) {
-        state.userInfo.fishes?.push({ id: action.payload });
+        state.userInfo.fishes?.push({ fishId: action.payload });
       }
     },
 
     removeChallengeFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.challenges = state.userInfo.challenges?.filter(
-          (plant) => plant.id !== action.payload,
+          (challenge) => challenge.challengeId !== action.payload,
         );
       }
     },
@@ -190,17 +319,17 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.challenges?.some(
-          (challenge) => challenge.id === action.payload,
+          (challenge) => challenge.challengeId === action.payload,
         )
       ) {
-        state.userInfo.challenges?.push({ id: action.payload });
+        state.userInfo.challenges?.push({ challengeId: action.payload });
       }
     },
 
     removeCollectibleFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.collectibles = state.userInfo.collectibles?.filter(
-          (plant) => plant.id !== action.payload,
+          (collectible) => collectible.collectibleId !== action.payload,
         );
       }
     },
@@ -209,17 +338,17 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.collectibles?.some(
-          (collectible) => collectible.id === action.payload,
+          (collectible) => collectible.collectibleId === action.payload,
         )
       ) {
-        state.userInfo.collectibles?.push({ id: action.payload });
+        state.userInfo.collectibles?.push({ collectibleId: action.payload });
       }
     },
 
     removeFactionFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.factions = state.userInfo.factions?.filter(
-          (faction) => faction.id !== action.payload,
+          (faction) => faction.factionId !== action.payload,
         );
       }
     },
@@ -228,17 +357,17 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.factions?.some(
-          (faction) => faction.id === action.payload,
+          (faction) => faction.factionId === action.payload,
         )
       ) {
-        state.userInfo.factions?.push({ id: action.payload });
+        state.userInfo.factions?.push({ factionId: action.payload });
       }
     },
 
     removeMiscellaneouFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.miscellaneous = state.userInfo.miscellaneous?.filter(
-          (miscellaneou) => miscellaneou.id !== action.payload,
+          (miscellaneou) => miscellaneou.miscellaneousId !== action.payload,
         );
       }
     },
@@ -247,10 +376,10 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.miscellaneous?.some(
-          (miscellaneou) => miscellaneou.id === action.payload,
+          (miscellaneou) => miscellaneou.miscellaneousId === action.payload,
         )
       ) {
-        state.userInfo.miscellaneous?.push({ id: action.payload });
+        state.userInfo.miscellaneous?.push({ miscellaneousId: action.payload });
       }
     },
 
@@ -258,7 +387,8 @@ const userSlice = createSlice({
       if (state.userInfo) {
         state.userInfo.randomEncounters =
           state.userInfo.randomEncounters?.filter(
-            (randomEncounter) => randomEncounter.id !== action.payload,
+            (randomEncounter) =>
+              randomEncounter.randomencounterId !== action.payload,
           );
       }
     },
@@ -267,17 +397,20 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.randomEncounters?.some(
-          (randomEncounter) => randomEncounter.id === action.payload,
+          (randomEncounter) =>
+            randomEncounter.randomencounterId === action.payload,
         )
       ) {
-        state.userInfo.randomEncounters?.push({ id: action.payload });
+        state.userInfo.randomEncounters?.push({
+          randomencounterId: action.payload,
+        });
       }
     },
 
     removeTableGameFromSaved: (state, action: PayloadAction<number>) => {
       if (state.userInfo) {
         state.userInfo.tableGames = state.userInfo.tableGames?.filter(
-          (tableGame) => tableGame.id !== action.payload,
+          (tableGame) => tableGame.tablegameId !== action.payload,
         );
       }
     },
@@ -286,10 +419,10 @@ const userSlice = createSlice({
       if (
         state.userInfo &&
         !state.userInfo.tableGames?.some(
-          (tableGame) => tableGame.id === action.payload,
+          (tableGame) => tableGame.tablegameId === action.payload,
         )
       ) {
-        state.userInfo.tableGames?.push({ id: action.payload });
+        state.userInfo.tableGames?.push({ tablegameId: action.payload });
       }
     },
   },
@@ -299,6 +432,18 @@ export const {
   changeIsAuthorized,
   changeUserInfo,
   setSavedWeapons,
+  setSavedAnimals,
+  setSavedChallenges,
+  setSavedCollectibles,
+  setSavedFactions,
+  setSavedFishes,
+  setSavedHorses,
+  setSavedMiscellaneous,
+  setSavedPlants,
+  setSavedRandomEncounters,
+  setSavedSideQuests,
+  setSavedStoryQuests,
+  setSavedTableGames,
   addHorseToSaved,
   addSideQuestToSaved,
   addStoryQuestToSaved,

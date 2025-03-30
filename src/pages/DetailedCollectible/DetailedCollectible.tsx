@@ -9,6 +9,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addCollectibleToSaved,
   removeCollectibleFromSaved,
+  setSavedCollectibles,
 } from '@src/store/slices/userSlice';
 import { ICollectible } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -24,6 +25,10 @@ const DetailedCollectible = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedCollectibles = useAppSelector(
     (state) => state.userReducer.userInfo?.collectibles,
   );
@@ -37,6 +42,15 @@ const DetailedCollectible = () => {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedCollectibles) {
+        const savedCollectibles = await serverAPI.getSavedCollectibles();
+        dispatch(setSavedCollectibles(savedCollectibles));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -70,7 +84,7 @@ const DetailedCollectible = () => {
 
     toggleSavedCollectible(
       collectible!.id,
-      isInArray(collectible!.id, savedCollectibles),
+      isInArray(collectible!.id, savedCollectibles, 'collectibleId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -101,7 +115,11 @@ const DetailedCollectible = () => {
               />
               <div className={styles.favourite_btn_wrapper}>
                 <FavoriteButton
-                  isInFavorites={isInArray(collectible.id, savedCollectibles)}
+                  isInFavorites={isInArray(
+                    collectible.id,
+                    savedCollectibles,
+                    'collectibleId',
+                  )}
                   onClick={handleToggleFavorite}
                 />
               </div>
@@ -118,17 +136,19 @@ const DetailedCollectible = () => {
                     {collectible.amount}
                   </span>
                 </p>
-                <p className={styles.overview_item}>
-                  <span className={styles.overview_item_title}>
-                    Side Quest:
-                  </span>
-                  <Link
-                    className={styles.overview_item_value_link}
-                    to={`${routes.sideQuests}/${collectible.sidequest.id}`}
-                  >
-                    {collectible.sidequest.name}
-                  </Link>
-                </p>
+                {collectible?.sidequest && (
+                  <p className={styles.overview_item}>
+                    <span className={styles.overview_item_title}>
+                      Side Quest:
+                    </span>
+                    <Link
+                      className={styles.overview_item_value_link}
+                      to={`${routes.sideQuests}/${collectible.sidequest.id}`}
+                    >
+                      {collectible.sidequest.name}
+                    </Link>
+                  </p>
+                )}
               </div>
             </div>
           </div>

@@ -15,6 +15,7 @@ import serverAPI from '@src/services/serverAPI';
 import {
   addFactionToSaved,
   removeFactionFromSaved,
+  setSavedFactions,
 } from '@src/store/slices/userSlice';
 import { IFactionsResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -30,6 +31,10 @@ const Factions = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedFactions = useAppSelector(
     (state) => state.userReducer.userInfo?.factions,
   );
@@ -39,6 +44,15 @@ const Factions = () => {
   );
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedFactions) {
+        const savedFactions = await serverAPI.getSavedFactions();
+        dispatch(setSavedFactions(savedFactions));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -52,7 +66,7 @@ const Factions = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedFaction(
       id,
-      isInArray(id, savedFactions),
+      isInArray(id, savedFactions, 'factionId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -103,7 +117,11 @@ const Factions = () => {
                     {
                       <div className={styles.btn_wrapper}>
                         <FavoriteButton
-                          isInFavorites={isInArray(faction.id, savedFactions)}
+                          isInFavorites={isInArray(
+                            faction.id,
+                            savedFactions,
+                            'factionId',
+                          )}
                           onClick={() => handleToggleSaved(faction.id)}
                         />
                       </div>
