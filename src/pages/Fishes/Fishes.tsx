@@ -13,6 +13,7 @@ import {
 import {
   addFishToSaved,
   removeFishFromSaved,
+  setSavedFishes,
 } from '@src/store/slices/userSlice';
 import { IFishesResponse } from '@src/types/serverAPITypes';
 import isInArray from '@src/utils/isInArray';
@@ -28,6 +29,10 @@ const Fishes = () => {
 
   const dispatch = useDispatch();
 
+  const isAuthorized = useAppSelector(
+    (state) => state.userReducer.isAuthorized,
+  );
+
   const savedFishes = useAppSelector(
     (state) => state.userReducer.userInfo?.fishes,
   );
@@ -37,6 +42,15 @@ const Fishes = () => {
   const params = useAppSelector((state) => state.searchReducer.fishes);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuthorized && !savedFishes) {
+        const savedFishes = await serverAPI.getSavedFishes();
+        dispatch(setSavedFishes(savedFishes));
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -50,7 +64,7 @@ const Fishes = () => {
   const handleToggleSaved = (id: number) => {
     toggleSavedFish(
       id,
-      isInArray(id, savedFishes),
+      isInArray(id, savedFishes, 'fishId'),
       succesAdd,
       succesRemove,
       unathorizedCallback,
@@ -96,7 +110,7 @@ const Fishes = () => {
                 id={fish.id}
                 handleBtnClickCallback={handleToggleSaved}
                 title={fish.name}
-                isActive={isInArray(fish.id, savedFishes)}
+                isActive={isInArray(fish.id, savedFishes, 'fishId')}
                 navigateTo={`${routes.fishes}/${fish.id}`}
               />
             ))}
