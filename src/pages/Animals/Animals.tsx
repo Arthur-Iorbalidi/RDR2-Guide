@@ -1,16 +1,11 @@
 import Grid from '@src/components/Grid/Grid';
 import Item from '@src/components/Item/Item';
 import Pagination from '@src/components/Pagination/Pagination';
-import SearchForm from '@src/components/SearchForm/SearchForm';
 import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import {
-  changeAnimalsPage,
-  changeAnimalsSearch,
-  resetAnimalsPage,
-} from '@src/store/slices/searchSlice';
+import { changeAnimalsPage } from '@src/store/slices/searchSlice';
 import {
   addAnimalToSaved,
   removeAnimalFromSaved,
@@ -86,11 +81,6 @@ const Animals = () => {
     navigate(routes.login);
   };
 
-  const handleChangeSearch = (search: string) => {
-    dispatch(changeAnimalsSearch(search));
-    dispatch(resetAnimalsPage());
-  };
-
   const handleChangePage = (count: number) => {
     dispatch(changeAnimalsPage(params.page! + count));
   };
@@ -98,11 +88,6 @@ const Animals = () => {
   return (
     <section className={styles.page}>
       <div className={styles.wrapper}>
-        <SearchForm
-          handleChangeQuery={handleChangeSearch}
-          currentSearchValue={params.search!}
-        />
-
         <h2 className={styles.header}>Animals</h2>
 
         <Grid isLoading={isLoading}>

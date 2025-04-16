@@ -42,11 +42,13 @@ function App() {
 
         <Route
           path={routes.login}
-          element={!isAuth ? <Login /> : <Navigate to={routes.home} />}
+          element={!isAuth ? <Login /> : <Navigate to={routes.weapons} />}
         />
         <Route
           path={routes.registration}
-          element={!isAuth ? <Registration /> : <Navigate to={routes.home} />}
+          element={
+            !isAuth ? <Registration /> : <Navigate to={routes.weapons} />
+          }
         />
       </Routes>
     </BrowserRouter>

@@ -14,7 +14,6 @@ import DetailedStoryQuest from '@src/pages/DetailedStoryQuest/DetailedStoryQuest
 import DetailedWeapon from '@src/pages/DetailedWeapon/DetailedWeapon';
 import Factions from '@src/pages/Factions/Factions';
 import Fishes from '@src/pages/Fishes/Fishes';
-import Home from '@src/pages/Home/Home';
 import Hourses from '@src/pages/Hourses/Hourses';
 import Miscellaneous from '@src/pages/Miscellaneous/Miscellaneous';
 import Plants from '@src/pages/Plants/Plants';
@@ -31,8 +30,8 @@ const MainRouter = () => {
     <>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/*" element={<Navigate to={routes.home} replace />} />
-          <Route path={routes.home} element={<Home />} />
+          <Route path="/*" element={<Navigate to={routes.weapons} replace />} />
+          {/* <Route path={routes.home} element={<Home />} /> */}
           <Route path={routes.weapons} element={<Weapons />} />
           <Route path={routes.horses} element={<Hourses />} />
           <Route path={routes.storyQuests} element={<StoryQuests />} />

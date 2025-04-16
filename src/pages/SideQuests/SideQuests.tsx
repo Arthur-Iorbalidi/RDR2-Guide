@@ -1,20 +1,11 @@
 import Grid from '@src/components/Grid/Grid';
 import Item from '@src/components/Item/Item';
 import Pagination from '@src/components/Pagination/Pagination';
-import SearchForm from '@src/components/SearchForm/SearchForm';
-import Sorting from '@src/components/Sorting/Sorting';
 import routes from '@src/constants/routes';
-import sortOptions from '@src/constants/sortOptions';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import {
-  changeSideQuestsPage,
-  changeSideQuestsSearch,
-  changeSideQuestsSort,
-  changeSideQuestsSortOrder,
-  resetSideQuestsPage,
-} from '@src/store/slices/searchSlice';
+import { changeSideQuestsPage } from '@src/store/slices/searchSlice';
 import {
   addSideQuestToSaved,
   removeSideQuestFromSaved,
@@ -68,13 +59,6 @@ const SideQuests = () => {
     })();
   }, [params]);
 
-  const currentSortOptionIndex =
-    sortOptions.sideQuests.findIndex(
-      (option) =>
-        option.value.sortBy === params.sortBy &&
-        option.value.sortOrder === params.sortOrder,
-    ) || 0;
-
   const handleToggleSaved = (id: number) => {
     toggleSavedSideQuest(
       id,
@@ -97,36 +81,13 @@ const SideQuests = () => {
     navigate(routes.login);
   };
 
-  const handleChangeSearch = (search: string) => {
-    dispatch(changeSideQuestsSearch(search));
-    dispatch(resetSideQuestsPage());
-  };
-
   const handleChangePage = (count: number) => {
     dispatch(changeSideQuestsPage(params.page! + count));
-  };
-
-  const handleChangeSorting = (index: number) => {
-    dispatch(changeSideQuestsSort(sortOptions.sideQuests[index].value.sortBy));
-    dispatch(
-      changeSideQuestsSortOrder(sortOptions.sideQuests[index].value.sortOrder),
-    );
   };
 
   return (
     <section className={styles.page}>
       <div className={styles.wrapper}>
-        <SearchForm
-          handleChangeQuery={handleChangeSearch}
-          currentSearchValue={params.search!}
-        />
-
-        <Sorting
-          sortOptions={sortOptions.sideQuests.map((elem) => elem.title)}
-          currentSortOptionIndex={currentSortOptionIndex}
-          handleChangeSorting={handleChangeSorting}
-        />
-
         <h2 className={styles.header}>Side Quests</h2>
 
         <Grid isLoading={isLoading}>

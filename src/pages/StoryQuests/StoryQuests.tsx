@@ -1,20 +1,11 @@
 import Grid from '@src/components/Grid/Grid';
 import Item from '@src/components/Item/Item';
 import Pagination from '@src/components/Pagination/Pagination';
-import SearchForm from '@src/components/SearchForm/SearchForm';
-import Sorting from '@src/components/Sorting/Sorting';
 import routes from '@src/constants/routes';
-import sortOptions from '@src/constants/sortOptions';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import {
-  changeStoryQuestsPage,
-  changeStoryQuestsSearch,
-  changeStoryQuestsSort,
-  changeStoryQuestsSortOrder,
-  resetStoryQuestsPage,
-} from '@src/store/slices/searchSlice';
+import { changeStoryQuestsPage } from '@src/store/slices/searchSlice';
 import {
   addStoryQuestToSaved,
   removeStoryQuestFromSaved,
@@ -68,13 +59,6 @@ const StoryQuests = () => {
     })();
   }, [params]);
 
-  const currentSortOptionIndex =
-    sortOptions.storyQuests.findIndex(
-      (option) =>
-        option.value.sortBy === params.sortBy &&
-        option.value.sortOrder === params.sortOrder,
-    ) || 0;
-
   const handleToggleSaved = (id: number) => {
     toggleSavedStoryQuest(
       id,
@@ -97,40 +81,13 @@ const StoryQuests = () => {
     navigate(routes.login);
   };
 
-  const handleChangeSearch = (search: string) => {
-    dispatch(changeStoryQuestsSearch(search));
-    dispatch(resetStoryQuestsPage());
-  };
-
   const handleChangePage = (count: number) => {
     dispatch(changeStoryQuestsPage(params.page! + count));
-  };
-
-  const handleChangeSorting = (index: number) => {
-    dispatch(
-      changeStoryQuestsSort(sortOptions.storyQuests[index].value.sortBy),
-    );
-    dispatch(
-      changeStoryQuestsSortOrder(
-        sortOptions.storyQuests[index].value.sortOrder,
-      ),
-    );
   };
 
   return (
     <section className={styles.page}>
       <div className={styles.wrapper}>
-        <SearchForm
-          handleChangeQuery={handleChangeSearch}
-          currentSearchValue={params.search!}
-        />
-
-        <Sorting
-          sortOptions={sortOptions.storyQuests.map((elem) => elem.title)}
-          currentSortOptionIndex={currentSortOptionIndex}
-          handleChangeSorting={handleChangeSorting}
-        />
-
         <h2 className={styles.header}>Story Quests</h2>
 
         <Grid isLoading={isLoading}>

@@ -1,20 +1,11 @@
 import Grid from '@src/components/Grid/Grid';
 import Item from '@src/components/Item/Item';
 import Pagination from '@src/components/Pagination/Pagination';
-import SearchForm from '@src/components/SearchForm/SearchForm';
-import Sorting from '@src/components/Sorting/Sorting';
 import routes from '@src/constants/routes';
-import sortOptions from '@src/constants/sortOptions';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import {
-  changeWeaponsPage,
-  changeWeaponsSearch,
-  changeWeaponsSort,
-  changeWeaponsSortOrder,
-  resetWeaponsPage,
-} from '@src/store/slices/searchSlice';
+import { changeWeaponsPage } from '@src/store/slices/searchSlice';
 import {
   addWeaponToSaved,
   removeWeaponFromSaved,
@@ -68,13 +59,6 @@ const Weapons = () => {
     })();
   }, [params]);
 
-  const currentSortOptionIndex =
-    sortOptions.weapons.findIndex(
-      (option) =>
-        option.value.sortBy === params.sortBy &&
-        option.value.sortOrder === params.sortOrder,
-    ) || 0;
-
   const handleToggleSaved = (id: number) => {
     toggleSavedWeapon(
       id,
@@ -97,36 +81,13 @@ const Weapons = () => {
     navigate(routes.login);
   };
 
-  const handleChangeSearch = (search: string) => {
-    dispatch(changeWeaponsSearch(search));
-    dispatch(resetWeaponsPage());
-  };
-
   const handleChangePage = (count: number) => {
     dispatch(changeWeaponsPage(params.page! + count));
-  };
-
-  const handleChangeSorting = (index: number) => {
-    dispatch(changeWeaponsSort(sortOptions.weapons[index].value.sortBy));
-    dispatch(
-      changeWeaponsSortOrder(sortOptions.weapons[index].value.sortOrder),
-    );
   };
 
   return (
     <section className={styles.weapons_page}>
       <div className={styles.wrapper}>
-        <SearchForm
-          handleChangeQuery={handleChangeSearch}
-          currentSearchValue={params.search!}
-        />
-
-        <Sorting
-          sortOptions={sortOptions.weapons.map((elem) => elem.title)}
-          currentSortOptionIndex={currentSortOptionIndex}
-          handleChangeSorting={handleChangeSorting}
-        />
-
         <h2 className={styles.header}>Weapons</h2>
 
         <Grid isLoading={isLoading}>

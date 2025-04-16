@@ -1,16 +1,11 @@
 import Grid from '@src/components/Grid/Grid';
 import Item from '@src/components/Item/Item';
 import Pagination from '@src/components/Pagination/Pagination';
-import SearchForm from '@src/components/SearchForm/SearchForm';
 import routes from '@src/constants/routes';
 import useAppSelector from '@src/hooks/useAppSelector';
 import imageAPI from '@src/services/imageAPI';
 import serverAPI from '@src/services/serverAPI';
-import {
-  changePlantsPage,
-  changePlantsSearch,
-  resetPlantsPage,
-} from '@src/store/slices/searchSlice';
+import { changePlantsPage } from '@src/store/slices/searchSlice';
 import {
   addPlantToSaved,
   removePlantFromSaved,
@@ -84,11 +79,6 @@ const Plants = () => {
     navigate(routes.login);
   };
 
-  const handleChangeSearch = (search: string) => {
-    dispatch(changePlantsSearch(search));
-    dispatch(resetPlantsPage());
-  };
-
   const handleChangePage = (count: number) => {
     dispatch(changePlantsPage(params.page! + count));
   };
@@ -96,11 +86,6 @@ const Plants = () => {
   return (
     <section className={styles.page}>
       <div className={styles.wrapper}>
-        <SearchForm
-          handleChangeQuery={handleChangeSearch}
-          currentSearchValue={params.search!}
-        />
-
         <h2 className={styles.header}>Plants</h2>
 
         <Grid isLoading={isLoading}>
